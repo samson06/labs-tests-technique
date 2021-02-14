@@ -1,0 +1,404 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>fr.supraloglabs.jbe</groupId>
+	<artifactId>labs-tests-technique</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<name><![CDATA[SUPRALOG LABS - Tests Technique]]></name>
+	<description><![CDATA[REST API de Gestion des comptes utilisateurs]]></description>
+	<inceptionYear>2021</inceptionYear>
+	<!-- ============ TEAM ============ -->
+	<developers>
+		<developer>
+			<id>vot</id>
+			<name>Vincent De Paul Otchoun</name>
+			<email>vincokri31@live.fr</email>
+			<organization>OVIOK</organization>
+			<roles>
+				<role>Architecte</role>
+				<role>Developer</role>
+			</roles>
+			<timezone>Europe/Paris</timezone>
+		</developer>
+	</developers>
+	<!-- =========== GESTION CODE SOURCE =========== -->
+	<scm>
+		<connection>scm:git:https://github.com/samson06/labs-tests-technique/</connection>
+		<developerConnection>scm:git:https://github.com/samson06/labs-tests-technique/</developerConnection>
+		<url>https://github.com/samson06/labs-tests-technique/</url>
+	</scm>
+	<!-- =========== PROJET PROPERTIES =========== -->
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>8</java.version>
+		<spring.boot.release.version>2.3.4.RELEASE</spring.boot.release.version>
+		<!-- Maven -->
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+		<maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
+		<!-- Jacoco -->
+		<jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
+		<jacoco.utReportFolder>${project.build.directory}/jacoco/test</jacoco.utReportFolder>
+		<jacoco.utReportFile>${jacoco.utReportFolder}/test.exec</jacoco.utReportFile>
+		<jacoco.itReportFolder>${project.build.directory}/jacoco/integrationTest</jacoco.itReportFolder>
+		<jacoco.itReportFile>${jacoco.itReportFolder}/integrationTest.exec</jacoco.itReportFile>
+		<junit.utReportFolder>${project.testresult.directory}/test</junit.utReportFolder>
+		<junit.itReportFolder>${project.testresult.directory}/integrationTest</junit.itReportFolder>
+		<project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
+		<!-- Model Mapper -->
+		<modelmapper.version>2.3.5</modelmapper.version>
+		<!-- Starter -->
+		<start-class>fr.supraloglabs.jbe.UserAccountApplicationStarter</start-class>
+	</properties>
+	<!-- =========== DEPENDANCES CENTRALISEES =========== -->
+	<!-- BOOT -->
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring.boot.release.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<!-- =========== DEPENDANCES =========== -->
+	<dependencies>
+		<!-- Configurer Spring Boot -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- Jetty -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jetty</artifactId>
+		</dependency>
+		<!-- MongoDB -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+		</dependency>
+		<!-- Embedded MongoDB -->
+		<dependency>
+			<groupId>de.flapdoodle.embed</groupId>
+			<artifactId>de.flapdoodle.embed.mongo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>cz.jirutka.spring</groupId>
+			<artifactId>embedmongo-spring</artifactId>
+			<version>1.3.1</version>
+		</dependency>
+		<!-- Mapper -->
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>${modelmapper.version}</version>
+		</dependency>
+		<!-- LOGGER : SLF4J && LOGBACK : Implementation choisie pour SLF4J -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+		</dependency>
+		<!-- Lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+			<scope>provided	</scope>
+		</dependency>
+		<!-- Utlis -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>20.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+
+		<!-- TESTS -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.10.19</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.hamcrest</groupId>
+					<artifactId>hamcrest-core</artifactId>
+				</exclusion>
+			</exclusions>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.hamcrest</groupId>
+					<artifactId>hamcrest-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.hamcrest</groupId>
+					<artifactId>hamcrest-library</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.assertj</groupId>
+					<artifactId>assertj-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
+			<version>1.3</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+				</exclusion>
+			</exclusions>
+			<scope>test</scope>
+		</dependency>
+		<!-- Utilitaire pour exécution des test avec spring-test -->
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.3</version>
+		</dependency>
+	</dependencies>
+	<!-- ================= CONSTRUIRE L'ARCHIVE ================= -->
+	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<directory>${basedir}/target</directory>
+		<outputDirectory>${basedir}/target/classes</outputDirectory>
+		<testOutputDirectory>${basedir}/target/test-classes</testOutputDirectory>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*.properties</include>
+					<include>**/*.xml</include>
+				</includes>
+				<excludes>
+					<exclude>**/*.java</exclude>
+					<exclude>*.test.*</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
+		<plugins>
+			<!-- Plugin Maven pour la compilation des sources -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<inherited>true</inherited>
+				<configuration>
+					<debug>true</debug>
+					<debuglevel>lines,vars,source</debuglevel>
+					<compilerVersion>${java.version}</compilerVersion>
+					<fork>true</fork>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<showDeprecation>true</showDeprecation>
+					<showWarnings>true</showWarnings>
+				</configuration>
+			</plugin>
+			<!-- JAR PLUGIN -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions> <!-- Construction de l'archive des tests -->
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration> <!-- Configuration diverses -->
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			<!-- MAVEN-RESOURCES -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<!-- TESTS UNITAIRES -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<argLine>${surefireArgLine}</argLine>
+					<skipTests>false</skipTests>
+					<classesDirectory>${project.build.outputDirectory}</classesDirectory>
+					<runOrder>alphabetical</runOrder> <!-- Forcer l'ordre alphabétique pour avoir une construction reproductible -->
+					<reportsDirectory>${junit.itReportFolder}</reportsDirectory>
+					<excludes>
+						<exclude>**/*IntegrationTest.java</exclude>
+						<exclude>**/*IT*</exclude>
+						<exclude>**/*IntTest*</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>unit-tests</id>
+						<phase>test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- TESTS INTEGRATION -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<configuration>
+					<argLine>${surefireArgLine}</argLine>
+					<skipTests>false</skipTests>
+					<runOrder>alphabetical</runOrder> <!-- Forcer l'ordre alphabétique pour avoir une construction reproductible -->
+					<reportsDirectory>${junit.utReportFolder}</reportsDirectory>
+					<includes>
+						<include>**/*IntegrationTest.java</include>
+						<include>**/*IT*</include>
+						<include>**/*IntTest*</include>
+					</includes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>integration-tests</id>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- JavaDoc -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>${maven-javadoc-plugin.version}</version>
+				<!-- -->
+				<configuration>
+					<source>${java.version}</source>
+					<minmemory>128m</minmemory>
+					<maxmemory>1g</maxmemory>
+					<doclint>none</doclint>
+					<locale>fr_FR</locale>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<sourceFileExcludes>**/module-info.java</sourceFileExcludes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- BOOT -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+						<configuration>
+							<mainClass>${start-class}</mainClass>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<!-- ============ CONFIGURATION DEPOTS : Maven central ============ -->
+	<pluginRepositories>
+		<pluginRepository>
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>https://repo.maven.apache.org/maven2</url>
+			<layout>default</layout>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
+	<repositories>
+		<repository>
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>https://repo.maven.apache.org/maven2</url>
+			<layout>default</layout>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+</project>
