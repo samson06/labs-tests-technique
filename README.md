@@ -1,7 +1,6 @@
 # labs-tests-technique : REST Services
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg?branch=master)
-![GitHub release (latest by date)](https://img.shields.io/github/v/samson06/labs-tests-technique)
 ![GitHub language count](https://img.shields.io/github/languages/count/samson06/labs-tests-technique) 
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/samson06/labs-tests-technique)
 ![GitHub repo size](https://img.shields.io/github/repo-size/samson06/labs-tests-technique)
@@ -24,7 +23,7 @@ Une liste non exhaustive des technos embarquées pour le développment de cette 
 ![](https://img.shields.io/badge/Lombok-✓-blue.svg)
 
 ## Expression de besoins de l'application
-L'expression des besoins est consignée dans le document : [Besoins](./docs/Test Technique - JAVA BACK END.pdf "Expression de Besoins")
+L'expression des besoins est consignée dans le document : [Besoins](labs-tests-technique/docs/Test Technique - JAVA BACK END.pdf "Expression de Besoins")
 
 ## Fonctionnalités
 Cette application fournit des points de terminaison HTTP et des outils pour les éléments suivants : 
