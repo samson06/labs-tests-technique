@@ -11,8 +11,8 @@
  */
 package fr.supraloglabs.jbe;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 
 /**
  * Back-end REST Services boot starter.
@@ -29,6 +29,9 @@ public class UserAccountApplicationStarter
      */
     public static void main(String... args)
     {
-        SpringApplication.run(UserAccountApplicationStarter.class, args);
+        // SpringApplication.run(UserAccountApplicationStarter.class, args);
+        new SpringApplicationBuilder() //
+        .sources(UserAccountApplicationStarter.class)//
+        .run(args);
     }
 }

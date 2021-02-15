@@ -30,8 +30,8 @@ Cette application fournit des points de terminaison HTTP et des outils pour les 
 
 |HTTP Verbe|URL|Description|Status Codes|
 |---|---|---|---|
-|`POST`|_http://localhost:${server.port}/api-users/users/register/_|Enregistrer/Sauvegarder dans le SI les informations d'un utilisateur|<ul><li>`200 OK` si la sauvagarde a réussi</li><li>`40X ou 50X` si erreur survenue lors de la persistance</li></ul>|
-|`GET`|_http://localhost:${server.port}/api-users/users/search/{id}_|Rechercher et afficher les détails d'un utilisateur enregistré dans le SI|<ul><li>`200 OK` si utilisateur existe</li><li>`40X 50X` si erreur survenue lors de la recherche</li></ul>|
+|`POST`|_http://localhost:${server.port}/api-users/user/register/_|Enregistrer/Sauvegarder dans le SI les informations d'un utilisateur|<ul><li>`200 OK` si la sauvagarde a réussi</li><li>`40X ou 50X` si erreur survenue lors de la persistance</li></ul>|
+|`GET`|_http://localhost:${server.port}/api-users/user/search/{id}_|Rechercher et afficher les détails d'un utilisateur enregistré dans le SI|<ul><li>`200 OK` si utilisateur existe</li><li>`40X 50X` si erreur survenue lors de la recherche</li></ul>|
 
 
 ## Spécifications Techniques

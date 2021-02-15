@@ -41,6 +41,7 @@
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 		<maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
 		<!-- Jacoco -->
+		<maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
 		<jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
 		<jacoco.utReportFolder>${project.build.directory}/jacoco/test</jacoco.utReportFolder>
 		<jacoco.utReportFile>${jacoco.utReportFolder}/test.exec</jacoco.utReportFile>
@@ -72,6 +73,11 @@
 		<!-- Configurer Spring Boot -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<!-- Support Spring pour le Web -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 			<exclusions>
 				<exclusion>
@@ -80,26 +86,32 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<!-- Hibernate Validator -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>5.3.4.Final</version>
+		</dependency>
+
 		<!-- Jetty -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jetty</artifactId>
 		</dependency>
-		<!-- MongoDB -->
+
+		<!-- Support Spring pour la base de données MongoDB -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
+
 		<!-- Embedded MongoDB -->
 		<dependency>
 			<groupId>de.flapdoodle.embed</groupId>
 			<artifactId>de.flapdoodle.embed.mongo</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>cz.jirutka.spring</groupId>
-			<artifactId>embedmongo-spring</artifactId>
-			<version>1.3.1</version>
-		</dependency>
+
 		<!-- Mapper -->
 		<dependency>
 			<groupId>org.modelmapper</groupId>
@@ -141,19 +153,14 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.jayway.jsonpath</groupId>
-			<artifactId>json-path</artifactId>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
+			<version>1.3</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.hamcrest</groupId>
-					<artifactId>hamcrest-core</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -178,17 +185,6 @@
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-all</artifactId>
-			<version>1.3</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -240,6 +236,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
 				<inherited>true</inherited>
 				<configuration>
 					<debug>true</debug>
@@ -257,6 +254,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
 				<executions> <!-- Construction de l'archive des tests -->
 					<execution>
 						<goals>
@@ -286,6 +284,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven-surefire-plugin.version}</version>
 				<configuration>
 					<argLine>${surefireArgLine}</argLine>
 					<skipTests>false</skipTests>
@@ -330,6 +329,63 @@
 							<goal>integration-test</goal>
 							<goal>verify</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Metriques de couverture des Tests Automatises -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco-maven-plugin.version}</version>
+				<!-- Exclude full package from test coverage -->
+				<configuration>
+					<excludes>
+						<exclude>fr/supraloglabs/jbe/model/**/*</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>pre-unit-test</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+							<destFile>${jacoco.utReportFile}</destFile>
+							<propertyName>surefireArgLine</propertyName>
+						</configuration>
+					</execution>
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<dataFile>${jacoco.utReportFile}</dataFile>
+							<outputDirectory>${jacoco.utReportFolder}</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>pre-integration-test</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+							<propertyName>failsafeArgLine</propertyName>
+							<destFile>${jacoco.itReportFile}</destFile>
+						</configuration>
+					</execution>
+					<execution>
+						<id>post-integration-test</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>report-integration</goal>
+						</goals>
+						<configuration>
+							<dataFile>${jacoco.itReportFile}</dataFile>
+							<outputDirectory>${jacoco.itReportFolder}</outputDirectory>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
