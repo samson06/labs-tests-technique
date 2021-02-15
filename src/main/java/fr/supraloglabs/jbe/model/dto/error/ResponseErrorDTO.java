@@ -53,7 +53,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE) // Hides the constructor to force usage of the Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE) 
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "status", "timestamp", "details", "validationErrors" })
@@ -121,11 +121,11 @@ public class ResponseErrorDTO
 
     private void addValidationError(String object, String field, Object rejectedValue, String message)
     {
-        this.addSubError(this.buildApiValidationError(object, field, rejectedValue, message));
+        this.addSubError(UserAccountUtil.buildApiValidationError(object, field, rejectedValue, message));
     }
 
     /**
-     * Populer la lsite des erreurs de validations des achamps ou attributs de l'objet.
+     * Alimenter la liste des erreurs de validations des achamps ou attributs de l'objet.
      * 
      * @param validationError les informations des erreurs de validation des champs ou attributs.
      */
@@ -138,22 +138,4 @@ public class ResponseErrorDTO
         this.validationErrors.add(validationError);
     }
 
-    /**
-     * Construire l'instance de {@link ValidationErrorDTO } avec les paramètres fournis.
-     * 
-     * @param object        l'objet à valider.
-     * @param field         le champ ou l'attribut à valider.
-     * @param rejectedValue la valeur de rejet de la validation.
-     * @param message       le message d'erreurs de la validation.
-     * @return l'instance de l'objet de transfert des données d'erreurs de validation.
-     */
-    private ValidationErrorDTO buildApiValidationError(String object, String field, Object rejectedValue, String message)
-    {
-        return ValidationErrorDTO.builder()//
-        .object(object)//
-        .field(field)//
-        .message(message)//
-        .rejectedValue(rejectedValue)//
-        .build();
-    }
 }

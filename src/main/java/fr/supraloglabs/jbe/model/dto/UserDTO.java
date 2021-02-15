@@ -40,7 +40,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE) // Hides the constructor to force usage of the Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE) 
 @Builder
 @JsonInclude(content = JsonInclude.Include.NON_NULL, value = Include.NON_EMPTY)
 @JsonPropertyOrder({ "id", "firstName", "lastName", "email", "age", "accountLocked", "adresse", "city", "phone" })

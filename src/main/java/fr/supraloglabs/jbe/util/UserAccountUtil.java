@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 
 import fr.supraloglabs.jbe.model.GenericApiResponse;
 import fr.supraloglabs.jbe.model.dto.error.ResponseErrorDTO;
+import fr.supraloglabs.jbe.model.dto.error.ValidationErrorDTO;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -75,5 +76,24 @@ public class UserAccountUtil
         return ResponseEntity//
         .status(pResponseErrorDTO.getStatus())//
         .body(response);
+    }
+    
+    /**
+     * Construire l'instance de {@link ValidationErrorDTO } avec les paramètres fournis.
+     * 
+     * @param object        l'objet à valider.
+     * @param field         le champ ou l'attribut à valider.
+     * @param rejectedValue la valeur de rejet de la validation.
+     * @param message       le message d'erreurs de la validation.
+     * @return l'instance de l'objet de transfert des données d'erreurs de validation.
+     */
+    public static ValidationErrorDTO buildApiValidationError(String object, String field, Object rejectedValue, String message)
+    {
+        return ValidationErrorDTO.builder()//
+        .object(object)//
+        .field(field)//
+        .message(message)//
+        .rejectedValue(rejectedValue)//
+        .build();
     }
 }

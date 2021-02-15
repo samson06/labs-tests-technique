@@ -33,12 +33,12 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE) // Hides the constructor to force usage of the Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE) 
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class GenericApiResponse<T>
 {
     //
     private T data; // Les données de la réponse de l'API
-    private ResponseErrorDTO errors; // Les erreus survenues lors de l'exécution
+    private ResponseErrorDTO errors; // Les erreurs survenues lors de l'exécution
 }
