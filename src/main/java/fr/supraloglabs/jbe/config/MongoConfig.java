@@ -64,10 +64,10 @@ public class MongoConfig
     @Bean(name = "mongoClient")
     public MongoClient mongoClient()
     {
-        // // Construire la chaîne de connection
+        //  Construire la chaîne de connexion
         final String urlConnection = UserAccountUtil.mongoDBConnectionStr(this.host, this.port, this.database);
 
-        // Credentials dans le cas où la connexion est sécurisée
+        // Credentials : informations d'identification dans le cas où la connexion est sécurisée
         final MongoCredential mongoCredential = MongoCredential.createCredential(this.username, this.database, this.password.toCharArray());
 
         final ConnectionString connectionString = new ConnectionString(urlConnection);

@@ -38,7 +38,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 @ComponentScan(basePackages = { "fr.supraloglabs.jbe" })
 @EntityScan("fr.supraloglabs.jbe.model.po")
 @EnableMongoRepositories(basePackages = { "fr.supraloglabs.jbe.dao" })
-//@EnableTransactionManagement
 public class AppRootConfig
 {
     /**

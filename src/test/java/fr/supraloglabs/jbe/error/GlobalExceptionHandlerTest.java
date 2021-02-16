@@ -2,8 +2,8 @@
  * ----------------------------------------------
  * Projet ou Module : labs-tests-technique
  * Nom de la classe : GlobalExceptionHandlerTest.java
- * Date de création : 15 févr. 2021
- * Heure de création : 10:58:49
+ * Date de création : 16 févr. 2021
+ * Heure de création : 12:52:32
  * Package : fr.supraloglabs.jbe.error
  * Auteur : Vincent Otchoun
  * Copyright © 2021 - All rights reserved.
@@ -13,42 +13,35 @@ package fr.supraloglabs.jbe.error;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
-import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JsonParseException;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.core.MethodParameter;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
-import org.springframework.mock.http.MockHttpInputMessage;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.google.common.collect.Sets;
 
 import fr.supraloglabs.jbe.config.AppRootConfig;
@@ -63,12 +56,10 @@ import fr.supraloglabs.jbe.util.UserAccountUtil;
  * @author Vincent Otchoun
  */
 @RunWith(SpringRunner.class)
-@TestPropertySource(value = { "classpath:application-test.properties" })
 @ContextConfiguration(name = "globalExceptionHandlerTest", classes = { AppRootConfig.class, GlobalExceptionHandler.class })
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 @ActiveProfiles("test")
-//@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
-public class GlobalExceptionHandlerTest
+class GlobalExceptionHandlerTest
 {
     @Autowired
     private GlobalExceptionHandler<UserDTO> exceptionHandler;
@@ -76,10 +67,17 @@ public class GlobalExceptionHandlerTest
     /**
      * @throws java.lang.Exception
      */
+    @BeforeEach
+    void setUp() throws Exception
+    {
+    }
+
+    /**
+     * @throws java.lang.Exception
+     */
     @AfterEach
     void tearDown() throws Exception
     {
-        this.exceptionHandler = null;
     }
 
     /**
@@ -87,7 +85,7 @@ public class GlobalExceptionHandlerTest
      * {@link fr.supraloglabs.jbe.error.GlobalExceptionHandler#handleHttpClientErrorException(org.springframework.web.client.HttpClientErrorException)}.
      */
     @Test
-    public void testHandleHttpClientErrorException()
+    void testHandleHttpClientErrorException()
     {
         final HttpClientErrorException clientErrorException = new HttpClientErrorException(HttpStatus.UNAUTHORIZED, UserAccountUtil.ACCESS_DENIED);
         final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleHttpClientErrorException(clientErrorException);
@@ -105,7 +103,7 @@ public class GlobalExceptionHandlerTest
     }
 
     @Test
-    public void testHandleHttpClientErrorException_BadRequest()
+    void testHandleHttpClientErrorException_BadRequest()
     {
         final HttpClientErrorException clientErrorException = new HttpClientErrorException(HttpStatus.BAD_REQUEST, UserAccountUtil.ACCESS_DENIED);
         final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleHttpClientErrorException(clientErrorException);
@@ -123,7 +121,7 @@ public class GlobalExceptionHandlerTest
     }
 
     @Test
-    public void testHandleHttpClientErrorException_ShouldThrowException()
+    void testHandleHttpClientErrorException_ShouldThrowException()
     {
         final Exception exception = assertThrows(NullPointerException.class, () -> {
             new HttpClientErrorException(null, null);
@@ -139,7 +137,7 @@ public class GlobalExceptionHandlerTest
      * {@link fr.supraloglabs.jbe.error.GlobalExceptionHandler#handleHttpUserAccountException(fr.supraloglabs.jbe.error.UserAccountException)}.
      */
     @Test
-    public void testHandleHttpUserAccountException()
+    void testHandleHttpUserAccountException()
     {
         final UserAccountException customAppException = new UserAccountException("Erreur customisée");
         final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleHttpUserAccountException(customAppException);
@@ -157,7 +155,7 @@ public class GlobalExceptionHandlerTest
     }
 
     @Test
-    public void testHandleHttpUserAccountException_WithNull()
+    void testHandleHttpUserAccountException_WithNull()
     {
         final UserAccountException customAppException = new UserAccountException(null, null);
         final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleHttpUserAccountException(customAppException);
@@ -175,7 +173,7 @@ public class GlobalExceptionHandlerTest
     }
 
     @Test
-    public void testHandleHttpUserAccountException_ShouldTrowNP()
+    void testHandleHttpUserAccountException_ShouldTrowNP()
     {
         final Exception exception = assertThrows(NullPointerException.class, () -> {
             this.exceptionHandler.handleHttpUserAccountException(null);
@@ -190,29 +188,11 @@ public class GlobalExceptionHandlerTest
      * {@link fr.supraloglabs.jbe.error.GlobalExceptionHandler#handleNotReadableException(java.lang.Exception)}.
      */
     @Test
-    public void testHandleNotReadableException()
+    void testHandleNotReadableException()
     {
-        MockHttpInputMessage inputMessage = new MockHttpInputMessage("mockInput".getBytes());
-        final HttpMessageNotReadableException notReadableException = new HttpMessageNotReadableException("HttpMessageNotReadableExceptione", null,
-        inputMessage);
-        final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleNotReadableException(notReadableException);
-
-        assertThat(response).isNotNull();
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getData()).isNull();
-        assertThat(response.getBody().getErrors()).isNotNull();
-        assertThat(response.getBody().getErrors()).isExactlyInstanceOf(ResponseErrorDTO.class);
-        assertThat(response.getBody().getErrors().getStatus()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
-        assertThat(response.getBody().getErrors().getDetails()).isEqualTo(UserAccountUtil.FORMAT_ERROR);
-        assertThat(response.getBody().getErrors().getDebugMessage()).isEqualTo(notReadableException.getMessage());
-        assertThat(response.getBody().getErrors().getValidationErrors()).isNull();
-    }
-
-    @Test
-    public void testHandleNotReadableException_Json()
-    {
-        final JsonParseException jsonParseException = new JsonParseException(null, "JSON");
+        final String message = "Message Erreur Parsing flux JSON";
+        final Throwable throwable = new Throwable(message);
+        final JsonParseException jsonParseException = new JsonParseException(throwable);
         final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleNotReadableException(jsonParseException);
 
         assertThat(response).isNotNull();
@@ -228,7 +208,7 @@ public class GlobalExceptionHandlerTest
     }
 
     @Test
-    public void testHandleNotReadableException_WithNull()
+    void testHandleNotReadableException_WithNull()
     {
         final HttpMessageNotReadableException notReadableException = new HttpMessageNotReadableException(null, null, null);
         final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleNotReadableException(notReadableException);
@@ -246,7 +226,7 @@ public class GlobalExceptionHandlerTest
     }
 
     @Test
-    public void testHandleNotReadableException_ShouldTrowNPE()
+    void testHandleNotReadableException_ShouldTrowNPE()
     {
         final Exception exception = assertThrows(NullPointerException.class, () -> {
             this.exceptionHandler.handleNotReadableException(null);
@@ -261,7 +241,7 @@ public class GlobalExceptionHandlerTest
      * {@link fr.supraloglabs.jbe.error.GlobalExceptionHandler#handleNoHandlerFoundException(org.springframework.web.servlet.NoHandlerFoundException)}.
      */
     @Test
-    public void testHandleNoHandlerFoundException()
+    void testHandleNoHandlerFoundException()
     {
         ServletServerHttpRequest req = new ServletServerHttpRequest(new MockHttpServletRequest("GET", "/resource"));
         final NoHandlerFoundException noHandlerFoundException = new NoHandlerFoundException(req.getMethod().toString(), req.getServletRequest()
@@ -281,7 +261,7 @@ public class GlobalExceptionHandlerTest
     }
 
     @Test
-    public void testHandleNoHandlerFoundExceptionWithNull()
+    void testHandleNoHandlerFoundExceptionWithNull()
     {
         final NoHandlerFoundException noHandlerFoundException = new NoHandlerFoundException(null, null, null);
         final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleNoHandlerFoundException(noHandlerFoundException);
@@ -299,7 +279,7 @@ public class GlobalExceptionHandlerTest
     }
 
     @Test
-    public void testHandleNoHandlerFoundException_ShouldThrowNPE()
+    void testHandleNoHandlerFoundException_ShouldThrowNPE()
     {
         final Exception exception = assertThrows(NullPointerException.class, () -> {
             this.exceptionHandler.handleNoHandlerFoundException(null);
@@ -313,33 +293,14 @@ public class GlobalExceptionHandlerTest
      * Test method for
      * {@link fr.supraloglabs.jbe.error.GlobalExceptionHandler#handleFileldValidationError(org.springframework.web.bind.MethodArgumentNotValidException)}.
      */
-    @Test
-    public void testHandleFileldValidationError()
-    {
-        final MethodArgumentNotValidException methodArgumentNotValidException = mock(MethodArgumentNotValidException.class);
-        final BindingResult bindingResult = mock(BindingResult.class);
-
-        when(bindingResult.getFieldErrors()).thenReturn(Arrays.asList(new FieldError("station", "name", "should not be empty")));
-        when(methodArgumentNotValidException.getBindingResult()).thenReturn(bindingResult);
-
-        final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleFileldValidationError(
-        methodArgumentNotValidException);
-
-        // assertThat(response, notNullValue());
-        assertThat(response).isNotNull();
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getData()).isNull();
-        assertThat(response.getBody().getErrors()).isNotNull();
-        assertThat(response.getBody().getErrors()).isExactlyInstanceOf(ResponseErrorDTO.class);
-        assertThat(response.getBody().getErrors().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody().getErrors().getDetails()).isEqualTo(UserAccountUtil.CONTRAINST_VALDATION_ERROR);
-        assertThat(response.getBody().getErrors().getDebugMessage()).isEqualTo(methodArgumentNotValidException.getMessage());
-        assertThat(response.getBody().getErrors().getValidationErrors()).isNotEmpty();
-    }
+    // @Test
+    // void testHandleFileldValidationError()
+    // {
+    // fail("Not yet implemented");
+    // }
 
     @Test
-    public void testHandleFileldValidationError_WithNull()
+    void testHandleFileldValidationError_WithNull()
     {
         final MethodArgumentNotValidException methodArgumentNotValidException = new MethodArgumentNotValidException(null, null);
         final Exception exception = assertThrows(NullPointerException.class, () -> {
@@ -351,7 +312,7 @@ public class GlobalExceptionHandlerTest
     }
 
     @Test
-    public void testHandleFileldValidationError_ShouldThrowNPE()
+    void testHandleFileldValidationError_ShouldThrowNPE()
     {
         final Exception exception = assertThrows(NullPointerException.class, () -> {
             this.exceptionHandler.handleFileldValidationError(null);
@@ -366,7 +327,7 @@ public class GlobalExceptionHandlerTest
      * {@link fr.supraloglabs.jbe.error.GlobalExceptionHandler#handleConstraintViolationException(javax.validation.ConstraintViolationException)}.
      */
     @Test
-    public void testHandleConstraintViolationException()
+    void testHandleConstraintViolationException()
     {
         Set<ConstraintViolation<UserDTO>> constraintViolations = Sets.newHashSet();
         final ConstraintViolationException violationException = new ConstraintViolationException("Violation de contraintes", constraintViolations);
@@ -385,7 +346,7 @@ public class GlobalExceptionHandlerTest
     }
 
     @Test
-    public void testHandleConstraintViolationException_WithNull()
+    void testHandleConstraintViolationException_WithNull()
     {
         final ConstraintViolationException violationException = new ConstraintViolationException(null, null);
         final Exception exception = assertThrows(NullPointerException.class, () -> {
@@ -397,7 +358,7 @@ public class GlobalExceptionHandlerTest
     }
 
     @Test
-    public void testHandleConstraintViolationException_ShouldThrowNPE()
+    void testHandleConstraintViolationException_ShouldThrowNPE()
     {
         final Exception exception = assertThrows(NullPointerException.class, () -> {
             this.exceptionHandler.handleConstraintViolationException(null);
@@ -412,7 +373,7 @@ public class GlobalExceptionHandlerTest
      * {@link fr.supraloglabs.jbe.error.GlobalExceptionHandler#handleDataIntegrityException(org.springframework.dao.DataIntegrityViolationException)}.
      */
     @Test
-    public void testHandleDataIntegrityException()
+    void testHandleDataIntegrityException()
     {
         final DataIntegrityViolationException dataIntegrityViolationException = new DataIntegrityViolationException(
         "Violation intégrité des données.");
@@ -432,7 +393,7 @@ public class GlobalExceptionHandlerTest
     }
 
     @Test
-    public void testHandleDataIntegrityException_WithNull()
+    void testHandleDataIntegrityException_WithNull()
     {
         final DataIntegrityViolationException dataIntegrityViolationException = new DataIntegrityViolationException(null, null);
         final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleDataIntegrityException(
@@ -451,7 +412,7 @@ public class GlobalExceptionHandlerTest
     }
 
     @Test
-    public void testHandleDataIntegrityException_ShouldThrowNPE()
+    void testHandleDataIntegrityException_ShouldThrowNPE()
     {
         final Exception exception = assertThrows(NullPointerException.class, () -> {
             this.exceptionHandler.handleDataIntegrityException(null);
@@ -469,7 +430,7 @@ public class GlobalExceptionHandlerTest
      * @throws NoSuchMethodException
      */
     @Test
-    public void testHandleMethodArgumentTypException() throws NoSuchMethodException, SecurityException
+    void testHandleMethodArgumentTypException() throws NoSuchMethodException, SecurityException
     {
         Method method = UserDTO.class.getMethod("setFirstName", String.class);
         MethodParameter methodParameter = new MethodParameter(method, 0);
@@ -490,7 +451,7 @@ public class GlobalExceptionHandlerTest
     }
 
     @Test
-    public void testHandleMethodArgumentTypException_WithNull()
+    void testHandleMethodArgumentTypException_WithNull()
     {
         MethodArgumentTypeMismatchException mismatchException = new MethodArgumentTypeMismatchException(null, null, null, null, null);
         final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleMethodArgumentTypException(mismatchException);
@@ -508,7 +469,7 @@ public class GlobalExceptionHandlerTest
     }
 
     @Test
-    public void testHandleMethodArgumentTypException_ShouldThrowNPE()
+    void testHandleMethodArgumentTypException_ShouldThrowNPE()
     {
         final Exception exception = assertThrows(NullPointerException.class, () -> {
             this.exceptionHandler.handleMethodArgumentTypException(null);
@@ -517,4 +478,5 @@ public class GlobalExceptionHandlerTest
         String actualMessage = exception.getMessage();
         assertThat(actualMessage).isNull();
     }
+
 }
