@@ -38,7 +38,7 @@ import fr.supraloglabs.jbe.model.po.User;
  * @author Vincent Otchoun
  */
 @RunWith(SpringRunner.class)
-@ContextConfiguration(name = "userMapperTest", classes = {ModelMapper.class, UserMapper.class })
+@ContextConfiguration(name = "userMapperTest", classes = { ModelMapper.class, UserMapper.class })
 @SpringBootTest
 @ActiveProfiles("test")
 class UserMapperTest
@@ -147,13 +147,13 @@ class UserMapperTest
         TestsDataUtils.assertAllUsersUserAndUserDTO(users.get(0), dtos.get(0));
     }
 
-    // @Test
-    // void testTotoUsers_WithNullList()
-    // {
-    // final List<User> users = (List<User>) this.userMapper.totoUsers(null);
-    // assertThat(users).isEmpty();
-    // assertThat(users.size()).isNotPositive();
-    // }
+    @Test
+    void testTotoUsers_WithNullList()
+    {
+        final List<User> users = (List<User>) this.userMapper.totoUsers(null);
+        assertThat(users).isEmpty();
+        assertThat(users.size()).isNotPositive();
+    }
 
     /**
      * Test method for {@link fr.supraloglabs.jbe.service.mapper.UserMapper#toUserDtos(java.util.Collection)}.
@@ -188,11 +188,11 @@ class UserMapperTest
         TestsDataUtils.assertAllUsersUserAndUserDTO(users.get(0), dtos.get(0));
     }
 
-    // @Test
-    // void testToUserDtos_WithNullList()
-    // {
-    // final List<UserDTO> dtos = (List<UserDTO>) this.userMapper.toUserDtos(null);
-    // assertThat(dtos).isEmpty();
-    // assertThat(dtos.size()).isNotPositive();
-    // }
+    @Test
+    void testToUserDtos_WithNullList()
+    {
+        final List<UserDTO> dtos = (List<UserDTO>) this.userMapper.toUserDtos(null);
+        assertThat(dtos).isEmpty();
+        assertThat(dtos.size()).isNotPositive();
+    }
 }

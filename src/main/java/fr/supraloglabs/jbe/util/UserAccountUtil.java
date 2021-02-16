@@ -105,12 +105,12 @@ public class UserAccountUtil
     }
 
     /**
-     * Fournit la chaîne de connection à la base de données avec les paramètres fournis en paramètres.
+     * Fournit la chaîne de connexion à la base de données avec les paramètres fournis en paramètres.
      * 
      * @param pHostname le nom de l'hôte du serveur.
-     * @param pPort     le port de connection du serveur.
+     * @param pPort     le port de connexion du serveur.
      * @param pDatabase le nom de la base de données.
-     * @return la chaîne de connection à la base de données.
+     * @return la chaîne de connexion à la base de données.
      */
     public static String mongoDBConnectionStr(final String pHostname, final Integer pPort, final String pDatabase)
     {
@@ -121,11 +121,22 @@ public class UserAccountUtil
     /**
      * Construire la chaîne avec les valeurs par défaut.
      * 
-     * @return la chaîne de connection à la base de données.
+     * @return la chaîne de connexion à la base de données.
      */
     public static String mongoDBConnectionStrDefault()
     {
         return mongoDBConnectionStr(MONGO_DB_URL, MONGO_DB_PORT, MONGO_DB);
+    }
+
+    /**
+     * Construire la chaîne de connexion à la base de données avec le nom de la base en paramètres.
+     * 
+     * @param pDatabasename le nom de la base de donées.
+     * @return la chaîne de connexion à la base de données.
+     */
+    public static String mongoDBConnectionWithDBName(final String pDatabasename)
+    {
+        return mongoDBConnectionStr(MONGO_DB_URL, MONGO_DB_PORT, pDatabasename);
     }
 
 }

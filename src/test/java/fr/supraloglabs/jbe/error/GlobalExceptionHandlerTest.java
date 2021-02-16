@@ -13,8 +13,11 @@ package fr.supraloglabs.jbe.error;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -37,6 +40,8 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -293,11 +298,30 @@ class GlobalExceptionHandlerTest
      * Test method for
      * {@link fr.supraloglabs.jbe.error.GlobalExceptionHandler#handleFileldValidationError(org.springframework.web.bind.MethodArgumentNotValidException)}.
      */
-    // @Test
-    // void testHandleFileldValidationError()
-    // {
-    // fail("Not yet implemented");
-    // }
+     @Test
+     void testHandleFileldValidationError()
+     {
+          final MethodArgumentNotValidException methodArgumentNotValidException = mock(MethodArgumentNotValidException.class);
+          final BindingResult bindingResult = mock(BindingResult.class);
+         
+          when(bindingResult.getFieldErrors()).thenReturn(Arrays.asList(new FieldError("station", "name", "should not be  empty")));
+          when(methodArgumentNotValidException.getBindingResult()).thenReturn(bindingResult);
+         
+          final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleFileldValidationError(
+          methodArgumentNotValidException);
+         
+          // 
+          assertThat(response).isNotNull();
+          assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+          assertThat(response.getBody()).isNotNull();
+          assertThat(response.getBody().getData()).isNull();
+          assertThat(response.getBody().getErrors()).isNotNull();
+          assertThat(response.getBody().getErrors()).isExactlyInstanceOf(ResponseErrorDTO.class);
+          assertThat(response.getBody().getErrors().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
+          assertThat(response.getBody().getErrors().getDetails()).isEqualTo(UserAccountUtil.CONTRAINST_VALDATION_ERROR);
+          assertThat(response.getBody().getErrors().getDebugMessage()).isEqualTo(methodArgumentNotValidException.getMessage());
+          assertThat(response.getBody().getErrors().getValidationErrors()).isNotEmpty();
+     }
 
     @Test
     void testHandleFileldValidationError_WithNull()
