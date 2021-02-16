@@ -10,7 +10,7 @@
  * ----------------------------------------------
  */
 /**
- * Les configuration applicatives.
+ * Les configurations applicatives.
  * 
  * @author Vincent Otchoun
  */

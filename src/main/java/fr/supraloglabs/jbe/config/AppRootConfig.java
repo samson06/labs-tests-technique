@@ -20,7 +20,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,7 +38,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 @ComponentScan(basePackages = { "fr.supraloglabs.jbe" })
 @EntityScan("fr.supraloglabs.jbe.model.po")
 @EnableMongoRepositories(basePackages = { "fr.supraloglabs.jbe.dao" })
-@EnableTransactionManagement
+//@EnableTransactionManagement
 public class AppRootConfig
 {
     /**

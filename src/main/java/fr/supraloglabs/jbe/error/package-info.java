@@ -10,7 +10,7 @@
  * ----------------------------------------------
  */
 /**
- * Composants de gestion des erreurs ou exceptions dans l'apllication.
+ * Composants de gestion des erreurs ou exceptions dans l'application.
  * 
  * @author Vincent Otchoun
  */

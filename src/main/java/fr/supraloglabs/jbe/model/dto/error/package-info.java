@@ -10,7 +10,7 @@
  * ----------------------------------------------
  */
 /**
- * Objets d'encapsulation des erreurs survenues lors du ofnctionnement de l'application.
+ * Objets d'encapsulation des erreurs survenues lors du fonctionnement de l'application.
  * 
  * @author Vincent Otchoun
  */

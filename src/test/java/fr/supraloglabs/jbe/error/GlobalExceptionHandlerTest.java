@@ -66,8 +66,8 @@ import fr.supraloglabs.jbe.util.UserAccountUtil;
 @TestPropertySource(value = { "classpath:application-test.properties" })
 @ContextConfiguration(name = "globalExceptionHandlerTest", classes = { AppRootConfig.class, GlobalExceptionHandler.class })
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-// @SpringBootTest
 @ActiveProfiles("test")
+//@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class GlobalExceptionHandlerTest
 {
     @Autowired

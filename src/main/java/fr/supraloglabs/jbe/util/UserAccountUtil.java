@@ -11,6 +11,7 @@
  */
 package fr.supraloglabs.jbe.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
 
 import fr.supraloglabs.jbe.model.GenericApiResponse;
@@ -26,6 +27,13 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class UserAccountUtil
 {
+    // "mongodb://localhost:12345/users_db_test"
+    public static final String MONGODB_PREFIX_PATTERN = "mongodb://%s:%d/%s";
+
+    private static final String MONGO_DB_URL = "localhost";
+    private static final Integer MONGO_DB_PORT = 12345;
+    private static final String MONGO_DB = "users_db_test";
+
     // Erreur HTTP
     public static final String URL_ERROR = "Impossible de trouver la méthode '%s' pour l'URL '%s'.";
     public static final String METHOD_ERROR = "Le paramètre '%s' de la valeur '%s' n'a pas pu être converti en type '%s'";
@@ -37,7 +45,6 @@ public class UserAccountUtil
     public static final String INTEGRITY_ERROR = "Erreur de violations d'intégrité des données.";
     public static final String ACCESS_DENIED = "Accès non autorisés.";
 
-    
     //
     public static final String CET_DATE_FORMAT_WITHOUT_TIMEZONE_TEXT = "yyyy-MM-dd'T'HH:mm:ss.SSS";
     public static final String ISO_DATE_TIME = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
@@ -77,7 +84,7 @@ public class UserAccountUtil
         .status(pResponseErrorDTO.getStatus())//
         .body(response);
     }
-    
+
     /**
      * Construire l'instance de {@link ValidationErrorDTO } avec les paramètres fournis.
      * 
@@ -96,4 +103,29 @@ public class UserAccountUtil
         .rejectedValue(rejectedValue)//
         .build();
     }
+
+    /**
+     * Fournit la chaîne de connection à la base de données avec les paramètres fournis en paramètres.
+     * 
+     * @param pHostname le nom de l'hôte du serveur.
+     * @param pPort     le port de connection du serveur.
+     * @param pDatabase le nom de la base de données.
+     * @return la chaîne de connection à la base de données.
+     */
+    public static String mongoDBConnectionStr(final String pHostname, final Integer pPort, final String pDatabase)
+    {
+        return (StringUtils.isNotBlank(pHostname) && pPort != null && StringUtils.isNotBlank(pDatabase)) ? String.format(MONGODB_PREFIX_PATTERN,
+        pHostname, pPort, pDatabase) : null;
+    }
+
+    /**
+     * Construire la chaîne avec les valeurs par défaut.
+     * 
+     * @return la chaîne de connection à la base de données.
+     */
+    public static String mongoDBConnectionStrDefault()
+    {
+        return mongoDBConnectionStr(MONGO_DB_URL, MONGO_DB_PORT, MONGO_DB);
+    }
+
 }

@@ -29,7 +29,6 @@ public class UserAccountApplicationStarter
      */
     public static void main(String... args)
     {
-        // SpringApplication.run(UserAccountApplicationStarter.class, args);
         new SpringApplicationBuilder() //
         .sources(UserAccountApplicationStarter.class)//
         .run(args);
