@@ -57,7 +57,7 @@ public class User implements Serializable
     private static final long serialVersionUID = 4677921064921552486L;
 
     @Id
-    String id; // identifiant technique auto-généré
+    Long id; // identifiant technique auto-généré
 
     @NotEmpty(message = UserAccountUtil.PRENOM_MSG)
     @Size(min = 1, max = UserAccountUtil.QUATRE_VINGT, message = UserAccountUtil.PRENOM_SIZE_MSG)

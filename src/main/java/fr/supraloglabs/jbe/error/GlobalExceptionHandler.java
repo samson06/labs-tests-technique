@@ -13,29 +13,15 @@ package fr.supraloglabs.jbe.error;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
 
-import javax.validation.ConstraintViolationException;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.http.converter.HttpMessageNotWritableException;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.context.request.WebRequest;
 
-import com.fasterxml.jackson.core.JsonParseException;
-
-import fr.supraloglabs.jbe.model.GenericApiResponse;
-import fr.supraloglabs.jbe.model.dto.error.ResponseErrorDTO;
+import fr.supraloglabs.jbe.model.error.ErrorDetails;
 import fr.supraloglabs.jbe.util.UserAccountUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,165 +35,66 @@ import lombok.extern.slf4j.Slf4j;
 public class GlobalExceptionHandler<T>
 {
     /**
-     * Interception des exceptions levées lorsqu'une erreur ayant le status (code HTTP) 4xx survient.
+     * Interception des exceptions levées lorsqu'une erreur avec le status (code HTTP) 4xx survient.
      * 
-     * @param ex erreur survenue.
-     * @return entité de réponse HTTP avec le status et le corps.
+     * @param pException erreur survenue lors de l'appel client.
+     * @param pRequest   les information de la requête adressée.
+     * @return entité de réponse HTTP avec les données sur les erreurs.
      */
     @ExceptionHandler(value = { HttpClientErrorException.class })
-    public ResponseEntity<GenericApiResponse<T>> handleHttpClientErrorException(HttpClientErrorException ex)
+    public ResponseEntity<T> handleHttpClientErrorException(final HttpClientErrorException pException, final WebRequest pRequest)
     {
         log.info("[handleHttpClientErrorException] - Interception des erreurs de type 4XX.");
 
-        // Construire l'objet de restitution des informations sur les erreurs.
-        final ResponseErrorDTO responseError = ResponseErrorDTO.builder()//
-        .status(ex.getStatusCode()) //
+        // Construire l'objet portant les données des erreurs survenues
+        final ErrorDetails responseError = ErrorDetails.builder()//
+        .status(pException.getStatusCode()) //
         .timestamp(LocalDateTime.now(ZoneId.systemDefault()))//
-        .details(UserAccountUtil.HTTP_CLIENT_ERROR)//
-        .debugMessage(ex.getMessage())//
-        .validationErrors(null)//
+        .details(pRequest.getDescription(false))//
+        .message(pException.getMessage())//
         .build();
         return UserAccountUtil.buildResponseErrorEntity(responseError);
     }
 
     /**
-     * Interception des exceptions internes propres au server (erreurs internes levées).
+     * Interception des exceptions personnalisées de l'application.
      * 
-     * @param ex erreur interne survenue.
-     * @return entité de réponse HTTP avec le status et le corps.
+     * @param pException erreur applicative survenue.
+     * @param pRequest   les information de la requête adressée.
+     * @return entité de réponse HTTP avec les données sur les erreurs.
      */
-    @ExceptionHandler(value = { UserAccountException.class })
-    public ResponseEntity<GenericApiResponse<T>> handleHttpUserAccountException(UserAccountException ex)
+    @ExceptionHandler(value = { AppCustomException.class })
+    public ResponseEntity<T> handleAppCustomException(final AppCustomException pException, final WebRequest pRequest)
     {
-        log.info("[handleHttpCustomAppException] - Interception des erreurs internes à l'application.");
+        log.info("[handleAppCustomException] - Interception des erreurs applicatives.");
 
-        final ResponseErrorDTO error = ResponseErrorDTO.builder()//
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)//
-        .timestamp(LocalDateTime.now(ZoneId.systemDefault()))//
-        .details(UserAccountUtil.SERVER_INTERNAL_ERROR)//
-        .debugMessage(ex.getMessage())//
-        .validationErrors(null)//
-        .build();
-        return UserAccountUtil.buildResponseErrorEntity(error);
-    }
+        // Construire l'objet portant les données des erreurs survenues
+        final ErrorDetails error = UserAccountUtil.construireErreur(pException, pRequest, HttpStatus.NOT_FOUND);
 
-    @ExceptionHandler(value = { HttpMessageNotReadableException.class, JsonParseException.class, HttpMessageNotWritableException.class })
-    public ResponseEntity<GenericApiResponse<T>> handleNotReadableException(Exception ex)
-    {
-        log.info("[handleNotReadableException] - Interception des erreurs de structure mal formatée.");
-
-        final ResponseErrorDTO error = ResponseErrorDTO.builder()//
-        .status(HttpStatus.UNPROCESSABLE_ENTITY)//
-        .timestamp(LocalDateTime.now(ZoneId.systemDefault()))//
-        .details(UserAccountUtil.FORMAT_ERROR)//
-        .debugMessage(ex.getMessage())//
-        .validationErrors(null).build();
+        // final ErrorDetails error = ErrorDetails.builder()//
+        // .status(HttpStatus.NOT_FOUND)//
+        // .timestamp(LocalDateTime.now(ZoneId.systemDefault()))//
+        // .details(pRequest.getDescription(false))//
+        // .message(pException.getMessage())//
+        // .build();
         return UserAccountUtil.buildResponseErrorEntity(error);
     }
 
     /**
-     * Interception des erreurs d'URL non valide.
+     * Interception des autres type d'erreurs survenues lors de l'exécution de l'application.
      * 
-     * @param ex erreur ou exception levée.
-     * @return entité de réponse HTTP avec le status et le corps.
+     * @param ex       erreur interne survenue.
+     * @param pRequest les information de la requête adressée.
+     * @return entité de réponse HTTP avec les données sur les erreurs.
      */
-    @ExceptionHandler(value = { NoHandlerFoundException.class })
-    public ResponseEntity<GenericApiResponse<T>> handleNoHandlerFoundException(NoHandlerFoundException ex)
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<T> globleExcpetionHandler(final Exception pException, WebRequest pRequest)
     {
-        log.info("[handleNoHandlerFoundException] - Interception des erreurs d'URL non valide.");
+        log.info("[globleExcpetionHandler] - Interception des autres erreurs applicatives.");
 
-        final ResponseErrorDTO error = ResponseErrorDTO.builder()//
-        .status(HttpStatus.BAD_REQUEST)//
-        .timestamp(LocalDateTime.now(ZoneId.systemDefault()))//
-        .details(String.format(UserAccountUtil.URL_ERROR, ex.getHttpMethod(), ex.getRequestURL()))//
-        .debugMessage(ex.getMessage())//
-        .validationErrors(null).build();
+        // Construire l'objet portant les données des erreurs survenues
+        final ErrorDetails error = UserAccountUtil.construireErreur(pException, pRequest, HttpStatus.INTERNAL_SERVER_ERROR);
         return UserAccountUtil.buildResponseErrorEntity(error);
     }
 
-    /**
-     * Intercèpter les erreurs de cahmps ou attributs lorsque @Valid échoue.
-     * 
-     * @param ex erreur ou exception levée.
-     * @return entité de réponse HTTP avec le status et le corps
-     */
-    @ExceptionHandler(value = { MethodArgumentNotValidException.class })
-    public ResponseEntity<GenericApiResponse<T>> handleFileldValidationError(MethodArgumentNotValidException ex)
-    {
-        log.info("[handleConstraintViolationException] - Interception des erreurs de violation d contraintes.");
-
-        final ResponseErrorDTO error = ResponseErrorDTO.builder()//
-        .status(HttpStatus.BAD_REQUEST)//
-        .timestamp(LocalDateTime.now(ZoneId.systemDefault()))//
-        .details(UserAccountUtil.CONTRAINST_VALDATION_ERROR)//
-        .debugMessage(ex.getMessage()).build();
-
-        final BindingResult result = ex.getBindingResult();
-        final List<FieldError> fieldErrors = result.getFieldErrors();
-
-        error.addFieldErrorValidationErrors(fieldErrors);
-        return UserAccountUtil.buildResponseErrorEntity(error);
-    }
-    
-    /**
-     * Intercèpter les erreurs de violations de contraintes lorsque @Validated échoue.
-     * 
-     * @param ex erreur ou exception levée.
-     * @return entité de réponse HTTP avec le status et le corps.
-     */
-    @ExceptionHandler(value = { ConstraintViolationException.class })
-    public ResponseEntity<GenericApiResponse<T>> handleConstraintViolationException(ConstraintViolationException ex)
-    {
-        log.info("[handleConstraintViolationException] - Interception des erreurs de violation d contraintes.");
-
-        final ResponseErrorDTO error = ResponseErrorDTO.builder()//
-        .status(HttpStatus.BAD_REQUEST)//
-        .timestamp(LocalDateTime.now(ZoneId.systemDefault()))//
-        .details(UserAccountUtil.CONTRAINST_VALDATION_ERROR)//
-        .debugMessage(ex.getMessage()).build();
-
-        error.addValidationErrorsCV(ex.getConstraintViolations());
-        return UserAccountUtil.buildResponseErrorEntity(error);
-    }
-
-    /**
-     * Intercepter les erreurs de violations d'intégrités des données.
-     * 
-     * @param ex erreur ou exception levée.
-     * @return entité de réponse HTTP avec le status et le corps.
-     */
-    @ExceptionHandler(value = { DataIntegrityViolationException.class })
-    public ResponseEntity<GenericApiResponse<T>> handleDataIntegrityException(DataIntegrityViolationException ex)
-    {
-        log.info("[handleDataIntegrityException] - Interception des erreurs pour violation d'intégrité des données.");
-
-        final ResponseErrorDTO error = ResponseErrorDTO.builder()//
-        .status(HttpStatus.CONFLICT)//
-        .timestamp(LocalDateTime.now(ZoneId.systemDefault()))//
-        .details(UserAccountUtil.INTEGRITY_ERROR)//
-        .debugMessage(ex.getMessage())//
-        .validationErrors(null).build();
-        return UserAccountUtil.buildResponseErrorEntity(error);
-    }
-    
-    /**
-     * Intercepter les erreurs de non-concordance de type d'argument de méthode.
-     * 
-     * @param ex erreur ou exception levée.
-     * @return entité de réponse HTTP avec le status et le corps.
-     */
-    @ExceptionHandler(value = { MethodArgumentTypeMismatchException.class })
-    public ResponseEntity<GenericApiResponse<T>> handleMethodArgumentTypException(MethodArgumentTypeMismatchException ex)
-    {
-        log.info("[handleMethodArgumentTypException] - Interception des erreurs de non-concordance de type d'argument de  méthode.");
-
-        final String details = String.format(UserAccountUtil.METHOD_ERROR, ex.getName(), ex.getValue(), ex.getRequiredType()+StringUtils.EMPTY);
-        final ResponseErrorDTO error = ResponseErrorDTO.builder()//
-        .status(HttpStatus.BAD_REQUEST)//
-        .timestamp(LocalDateTime.now(ZoneId.systemDefault()))//
-        .details(details)//
-        .debugMessage(ex.getMessage())//
-        .validationErrors(null).build();
-        return UserAccountUtil.buildResponseErrorEntity(error);
-    }
 }

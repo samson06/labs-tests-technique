@@ -13,6 +13,8 @@ package fr.supraloglabs.jbe.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -21,12 +23,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.context.request.WebRequest;
 
-import fr.supraloglabs.jbe.TestsDataUtils;
-import fr.supraloglabs.jbe.model.GenericApiResponse;
-import fr.supraloglabs.jbe.model.dto.UserDTO;
-import fr.supraloglabs.jbe.model.dto.error.ResponseErrorDTO;
-import fr.supraloglabs.jbe.model.dto.error.ValidationErrorDTO;
+import fr.supraloglabs.jbe.error.AppCustomException;
+import fr.supraloglabs.jbe.model.error.ErrorDetails;
 
 /**
  * Classe des Tests Unitaires des objets de type {@link UserAccountUtil}
@@ -102,53 +102,94 @@ class UserAccountUtilTest
 
     /**
      * Test method for
-     * {@link fr.supraloglabs.jbe.util.UserAccountUtil#buildResponseErrorEntity(fr.supraloglabs.jbe.model.dto.error.ResponseErrorDTO)}.
+     * {@link fr.supraloglabs.jbe.util.UserAccountUtil#buildResponseErrorEntity(fr.supraloglabs.jbe.model.error.ErrorDetails)}.
      */
     @Test
     void testBuildResponseErrorEntity()
     {
-        final ResponseErrorDTO responseError = ResponseErrorDTO.builder()//
+        final ErrorDetails responseError = ErrorDetails.builder()//
         .status(HttpStatus.BAD_REQUEST) //
         .timestamp(LocalDateTime.now(ZoneId.systemDefault()))//
         .details(UserAccountUtil.HTTP_CLIENT_ERROR)//
-        .debugMessage("Merreur mauvaise requête")//
-        .validationErrors(null)//
+        .message("Merreur mauvaise requête")//
         .build();
 
-        GenericApiResponse<UserDTO> response = new GenericApiResponse<>();
-        response.setData(TestsDataUtils.USER_DTO_TEST);
-        response.setErrors(responseError);
-
-        ResponseEntity<GenericApiResponse<UserDTO>> responseEntity = UserAccountUtil.buildResponseErrorEntity(responseError);
+        ResponseEntity<ErrorDetails> responseEntity = UserAccountUtil.buildResponseErrorEntity(responseError);
 
         assertThat(responseEntity).isNotNull();
-        assertThat(responseEntity.getBody().getErrors()).isExactlyInstanceOf(ResponseErrorDTO.class);
-        assertThat(responseEntity.getBody().getErrors().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(responseEntity.getBody()).isExactlyInstanceOf(ErrorDetails.class);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(responseEntity.getBody().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(responseEntity.getBody().getDetails()).isEqualTo(UserAccountUtil.HTTP_CLIENT_ERROR);
     }
 
     @Test
     void testBuildResponseErrorEntity_WithNull()
     {
-        
         final Exception exception = assertThrows(NullPointerException.class, () -> {
             UserAccountUtil.buildResponseErrorEntity(null);
         });
 
         String actualMessage = exception.getMessage();
         assertThat(actualMessage).isNull();
-
     }
+    
 
     /**
-     * Test method for
-     * {@link fr.supraloglabs.jbe.util.UserAccountUtil#buildApiValidationError(java.lang.String, java.lang.String, java.lang.Object, java.lang.String)}.
+     * Test method for {@link fr.supraloglabs.jbe.util.UserAccountUtil#construireErreur(java.lang.Exception, org.springframework.web.context.request.WebRequest, org.springframework.http.HttpStatus)}.
      */
     @Test
-    void testBuildApiValidationError()
+    void testConstruireErreur()
     {
-        final ValidationErrorDTO errorDTO = UserAccountUtil.buildApiValidationError(null, null, null, null);
+        final String message = "Message Erreur Exception globale";
+        final Exception exception = new Exception(message);
+        final WebRequest webRequest = mock(WebRequest.class);
+        when(webRequest.getDescription(Boolean.TRUE)).thenReturn("Infos client : session id and user name");
         
-        assertThat(errorDTO).isNotNull();
+        final ErrorDetails errorDetails = UserAccountUtil.construireErreur(exception, webRequest, HttpStatus.INTERNAL_SERVER_ERROR);
+        
+        assertThat(errorDetails).isNotNull();
+        assertThat(errorDetails.getMessage()).containsIgnoringCase("Erreur Exception globale");
+        assertThat(errorDetails.getTimestamp()).isExactlyInstanceOf(LocalDateTime.class);
     }
+    
+    
+    @Test
+    void testConstruireErreur_WithCustom()
+    {
+        final String message = "Message Erreur Exception customisée";
+        final AppCustomException exception = new AppCustomException(message);
+        
+        final WebRequest webRequest = mock(WebRequest.class);
+        when(webRequest.getDescription(Boolean.TRUE)).thenReturn("Infos client customisées : session id and user name");
+        
+        final ErrorDetails errorDetails = UserAccountUtil.construireErreur(exception, webRequest, HttpStatus.NOT_FOUND);
+        
+        assertThat(errorDetails).isNotNull();
+        assertThat(errorDetails.getMessage()).containsIgnoringCase("Erreur Exception customisée");
+        assertThat(errorDetails.getTimestamp()).isExactlyInstanceOf(LocalDateTime.class);
+        assertThat(errorDetails.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+    
+    @Test
+    void testConstruireErreur_WithNull()
+    {
+        final Exception exception = assertThrows(NullPointerException.class, () -> {
+            UserAccountUtil.construireErreur(null, null, HttpStatus.NOT_FOUND);
+        });
 
+        String actualMessage = exception.getMessage();
+        assertThat(actualMessage).isNull();
+    }
+    
+    @Test
+    void testConstruireErreur_WithFullNull()
+    {
+        final Exception exception = assertThrows(NullPointerException.class, () -> {
+            UserAccountUtil.construireErreur(null, null, null);
+        });
+
+        String actualMessage = exception.getMessage();
+        assertThat(actualMessage).isNull();
+    }
 }

@@ -27,6 +27,17 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class TestsDataUtils
 {
+    // Erreur HTTP
+    public static final String URL_ERROR = "Impossible de trouver la méthode '%s' pour l'URL '%s'.";
+    public static final String METHOD_ERROR = "Le paramètre '%s' de la valeur '%s' n'a pas pu être converti en type '%s'";
+    public static final String HTTP_CLIENT_ERROR = "Erreur client HTTP.";
+    public static final String SERVER_INTERNAL_ERROR = "Erreur interne du serveur.";
+    public static final String FORMAT_ERROR = "Erreur format pour lecture et écriture.";
+    public static final String CONTRAINST_VALDATION_ERROR = "Erreur violation de contraintes.";
+    public static final String NOT_FOUND_ERROR = "Erreur recherche infructueuse de données.";
+    public static final String INTEGRITY_ERROR = "Erreur de violations d'intégrité des données.";
+    public static final String ACCESS_DENIED = "Accès non autorisés.";
+    
     //
     public final UserDTO USER_DTO_TEST = UserDTO.builder()//
     // .id(generateUniqueId())//
@@ -39,8 +50,7 @@ public class TestsDataUtils
     .city("Marseille")//
     .phone("0645789512")//
     .build();
-    
-    
+
     public static void assertAllUserDTO(final UserDTO expected, final UserDTO actual)
     {
         assertThat(actual.getId()).isEqualTo(expected.getId());
@@ -53,7 +63,7 @@ public class TestsDataUtils
         assertThat(actual.getCity()).isEqualTo(expected.getCity());
         assertThat(actual.getPhone()).isEqualTo(expected.getPhone());
     }
-    
+
     public static void assertAllUsersUserAndUserDTO(final User expected, final UserDTO actual)
     {
         assertThat(actual.getId()).isEqualTo(expected.getId());
@@ -68,7 +78,8 @@ public class TestsDataUtils
     }
 
     public final User USER_TEST = User.builder()//
-    .id(generateUniqueId())//
+    // .id(generateUniqueId())//
+    .id(12L)//
     .firstName("Batcho")//
     .lastName("Karen Djayé")//
     .email("karen.test@live.fr")//

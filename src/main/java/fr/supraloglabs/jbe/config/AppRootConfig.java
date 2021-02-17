@@ -37,7 +37,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 @PropertySource(value = { "classpath:application.properties" }, ignoreResourceNotFound = false)
 @ComponentScan(basePackages = { "fr.supraloglabs.jbe" })
 @EntityScan("fr.supraloglabs.jbe.model.po")
-@EnableMongoRepositories(basePackages = { "fr.supraloglabs.jbe.dao" })
+@EnableMongoRepositories(basePackages = { "fr.supraloglabs.jbe.repository" })
 public class AppRootConfig
 {
     /**

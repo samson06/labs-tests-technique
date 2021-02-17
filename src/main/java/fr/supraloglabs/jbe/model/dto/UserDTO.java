@@ -18,8 +18,6 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import fr.supraloglabs.jbe.util.UserAccountUtil;
@@ -42,12 +40,11 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE) 
 @Builder
-@JsonInclude(content = JsonInclude.Include.NON_NULL, value = Include.NON_EMPTY)
 @JsonPropertyOrder({ "id", "firstName", "lastName", "email", "age", "accountLocked", "adresse", "city", "phone" })
 public class UserDTO
 {
 
-    String id; // identifiant technique auto-généré
+    Long id; // identifiant technique auto-généré
 
     @NotEmpty(message = UserAccountUtil.PRENOM_MSG)
     @Size(min = 1, max = UserAccountUtil.QUATRE_VINGT, message = UserAccountUtil.PRENOM_SIZE_MSG)

@@ -18,14 +18,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Classe des Tests Unitaires des objets de type {@link UserAccountException}
+ * Classe des Tests Unitaires des objets de type {@link AppCustomException}
  * @author Vincent Otchoun
  *
  */
-class UserAccountExceptionTest
+class AppCustomExceptionTest
 {
     
-    private UserAccountException error;
+    private AppCustomException error;
 
     /**
      * @throws java.lang.Exception
@@ -45,13 +45,13 @@ class UserAccountExceptionTest
     }
 
     /**
-     * Test method for {@link fr.supraloglabs.jbe.error.UserAccountException#UserAccountException(java.lang.String)}.
+     * Test method for {@link fr.supraloglabs.jbe.error.AppCustomException#UserAccountException(java.lang.String)}.
      */
     @Test
     void testUserAccountExceptionString()
     {
         final String message = "Message Erreur Exception";
-        this.error = new UserAccountException(message);
+        this.error = new AppCustomException(message);
 
         //
         assertThat(this.error.getCause()).isNull();
@@ -63,7 +63,7 @@ class UserAccountExceptionTest
     @Test
     void testUserAccountExceptionString_WithNull()
     {
-        this.error = new UserAccountException((String) null);
+        this.error = new AppCustomException((String) null);
 
         // AssertJ assertion's
         assertThat(this.error.getCause()).isNull();
@@ -74,7 +74,7 @@ class UserAccountExceptionTest
     
 
     /**
-     * Test method for {@link fr.supraloglabs.jbe.error.UserAccountException#UserAccountException(java.lang.Throwable)}.
+     * Test method for {@link fr.supraloglabs.jbe.error.AppCustomException#UserAccountException(java.lang.Throwable)}.
      */
     @Test
     void testUserAccountExceptionThrowable()
@@ -82,7 +82,7 @@ class UserAccountExceptionTest
         final String message = "Message Erreur Exception";
         final Throwable throwable = new Throwable(message);
         
-        this.error = new UserAccountException(throwable);
+        this.error = new AppCustomException(throwable);
         
         // AssertJ assertion's
         assertThat(this.error.getCause()).isNotNull();
@@ -97,7 +97,7 @@ class UserAccountExceptionTest
     {
         final Throwable throwable = new Throwable((String) null);
         
-        this.error = new UserAccountException(throwable);
+        this.error = new AppCustomException(throwable);
         
         // AssertJ assertion's
         assertThat(this.error.getCause()).isExactlyInstanceOf(Throwable.class);
@@ -107,7 +107,7 @@ class UserAccountExceptionTest
     }
 
     /**
-     * Test method for {@link fr.supraloglabs.jbe.error.UserAccountException#UserAccountException(java.lang.String, java.lang.Throwable)}.
+     * Test method for {@link fr.supraloglabs.jbe.error.AppCustomException#UserAccountException(java.lang.String, java.lang.Throwable)}.
      */
     @Test
     void testUserAccountExceptionStringThrowable()
@@ -115,7 +115,7 @@ class UserAccountExceptionTest
         final String message = "Message Erreur Exception";
         final Throwable throwable = new Throwable(message);
         
-        this.error = new UserAccountException(message, throwable);
+        this.error = new AppCustomException(message, throwable);
         
         // AssertJ assertion's
         assertThat(this.error.getCause()).isNotNull();
@@ -130,7 +130,7 @@ class UserAccountExceptionTest
     {
         final Throwable throwable = new Throwable((String) null, null);
         
-        this.error = new UserAccountException(throwable);
+        this.error = new AppCustomException(throwable);
         
         // AssertJ assertion's
         assertThat(this.error.getCause()).isExactlyInstanceOf(Throwable.class);

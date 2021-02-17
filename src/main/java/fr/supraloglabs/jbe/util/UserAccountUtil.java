@@ -11,12 +11,15 @@
  */
 package fr.supraloglabs.jbe.util;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.ResponseEntity;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
-import fr.supraloglabs.jbe.model.GenericApiResponse;
-import fr.supraloglabs.jbe.model.dto.error.ResponseErrorDTO;
-import fr.supraloglabs.jbe.model.dto.error.ValidationErrorDTO;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.context.request.WebRequest;
+
+import fr.supraloglabs.jbe.model.error.ErrorDetails;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -35,15 +38,7 @@ public class UserAccountUtil
     private static final String MONGO_DB = "users_db_test";
 
     // Erreur HTTP
-    public static final String URL_ERROR = "Impossible de trouver la méthode '%s' pour l'URL '%s'.";
-    public static final String METHOD_ERROR = "Le paramètre '%s' de la valeur '%s' n'a pas pu être converti en type '%s'";
     public static final String HTTP_CLIENT_ERROR = "Erreur client HTTP.";
-    public static final String SERVER_INTERNAL_ERROR = "Erreur interne du serveur.";
-    public static final String FORMAT_ERROR = "Erreur format pour lecture et écriture.";
-    public static final String CONTRAINST_VALDATION_ERROR = "Erreur violation de cahmps ou attributs.";
-    public static final String NOT_FOUND_ERROR = "Erreur recherche infructueuse de données.";
-    public static final String INTEGRITY_ERROR = "Erreur de violations d'intégrité des données.";
-    public static final String ACCESS_DENIED = "Accès non autorisés.";
 
     //
     public static final String CET_DATE_FORMAT_WITHOUT_TIMEZONE_TEXT = "yyyy-MM-dd'T'HH:mm:ss.SSS";
@@ -67,41 +62,33 @@ public class UserAccountUtil
     public static final int QUATRE_VINGT = 80;
 
     /**
-     * Construire la réponse HTTP avec le status et le corps.
+     * Construire l'objet d'encapsulation des des données sur les erreurs.
      * 
-     * @param <T>               le type de l'objet embarquée.
-     * @param pResponseErrorDTO entité de gestion des erreurs pour la réponse.
-     * @return entité générique de la réponse avec le statut HTTP.
+     * @param pException  erreur survenue.
+     * @param pRequest    les information de la requête adressée.
+     * @param pHttpStatus le code statut HTTP correspondant.
+     * @return l'objet encapsulant les données sur les erreurs.
      */
-    public static <T> ResponseEntity<GenericApiResponse<T>> buildResponseErrorEntity(final ResponseErrorDTO pResponseErrorDTO)
+    public static ErrorDetails construireErreur(final Exception pException, final WebRequest pRequest, final HttpStatus pHttpStatus)
     {
-        @SuppressWarnings("unchecked")
-        final GenericApiResponse<T> response = (GenericApiResponse<T>) GenericApiResponse.builder()//
-        .errors(pResponseErrorDTO)//
+        return ErrorDetails.builder()//
+        .status(pHttpStatus)//
+        .timestamp(LocalDateTime.now(ZoneId.systemDefault()))//
+        .details(pRequest.getDescription(true))// inclure les infos clients tels que : session id et user name
+        .message(pException.getMessage())//
         .build();
-
-        return ResponseEntity//
-        .status(pResponseErrorDTO.getStatus())//
-        .body(response);
     }
 
     /**
-     * Construire l'instance de {@link ValidationErrorDTO } avec les paramètres fournis.
+     * Construire la réponse HTTP avec le status et le corps.
      * 
-     * @param object        l'objet à valider.
-     * @param field         le champ ou l'attribut à valider.
-     * @param rejectedValue la valeur de rejet de la validation.
-     * @param message       le message d'erreurs de la validation.
-     * @return l'instance de l'objet de transfert des données d'erreurs de validation.
+     * @param pResponseErrorDTO entité de gestion des erreurs pour la réponse.
+     * @return objet encapsulant la réponse avec le statut HTTP.
      */
-    public static ValidationErrorDTO buildApiValidationError(String object, String field, Object rejectedValue, String message)
+    @SuppressWarnings("unchecked")
+    public static <T> ResponseEntity<T> buildResponseErrorEntity(final ErrorDetails pResponseErrorDTO)
     {
-        return ValidationErrorDTO.builder()//
-        .object(object)//
-        .field(field)//
-        .message(message)//
-        .rejectedValue(rejectedValue)//
-        .build();
+        return new ResponseEntity<>((T) pResponseErrorDTO, pResponseErrorDTO.getStatus());
     }
 
     /**

@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------
  * Projet ou Module : labs-tests-technique
- * Nom de la classe : UserAccountException.java
+ * Nom de la classe : AppCustomException.java
  * Date de création : 15 févr. 2021
  * Heure de création : 10:00:00
  * Package : fr.supraloglabs.jbe.error
@@ -11,13 +11,17 @@
  */
 package fr.supraloglabs.jbe.error;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 /**
  * * Classe d'interception des erreurs/exceptions metiers ou applicatifs. Elles ne sont pas vérifiees par le compilateur
  * (Unchecked exceptions) mais à l'éxécution.
  * 
  * @author Vincent Otchoun
  */
-public class UserAccountException extends RuntimeException
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
+public class AppCustomException extends RuntimeException
 {
     /**
      * Identitifnat de sérialisation/désérialisation.
@@ -29,7 +33,7 @@ public class UserAccountException extends RuntimeException
      * 
      * @param message le message d'erreurs.
      */
-    public UserAccountException(String message)
+    public AppCustomException(String message)
     {
         super(message);
     }
@@ -39,7 +43,7 @@ public class UserAccountException extends RuntimeException
      * 
      * @param cause la cause de l'erreur.
      */
-    public UserAccountException(Throwable cause)
+    public AppCustomException(Throwable cause)
     {
         super(cause);
     }
@@ -50,7 +54,7 @@ public class UserAccountException extends RuntimeException
      * @param message le message d'erreurs.
      * @param cause   la cause de l'erreur.
      */
-    public UserAccountException(String message, Throwable cause)
+    public AppCustomException(String message, Throwable cause)
     {
         super(message, cause);
     }

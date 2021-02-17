@@ -2,8 +2,8 @@
  * ----------------------------------------------
  * Projet ou Module : labs-tests-technique
  * Nom de la classe : GlobalExceptionHandlerTest.java
- * Date de création : 16 févr. 2021
- * Heure de création : 12:52:32
+ * Date de création : 17 févr. 2021
+ * Heure de création : 00:37:49
  * Package : fr.supraloglabs.jbe.error
  * Auteur : Vincent Otchoun
  * Copyright © 2021 - All rights reserved.
@@ -13,47 +13,23 @@ package fr.supraloglabs.jbe.error;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Set;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.JsonParseException;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.MethodParameter;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.http.server.ServletServerHttpRequest;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.context.request.WebRequest;
 
-import com.google.common.collect.Sets;
-
+import fr.supraloglabs.jbe.TestsDataUtils;
 import fr.supraloglabs.jbe.config.AppRootConfig;
-import fr.supraloglabs.jbe.model.GenericApiResponse;
-import fr.supraloglabs.jbe.model.dto.UserDTO;
-import fr.supraloglabs.jbe.model.dto.error.ResponseErrorDTO;
-import fr.supraloglabs.jbe.util.UserAccountUtil;
+import fr.supraloglabs.jbe.model.error.ErrorDetails;
 
 /**
  * Classe des Tests Unitaires des objets de type {@link GlobalExceptionHandler}
@@ -67,64 +43,43 @@ import fr.supraloglabs.jbe.util.UserAccountUtil;
 class GlobalExceptionHandlerTest
 {
     @Autowired
-    private GlobalExceptionHandler<UserDTO> exceptionHandler;
+    private GlobalExceptionHandler<ErrorDetails> exceptionHandler;
 
-    /**
-     * @throws java.lang.Exception
-     */
-    @BeforeEach
-    void setUp() throws Exception
-    {
-    }
-
-    /**
-     * @throws java.lang.Exception
-     */
-    @AfterEach
-    void tearDown() throws Exception
-    {
-    }
+    @Mock
+    private WebRequest webRequest;
 
     /**
      * Test method for
-     * {@link fr.supraloglabs.jbe.error.GlobalExceptionHandler#handleHttpClientErrorException(org.springframework.web.client.HttpClientErrorException)}.
+     * {@link fr.supraloglabs.jbe.error.GlobalExceptionHandler#handleHttpClientErrorException(org.springframework.web.client.HttpClientErrorException, org.springframework.web.context.request.WebRequest)}.
      */
     @Test
     void testHandleHttpClientErrorException()
     {
-        final HttpClientErrorException clientErrorException = new HttpClientErrorException(HttpStatus.UNAUTHORIZED, UserAccountUtil.ACCESS_DENIED);
-        final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleHttpClientErrorException(clientErrorException);
+        final HttpClientErrorException clientErrorException = new HttpClientErrorException(HttpStatus.UNAUTHORIZED, TestsDataUtils.ACCESS_DENIED);
+        final ResponseEntity<ErrorDetails> response = this.exceptionHandler.handleHttpClientErrorException(clientErrorException, this.webRequest);
 
         assertThat(response).isNotNull();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getData()).isNull();
-        assertThat(response.getBody().getErrors()).isNotNull();
-        assertThat(response.getBody().getErrors()).isExactlyInstanceOf(ResponseErrorDTO.class);
-        assertThat(response.getBody().getErrors().getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED);
-        assertThat(response.getBody().getErrors().getDetails()).isEqualTo(UserAccountUtil.HTTP_CLIENT_ERROR);
-        assertThat(response.getBody().getErrors().getDebugMessage()).isEqualTo(clientErrorException.getMessage());
-        assertThat(response.getBody().getErrors().getValidationErrors()).isNull();
+        assertThat(response.getBody().getMessage()).isEqualTo("401 Accès non autorisés.");
+        assertThat(response.getBody().getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(response.getBody().getDetails()).isNull();
     }
-
+    
     @Test
     void testHandleHttpClientErrorException_BadRequest()
     {
-        final HttpClientErrorException clientErrorException = new HttpClientErrorException(HttpStatus.BAD_REQUEST, UserAccountUtil.ACCESS_DENIED);
-        final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleHttpClientErrorException(clientErrorException);
+        final HttpClientErrorException clientErrorException = new HttpClientErrorException(HttpStatus.BAD_REQUEST, TestsDataUtils.ACCESS_DENIED);
+        final ResponseEntity<ErrorDetails> response = this.exceptionHandler.handleHttpClientErrorException(clientErrorException, this.webRequest);
 
         assertThat(response).isNotNull();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getData()).isNull();
-        assertThat(response.getBody().getErrors()).isNotNull();
-        assertThat(response.getBody().getErrors()).isExactlyInstanceOf(ResponseErrorDTO.class);
-        assertThat(response.getBody().getErrors().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody().getErrors().getDetails()).isEqualTo(UserAccountUtil.HTTP_CLIENT_ERROR);
-        assertThat(response.getBody().getErrors().getDebugMessage()).isEqualTo(clientErrorException.getMessage());
-        assertThat(response.getBody().getErrors().getValidationErrors()).isNull();
+        assertThat(response.getBody().getMessage()).isEqualTo("400 Accès non autorisés.");
+        assertThat(response.getBody().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody().getDetails()).isNull();
     }
-
+    
     @Test
     void testHandleHttpClientErrorException_ShouldThrowException()
     {
@@ -139,368 +94,88 @@ class GlobalExceptionHandlerTest
 
     /**
      * Test method for
-     * {@link fr.supraloglabs.jbe.error.GlobalExceptionHandler#handleHttpUserAccountException(fr.supraloglabs.jbe.error.UserAccountException)}.
+     * {@link fr.supraloglabs.jbe.error.GlobalExceptionHandler#handleAppCustomException(fr.supraloglabs.jbe.error.AppCustomException, org.springframework.web.context.request.WebRequest)}.
      */
     @Test
-    void testHandleHttpUserAccountException()
+    void testHandleAppCustomException()
     {
-        final UserAccountException customAppException = new UserAccountException("Erreur customisée");
-        final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleHttpUserAccountException(customAppException);
+        final AppCustomException customException = new AppCustomException("Erreur customisée");
+        final ResponseEntity<ErrorDetails> response = this.exceptionHandler.handleAppCustomException(customException, this.webRequest);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getMessage()).isEqualTo(customException.getMessage());
+        assertThat(response.getBody().getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody().getDetails()).isNull();
+    }
+    
+    
+    @Test
+    void testHandleAppCustomException_WithNull()
+    {
+        final AppCustomException customException = new AppCustomException(null,null);
+        final ResponseEntity<ErrorDetails> response = this.exceptionHandler.handleAppCustomException(customException, this.webRequest);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getMessage()).isNull();
+        assertThat(response.getBody().getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody().getDetails()).isNull();
+    }
+    
+    @Test
+    void testHandleAppCustomException_ShouldTrowNPE()
+    {
+        final Exception exception = assertThrows(NullPointerException.class, () -> {
+            this.exceptionHandler.handleAppCustomException(null,null);
+        });
+
+        String actualMessage = exception.getMessage();
+        assertThat(actualMessage).isNull();
+    }
+
+    /**
+     * Test method for
+     * {@link fr.supraloglabs.jbe.error.GlobalExceptionHandler#globleExcpetionHandler(java.lang.Exception, org.springframework.web.context.request.WebRequest)}.
+     */
+    @Test
+    void testGlobleExcpetionHandler()
+    {
+        final Exception customException = new Exception("Erreur générale");
+        final ResponseEntity<ErrorDetails> response = this.exceptionHandler.globleExcpetionHandler(customException, this.webRequest);
 
         assertThat(response).isNotNull();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getData()).isNull();
-        assertThat(response.getBody().getErrors()).isNotNull();
-        assertThat(response.getBody().getErrors()).isExactlyInstanceOf(ResponseErrorDTO.class);
-        assertThat(response.getBody().getErrors().getStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(response.getBody().getErrors().getDetails()).isEqualTo(UserAccountUtil.SERVER_INTERNAL_ERROR);
-        assertThat(response.getBody().getErrors().getDebugMessage()).isEqualTo(customAppException.getMessage());
-        assertThat(response.getBody().getErrors().getValidationErrors()).isNull();
+        assertThat(response.getBody().getMessage()).isEqualTo(customException.getMessage());
+        assertThat(response.getBody().getStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(response.getBody().getDetails()).isNull();
     }
-
+    
     @Test
-    void testHandleHttpUserAccountException_WithNull()
+    void testGlobleExcpetionHandler_WithNull()
     {
-        final UserAccountException customAppException = new UserAccountException(null, null);
-        final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleHttpUserAccountException(customAppException);
+        final Exception exception = new Exception(null,null);
+        final ResponseEntity<ErrorDetails> response = this.exceptionHandler.globleExcpetionHandler(exception, this.webRequest);
 
         assertThat(response).isNotNull();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getData()).isNull();
-        assertThat(response.getBody().getErrors()).isNotNull();
-        assertThat(response.getBody().getErrors()).isExactlyInstanceOf(ResponseErrorDTO.class);
-        assertThat(response.getBody().getErrors().getStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(response.getBody().getErrors().getDetails()).isEqualTo(UserAccountUtil.SERVER_INTERNAL_ERROR);
-        assertThat(response.getBody().getErrors().getDebugMessage()).isEqualTo(customAppException.getMessage());
-        assertThat(response.getBody().getErrors().getValidationErrors()).isNull();
+        assertThat(response.getBody().getMessage()).isNull();
+        assertThat(response.getBody().getStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(response.getBody().getDetails()).isNull();
     }
-
+    
     @Test
-    void testHandleHttpUserAccountException_ShouldTrowNP()
+    void testGlobleExcpetionHandler_ShouldTrowNPE()
     {
         final Exception exception = assertThrows(NullPointerException.class, () -> {
-            this.exceptionHandler.handleHttpUserAccountException(null);
+            this.exceptionHandler.globleExcpetionHandler(null,null);
         });
 
         String actualMessage = exception.getMessage();
         assertThat(actualMessage).isNull();
     }
-
-    /**
-     * Test method for
-     * {@link fr.supraloglabs.jbe.error.GlobalExceptionHandler#handleNotReadableException(java.lang.Exception)}.
-     */
-    @Test
-    void testHandleNotReadableException()
-    {
-        final String message = "Message Erreur Parsing flux JSON";
-        final Throwable throwable = new Throwable(message);
-        final JsonParseException jsonParseException = new JsonParseException(throwable);
-        final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleNotReadableException(jsonParseException);
-
-        assertThat(response).isNotNull();
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getData()).isNull();
-        assertThat(response.getBody().getErrors()).isNotNull();
-        assertThat(response.getBody().getErrors()).isExactlyInstanceOf(ResponseErrorDTO.class);
-        assertThat(response.getBody().getErrors().getStatus()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
-        assertThat(response.getBody().getErrors().getDetails()).isEqualTo(UserAccountUtil.FORMAT_ERROR);
-        assertThat(response.getBody().getErrors().getDebugMessage()).isEqualTo(jsonParseException.getMessage());
-        assertThat(response.getBody().getErrors().getValidationErrors()).isNull();
-    }
-
-    @Test
-    void testHandleNotReadableException_WithNull()
-    {
-        final HttpMessageNotReadableException notReadableException = new HttpMessageNotReadableException(null, null, null);
-        final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleNotReadableException(notReadableException);
-
-        assertThat(response).isNotNull();
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getData()).isNull();
-        assertThat(response.getBody().getErrors()).isNotNull();
-        assertThat(response.getBody().getErrors()).isExactlyInstanceOf(ResponseErrorDTO.class);
-        assertThat(response.getBody().getErrors().getStatus()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
-        assertThat(response.getBody().getErrors().getDetails()).isEqualTo(UserAccountUtil.FORMAT_ERROR);
-        assertThat(response.getBody().getErrors().getDebugMessage()).isEqualTo(notReadableException.getMessage());
-        assertThat(response.getBody().getErrors().getValidationErrors()).isNull();
-    }
-
-    @Test
-    void testHandleNotReadableException_ShouldTrowNPE()
-    {
-        final Exception exception = assertThrows(NullPointerException.class, () -> {
-            this.exceptionHandler.handleNotReadableException(null);
-        });
-
-        String actualMessage = exception.getMessage();
-        assertThat(actualMessage).isNull();
-    }
-
-    /**
-     * Test method for
-     * {@link fr.supraloglabs.jbe.error.GlobalExceptionHandler#handleNoHandlerFoundException(org.springframework.web.servlet.NoHandlerFoundException)}.
-     */
-    @Test
-    void testHandleNoHandlerFoundException()
-    {
-        ServletServerHttpRequest req = new ServletServerHttpRequest(new MockHttpServletRequest("GET", "/resource"));
-        final NoHandlerFoundException noHandlerFoundException = new NoHandlerFoundException(req.getMethod().toString(), req.getServletRequest()
-        .getRequestURI(), req.getHeaders());
-        final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleNoHandlerFoundException(noHandlerFoundException);
-
-        assertThat(response).isNotNull();
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getData()).isNull();
-        assertThat(response.getBody().getErrors()).isNotNull();
-        assertThat(response.getBody().getErrors()).isExactlyInstanceOf(ResponseErrorDTO.class);
-        assertThat(response.getBody().getErrors().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody().getErrors().getDetails()).isNotEqualTo(UserAccountUtil.URL_ERROR);
-        assertThat(response.getBody().getErrors().getDebugMessage()).isEqualTo(noHandlerFoundException.getMessage());
-        assertThat(response.getBody().getErrors().getValidationErrors()).isNull();
-    }
-
-    @Test
-    void testHandleNoHandlerFoundExceptionWithNull()
-    {
-        final NoHandlerFoundException noHandlerFoundException = new NoHandlerFoundException(null, null, null);
-        final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleNoHandlerFoundException(noHandlerFoundException);
-
-        assertThat(response).isNotNull();
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getData()).isNull();
-        assertThat(response.getBody().getErrors()).isNotNull();
-        assertThat(response.getBody().getErrors()).isExactlyInstanceOf(ResponseErrorDTO.class);
-        assertThat(response.getBody().getErrors().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody().getErrors().getDetails()).isNotEqualTo(UserAccountUtil.URL_ERROR);
-        assertThat(response.getBody().getErrors().getDebugMessage()).isEqualTo(noHandlerFoundException.getMessage());
-        assertThat(response.getBody().getErrors().getValidationErrors()).isNull();
-    }
-
-    @Test
-    void testHandleNoHandlerFoundException_ShouldThrowNPE()
-    {
-        final Exception exception = assertThrows(NullPointerException.class, () -> {
-            this.exceptionHandler.handleNoHandlerFoundException(null);
-        });
-
-        String actualMessage = exception.getMessage();
-        assertThat(actualMessage).isNull();
-    }
-
-    /**
-     * Test method for
-     * {@link fr.supraloglabs.jbe.error.GlobalExceptionHandler#handleFileldValidationError(org.springframework.web.bind.MethodArgumentNotValidException)}.
-     */
-     @Test
-     void testHandleFileldValidationError()
-     {
-          final MethodArgumentNotValidException methodArgumentNotValidException = mock(MethodArgumentNotValidException.class);
-          final BindingResult bindingResult = mock(BindingResult.class);
-         
-          when(bindingResult.getFieldErrors()).thenReturn(Arrays.asList(new FieldError("station", "name", "should not be  empty")));
-          when(methodArgumentNotValidException.getBindingResult()).thenReturn(bindingResult);
-         
-          final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleFileldValidationError(
-          methodArgumentNotValidException);
-         
-          // 
-          assertThat(response).isNotNull();
-          assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-          assertThat(response.getBody()).isNotNull();
-          assertThat(response.getBody().getData()).isNull();
-          assertThat(response.getBody().getErrors()).isNotNull();
-          assertThat(response.getBody().getErrors()).isExactlyInstanceOf(ResponseErrorDTO.class);
-          assertThat(response.getBody().getErrors().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
-          assertThat(response.getBody().getErrors().getDetails()).isEqualTo(UserAccountUtil.CONTRAINST_VALDATION_ERROR);
-          assertThat(response.getBody().getErrors().getDebugMessage()).isEqualTo(methodArgumentNotValidException.getMessage());
-          assertThat(response.getBody().getErrors().getValidationErrors()).isNotEmpty();
-     }
-
-    @Test
-    void testHandleFileldValidationError_WithNull()
-    {
-        final MethodArgumentNotValidException methodArgumentNotValidException = new MethodArgumentNotValidException(null, null);
-        final Exception exception = assertThrows(NullPointerException.class, () -> {
-            this.exceptionHandler.handleFileldValidationError(methodArgumentNotValidException);
-        });
-
-        String actualMessage = exception.getMessage();
-        assertThat(actualMessage).isNull();
-    }
-
-    @Test
-    void testHandleFileldValidationError_ShouldThrowNPE()
-    {
-        final Exception exception = assertThrows(NullPointerException.class, () -> {
-            this.exceptionHandler.handleFileldValidationError(null);
-        });
-
-        String actualMessage = exception.getMessage();
-        assertThat(actualMessage).isNull();
-    }
-
-    /**
-     * Test method for
-     * {@link fr.supraloglabs.jbe.error.GlobalExceptionHandler#handleConstraintViolationException(javax.validation.ConstraintViolationException)}.
-     */
-    @Test
-    void testHandleConstraintViolationException()
-    {
-        Set<ConstraintViolation<UserDTO>> constraintViolations = Sets.newHashSet();
-        final ConstraintViolationException violationException = new ConstraintViolationException("Violation de contraintes", constraintViolations);
-        final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleConstraintViolationException(violationException);
-
-        assertThat(response).isNotNull();
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getData()).isNull();
-        assertThat(response.getBody().getErrors()).isNotNull();
-        assertThat(response.getBody().getErrors()).isExactlyInstanceOf(ResponseErrorDTO.class);
-        assertThat(response.getBody().getErrors().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody().getErrors().getDetails()).isEqualTo(UserAccountUtil.CONTRAINST_VALDATION_ERROR);
-        assertThat(response.getBody().getErrors().getDebugMessage()).isEqualTo(violationException.getMessage());
-        assertThat(response.getBody().getErrors().getValidationErrors()).isNull();
-    }
-
-    @Test
-    void testHandleConstraintViolationException_WithNull()
-    {
-        final ConstraintViolationException violationException = new ConstraintViolationException(null, null);
-        final Exception exception = assertThrows(NullPointerException.class, () -> {
-            this.exceptionHandler.handleConstraintViolationException(violationException);
-        });
-
-        String actualMessage = exception.getMessage();
-        assertThat(actualMessage).isNull();
-    }
-
-    @Test
-    void testHandleConstraintViolationException_ShouldThrowNPE()
-    {
-        final Exception exception = assertThrows(NullPointerException.class, () -> {
-            this.exceptionHandler.handleConstraintViolationException(null);
-        });
-
-        String actualMessage = exception.getMessage();
-        assertThat(actualMessage).isNull();
-    }
-
-    /**
-     * Test method for
-     * {@link fr.supraloglabs.jbe.error.GlobalExceptionHandler#handleDataIntegrityException(org.springframework.dao.DataIntegrityViolationException)}.
-     */
-    @Test
-    void testHandleDataIntegrityException()
-    {
-        final DataIntegrityViolationException dataIntegrityViolationException = new DataIntegrityViolationException(
-        "Violation intégrité des données.");
-        final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleDataIntegrityException(
-        dataIntegrityViolationException);
-
-        assertThat(response).isNotNull();
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getData()).isNull();
-        assertThat(response.getBody().getErrors()).isNotNull();
-        assertThat(response.getBody().getErrors()).isExactlyInstanceOf(ResponseErrorDTO.class);
-        assertThat(response.getBody().getErrors().getStatus()).isEqualTo(HttpStatus.CONFLICT);
-        assertThat(response.getBody().getErrors().getDetails()).isEqualTo(UserAccountUtil.INTEGRITY_ERROR);
-        assertThat(response.getBody().getErrors().getDebugMessage()).isEqualTo(dataIntegrityViolationException.getMessage());
-        assertThat(response.getBody().getErrors().getValidationErrors()).isNull();
-    }
-
-    @Test
-    void testHandleDataIntegrityException_WithNull()
-    {
-        final DataIntegrityViolationException dataIntegrityViolationException = new DataIntegrityViolationException(null, null);
-        final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleDataIntegrityException(
-        dataIntegrityViolationException);
-
-        assertThat(response).isNotNull();
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getData()).isNull();
-        assertThat(response.getBody().getErrors()).isNotNull();
-        assertThat(response.getBody().getErrors()).isExactlyInstanceOf(ResponseErrorDTO.class);
-        assertThat(response.getBody().getErrors().getStatus()).isEqualTo(HttpStatus.CONFLICT);
-        assertThat(response.getBody().getErrors().getDetails()).isEqualTo(UserAccountUtil.INTEGRITY_ERROR);
-        assertThat(response.getBody().getErrors().getDebugMessage()).isEqualTo(dataIntegrityViolationException.getMessage());
-        assertThat(response.getBody().getErrors().getValidationErrors()).isNull();
-    }
-
-    @Test
-    void testHandleDataIntegrityException_ShouldThrowNPE()
-    {
-        final Exception exception = assertThrows(NullPointerException.class, () -> {
-            this.exceptionHandler.handleDataIntegrityException(null);
-        });
-
-        String actualMessage = exception.getMessage();
-        assertThat(actualMessage).isNull();
-    }
-
-    /**
-     * Test method for
-     * {@link fr.supraloglabs.jbe.error.GlobalExceptionHandler#handleMethodArgumentTypException(org.springframework.web.method.annotation.MethodArgumentTypeMismatchException)}.
-     * 
-     * @throws SecurityException
-     * @throws NoSuchMethodException
-     */
-    @Test
-    void testHandleMethodArgumentTypException() throws NoSuchMethodException, SecurityException
-    {
-        Method method = UserDTO.class.getMethod("setFirstName", String.class);
-        MethodParameter methodParameter = new MethodParameter(method, 0);
-        MethodArgumentTypeMismatchException mismatchException = new MethodArgumentTypeMismatchException(null, UserDTO.class, "name", methodParameter,
-        null);
-        final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleMethodArgumentTypException(mismatchException);
-
-        assertThat(response).isNotNull();
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getData()).isNull();
-        assertThat(response.getBody().getErrors()).isNotNull();
-        assertThat(response.getBody().getErrors()).isExactlyInstanceOf(ResponseErrorDTO.class);
-        assertThat(response.getBody().getErrors().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody().getErrors().getDetails()).isNotEqualTo(UserAccountUtil.METHOD_ERROR);
-        assertThat(response.getBody().getErrors().getDebugMessage()).isEqualTo(mismatchException.getMessage());
-        assertThat(response.getBody().getErrors().getValidationErrors()).isNull();
-    }
-
-    @Test
-    void testHandleMethodArgumentTypException_WithNull()
-    {
-        MethodArgumentTypeMismatchException mismatchException = new MethodArgumentTypeMismatchException(null, null, null, null, null);
-        final ResponseEntity<GenericApiResponse<UserDTO>> response = this.exceptionHandler.handleMethodArgumentTypException(mismatchException);
-
-        assertThat(response).isNotNull();
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getData()).isNull();
-        assertThat(response.getBody().getErrors()).isNotNull();
-        assertThat(response.getBody().getErrors()).isExactlyInstanceOf(ResponseErrorDTO.class);
-        assertThat(response.getBody().getErrors().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody().getErrors().getDetails()).isNotEqualTo(UserAccountUtil.METHOD_ERROR);
-        assertThat(response.getBody().getErrors().getDebugMessage()).isEqualTo(mismatchException.getMessage());
-        assertThat(response.getBody().getErrors().getValidationErrors()).isNull();
-    }
-
-    @Test
-    void testHandleMethodArgumentTypException_ShouldThrowNPE()
-    {
-        final Exception exception = assertThrows(NullPointerException.class, () -> {
-            this.exceptionHandler.handleMethodArgumentTypException(null);
-        });
-
-        String actualMessage = exception.getMessage();
-        assertThat(actualMessage).isNull();
-    }
-
 }
