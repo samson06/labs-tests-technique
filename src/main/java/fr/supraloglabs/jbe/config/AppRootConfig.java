@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -38,6 +39,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 @ComponentScan(basePackages = { "fr.supraloglabs.jbe" })
 @EntityScan("fr.supraloglabs.jbe.model.po")
 @EnableMongoRepositories(basePackages = { "fr.supraloglabs.jbe.repository" })
+@EnableAspectJAutoProxy (proxyTargetClass = true)  // Activer le support  @AspectJ 
 public class AppRootConfig
 {
     /**

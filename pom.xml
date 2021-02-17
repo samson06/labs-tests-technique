@@ -74,7 +74,14 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-aop</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
+
 		<!-- Support Spring pour le Web -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -84,7 +91,21 @@
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-tomcat</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-aop</artifactId>
+				</exclusion>
 			</exclusions>
+		</dependency>
+		<!-- AOP avec AspectJ + aspectjweaver -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<scope>compile</scope>
 		</dependency>
 
 		<!-- Hibernate Validator -->
@@ -105,22 +126,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
-
-		<!-- <dependency> -->
-		<!-- <groupId>org.springframework.boot</groupId> -->
-		<!-- <artifactId>spring-boot-starter-data-rest</artifactId> -->
-		<!-- </dependency> -->
-
-		<!-- Embedded MongoDB -->
-		<!-- <dependency> -->
-		<!-- <groupId>de.flapdoodle.embed</groupId> -->
-		<!-- <artifactId>de.flapdoodle.embed.mongo</artifactId> -->
-		<!-- </dependency> -->
-		<!-- <dependency> -->
-		<!-- <groupId>cz.jirutka.spring</groupId> -->
-		<!-- <artifactId>embedmongo-spring</artifactId> -->
-		<!-- <version>RELEASE</version> -->
-		<!-- </dependency> -->
 
 		<!-- Mapper -->
 		<dependency>

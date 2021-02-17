@@ -7,7 +7,7 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/samson06/labs-tests-technique)
 
 ## A Propos de l'application
-C'est une application basée sur une architecture `REST` (`service RESTFul`) exposant ses fonctionnalités au travers de deux `API`. Elle est écrite en `Java` 
+C'est une application basée sur une architecture `REST API` (`service RESTFul`) exposant ses fonctionnalités au travers de deux `API`. Elle est écrite en `Java` 
 avec pour socle le Framework `Spring` plus précisement `Spring Boot` qui est des variante de l'écosystème`Spring`. Elle embarque aussi d'autres technos supplémentaires pour l'impémentation des besoins exprimés.
 
 ## Documentation

@@ -9,7 +9,7 @@
  * Copyright © 2021 - All rights reserved.
  * ----------------------------------------------
  */
-package fr.supraloglabs.jbe.config;
+package fr.supraloglabs.jbe.config.mongodb;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +33,7 @@ import com.mongodb.WriteConcern;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 
+import fr.supraloglabs.jbe.config.AppRootConfig;
 import fr.supraloglabs.jbe.util.UserAccountUtil;
 
 /**

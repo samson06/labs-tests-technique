@@ -13,13 +13,16 @@ package fr.supraloglabs.jbe.util;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.function.BiFunction;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.WebRequest;
 
+import fr.supraloglabs.jbe.error.AppCustomException;
 import fr.supraloglabs.jbe.model.error.ErrorDetails;
+import fr.supraloglabs.jbe.model.po.User;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -64,9 +67,13 @@ public class UserAccountUtil
     public static final String PAYS_MSG = "Le pays de résidence est obligatoire. Le pays autorisé pour la création de compte dans le système est la France.";
     public static final String PAYS_SIZE_MSG = "Le pays doit contenir au plus 50 caractères.";
     public static final String AGE_MIN_MSG = "L'âge minimum de création de compte dans le système est de 18 ans.";
+    private static final String PAYS_REF = "FRANCE";
+    private static final String MAJEUR_FR_USER_MSG = "Vous n'êtes pas autorisé à créér un compte dans le système. Il faut avoir au moins 18 ans et vivre en France";;
 
     public static final int CINQUANTE = 50;
     public static final int QUATRE_VINGT = 80;
+
+    public static final BiFunction<String, String, Boolean> IGNORE_CASE = String::equalsIgnoreCase;
 
     /**
      * Construire l'objet d'encapsulation des des données sur les erreurs.
@@ -131,6 +138,32 @@ public class UserAccountUtil
     public static String mongoDBConnectionWithDBName(final String pDatabasename)
     {
         return mongoDBConnectionStr(MONGO_DB_URL, MONGO_DB_PORT, pDatabasename);
+    }
+
+    /**
+     * Vérifier que l'utilisateur est autorisé à créer un compte dans le système d'informations.
+     * 
+     * @param pUser les données de l'utilisateur à sauvegarder en base de données.
+     * @return
+     */
+    public static final Boolean isValidUser(final User pUser)
+    {
+        return pUser != null && (pUser.getAge() != null && pUser.getAge() >= 18) && StringUtils.isNotBlank(pUser.getCountry()) && IGNORE_CASE.apply(
+        PAYS_REF, pUser.getCountry());
+    }
+
+    /**
+     * Contruire le message d'interdiction de création de compte dans le système d'informations.
+     * 
+     * @param pUser les données de l'utilisateur à sauvegarder en base de données.
+     */
+    public static void validUser(final User pUser)
+    {
+        final boolean isMajeurFrance = isValidUser(pUser);
+        if (!isMajeurFrance)
+        {
+            throw new AppCustomException(MAJEUR_FR_USER_MSG);
+        }
     }
 
 }

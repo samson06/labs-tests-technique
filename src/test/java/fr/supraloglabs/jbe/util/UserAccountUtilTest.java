@@ -27,6 +27,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import fr.supraloglabs.jbe.error.AppCustomException;
 import fr.supraloglabs.jbe.model.error.ErrorDetails;
+import fr.supraloglabs.jbe.model.po.User;
 
 /**
  * Classe des Tests Unitaires des objets de type {@link UserAccountUtil}
@@ -134,7 +135,6 @@ class UserAccountUtilTest
         assertThat(actualMessage).isNull();
     }
     
-
     /**
      * Test method for {@link fr.supraloglabs.jbe.util.UserAccountUtil#construireErreur(java.lang.Exception, org.springframework.web.context.request.WebRequest, org.springframework.http.HttpStatus)}.
      */
@@ -191,5 +191,85 @@ class UserAccountUtilTest
 
         String actualMessage = exception.getMessage();
         assertThat(actualMessage).isNull();
+    }
+    
+    /**
+     * Test method for {@link fr.supraloglabs.jbe.util.UserAccountUtil#isValidUser(fr.supraloglabs.jbe.model.po.User)}.
+     */
+    @Test
+    void testIsValidUser()
+    {
+        final User user = User.builder()//
+        .age(18)//
+        .country("France")//
+        .build();
+        
+        final Boolean response = UserAccountUtil.isValidUser(user);
+        
+        assertThat(response).isNotNull();
+        assertThat(response.booleanValue()).isTrue();
+    }
+    
+    @Test
+    void testIsValidUser_ShouldReturnFalseWithAge()
+    {
+        final User user = User.builder()//
+        .age(15)//
+        .country("France")//
+        .build();
+        
+        final Boolean response = UserAccountUtil.isValidUser(user);
+        
+        assertThat(response).isNotNull();
+        assertThat(response.booleanValue()).isFalse();
+    }
+    
+    @Test
+    void testIsValidUser_ShouldReturnFalseWithCountry()
+    {
+        final User user = User.builder()//
+        .age(20)//
+        .country("Italie")//
+        .build();
+        
+        final Boolean response = UserAccountUtil.isValidUser(user);
+        
+        assertThat(response).isNotNull();
+        assertThat(response.booleanValue()).isFalse();
+    }
+    
+    @Test
+    void testIsValidUser_ShouldReturnFalseWithNull()
+    {
+        final Boolean response = UserAccountUtil.isValidUser(null);
+        
+        assertThat(response).isNotNull();
+        assertThat(response.booleanValue()).isFalse();
+    }
+    
+    /**
+     * Test method for {@link fr.supraloglabs.jbe.util.UserAccountUtil#validUser(fr.supraloglabs.jbe.model.po.User)}.
+     */
+    @Test
+    void testValidUser()
+    {
+        final User user = User.builder()//
+        .age(18)//
+        .country("France")//
+        .build();
+        UserAccountUtil.validUser(user);
+        
+        assertThat(user).isNotNull();
+    }
+    
+    @Test
+    void testValidUser_()
+    {
+        final User user = User.builder()//
+        .age(20)//
+        .country("Italie")//
+        .build();
+        
+        assertThat(user).isNotNull();
     }
 }
