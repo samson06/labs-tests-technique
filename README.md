@@ -38,16 +38,51 @@ C'est un projet `Maven` avec `Spring Boot` donc basé sur le langage `Java` :
 - `JaCoCo` pour la production et fourniture des rapports de couverture du code source par les différents tests réalisés.
 - `Model Mapper` pour la conversion des objets : objets persistants vers `DTO` (Data Transfert Object) et vice versa.
 
+## Configurations
+L'ensemble des configurations pour l'exécution et exploitation de l'application est consigné dans le fichier : [application.properties](/labs-tests-technique/src/main/resources/application.properties)
+
+```properties
+# App custom config
+server.port=8500
+
+spring.profiles.active=production
+spring.application.name=user-account
+server.servlet.context-path=/user-account-api
+
+#########################
+####  MONGODB PROPS  #### 
+#########################
+# Credentials : informations d'identification à la base de données àrenseigner s'il y a lieu 
+spring.data.mongodb.authentication-database=
+spring.data.mongodb.username=
+spring.data.mongodb.password=
+
+# Informations pour la construction de la cha^ne de connexion à la base de donnnées
+spring.data.mongodb.database=admin
+spring.data.mongodb.host=localhost
+spring.data.mongodb.port=27017
+
+```
+
 ## Fonctionnalités
 Cette application fournit des points de terminaison HTTP et des outils pour les éléments suivants : 
 
 |Verbe HTTP|URL|Description|Status Codes|
 |---|---|---|---|
-|`POST`|_http://localhost:${server.port}/api-users/user/register/_|Enregistrer/Sauvegarder dans le SI les informations d'un utilisateur|<ul><li>`200 OK` si succès</li><li>`4XX ou 5XX` si erreur survenue</li></ul>|
-|`GET`|_http://localhost:${server.port}/api-users/user/search/{id}_|Rechercher et afficher les détails d'un utilisateur enregistré dans le SI|<ul><li>`200 OK` si utilisateur existe</li><li>`4XX ou 5XX` si erreur survenue</li></ul>|
+|`POST`|_http://localhost:${server.port}/${server.servlet.context-path}/api-users/user/register/_|Enregistrer/Sauvegarder dans le SI les informations d'un utilisateur|<ul><li>`200 OK` si succès</li><li>`4XX ou 5XX` si erreur survenue</li></ul>|
+|`GET`|_http://localhost:${server.port}/${server.servlet.context-path}/api-users/user/search/{id}_|Rechercher et afficher les détails d'un utilisateur enregistré dans le SI|<ul><li>`200 OK` si utilisateur existe</li><li>`4XX ou 5XX` si erreur survenue</li></ul>|
 
-## Configurations
-TODO
+avec comme URL de base : `http://localhost:${server.port}/${server.servlet.context-path}`
+
+## Compilation et Packaging
+L'application a été conçue et développée pour être exécutée à partir d'une archive Java `jar`. L'arxhive exécutable peut être générée de deux façons :
+- un build `Maven` : ceci suppose que l'outil `Maven` soit prélablement installé sur le post de travail
+- un build à partir de l'environnement intégré de développment utilsé
+Pour `Maven`, exécuter la commande ci-dessous :
+```bash
+mvn clean package
+```
+Il nettoiera, compilera et générera l'archive exécutable le `.jar` dans le répertoire cible, par exemple `labs-tests-technique-0.0.1-SNAPSHOT.jar`
 
 ## Exécution
 TODO
