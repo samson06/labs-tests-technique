@@ -40,6 +40,12 @@ public class UserAccountUtil
     // Erreur HTTP
     public static final String HTTP_CLIENT_ERROR = "Erreur client HTTP.";
 
+    // DAO messages
+    public static final String SAVE_MSG = "Erreur Sauvegarde en base de donnnées des détails du nouvel utilisateur.";
+    public static final String FIND_BY_EMAIL_MSG = "Erreur lors de la recherche des détails de l'utilisteur par son email.";
+    public static final String FIND_BY_ID_MSG = "Erreur lors de la recherche des détails de l'utilisteur par son identifiant.";
+    public static final String FIND_BY_ID_WITH_NAMES_MSG = "Erreur lors de la recherche des détails de l'utilisteur avec son identifiant par nom et prénom.";
+
     //
     public static final String CET_DATE_FORMAT_WITHOUT_TIMEZONE_TEXT = "yyyy-MM-dd'T'HH:mm:ss.SSS";
     public static final String ISO_DATE_TIME = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
@@ -55,8 +61,9 @@ public class UserAccountUtil
     public static final String EMAIL_MSG = "L'adresse mail ne doit pas être null ou vide.";
     public static final String EMAIL_SIZE_MSG = "L'adresse mail doit contenir au plus 50 caractères.";
     public static final String AGE_MSG = "L'age est obligatoire.";
-    public static final String PAYS_MSG = "Le pays de résidence est obligatoire.";
+    public static final String PAYS_MSG = "Le pays de résidence est obligatoire. Le pays autorisé pour la création de compte dans le système est la France.";
     public static final String PAYS_SIZE_MSG = "Le pays doit contenir au plus 50 caractères.";
+    public static final String AGE_MIN_MSG = "L'âge minimum de création de compte dans le système est de 18 ans.";
 
     public static final int CINQUANTE = 50;
     public static final int QUATRE_VINGT = 80;
@@ -74,7 +81,7 @@ public class UserAccountUtil
         return ErrorDetails.builder()//
         .status(pHttpStatus)//
         .timestamp(LocalDateTime.now(ZoneId.systemDefault()))//
-        .details(pRequest.getDescription(true))// inclure les infos clients tels que : session id et user name
+        .details(pRequest.getDescription(Boolean.FALSE.booleanValue()))// inclure les infos clients tels que : session id et user name
         .message(pException.getMessage())//
         .build();
     }

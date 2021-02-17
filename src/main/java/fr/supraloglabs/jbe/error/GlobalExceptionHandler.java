@@ -70,13 +70,6 @@ public class GlobalExceptionHandler<T>
 
         // Construire l'objet portant les données des erreurs survenues
         final ErrorDetails error = UserAccountUtil.construireErreur(pException, pRequest, HttpStatus.NOT_FOUND);
-
-        // final ErrorDetails error = ErrorDetails.builder()//
-        // .status(HttpStatus.NOT_FOUND)//
-        // .timestamp(LocalDateTime.now(ZoneId.systemDefault()))//
-        // .details(pRequest.getDescription(false))//
-        // .message(pException.getMessage())//
-        // .build();
         return UserAccountUtil.buildResponseErrorEntity(error);
     }
 

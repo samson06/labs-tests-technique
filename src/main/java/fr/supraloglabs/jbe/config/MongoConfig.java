@@ -11,12 +11,16 @@
  */
 package fr.supraloglabs.jbe.config;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.data.mongodb.MongoDatabaseFactory;
+import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -60,32 +64,52 @@ public class MongoConfig
     @Value("${spring.data.mongodb.password}")
     private String password;
 
+    @Bean
+    MongoTransactionManager transactionManager(MongoDatabaseFactory dbFactory)
+    {
+        return new MongoTransactionManager(dbFactory);
+    }
+
     @Primary
     @Bean(name = "mongoClient")
     public MongoClient mongoClient()
     {
-        //  Construire la chaîne de connexion
+        // Construire la chaîne de connexion
         final String urlConnection = UserAccountUtil.mongoDBConnectionStr(this.host, this.port, this.database);
-
-        // Credentials : informations d'identification dans le cas où la connexion est sécurisée
-        final MongoCredential mongoCredential = MongoCredential.createCredential(this.username, this.database, this.password.toCharArray());
-
         final ConnectionString connectionString = new ConnectionString(urlConnection);
-        final MongoClientSettings mongoClientSettings = MongoClientSettings.builder()//
-        .applicationName(this.proAppName)//
-        .credential(mongoCredential)//
-        .writeConcern(WriteConcern.ACKNOWLEDGED)//
-        .applyConnectionString(connectionString)//
-        .build();
+
+        MongoClientSettings mongoClientSettings = null;
+
+        if (StringUtils.isNotBlank(this.username) && StringUtils.isNotBlank(this.password))
+        {
+            // Credentials : informations d'identification dans le cas où la connexion est sécurisée
+            final MongoCredential mongoCredential = MongoCredential.createCredential(this.username, this.database, this.password.toCharArray());
+
+            mongoClientSettings = MongoClientSettings.builder()//
+            .applicationName(this.proAppName)//
+            .credential(mongoCredential)//
+            .writeConcern(WriteConcern.ACKNOWLEDGED)//
+            .applyConnectionString(connectionString)//
+            .build();
+        }
+        else
+        {
+            mongoClientSettings = MongoClientSettings.builder()//
+            .applicationName(this.proAppName)//
+            .writeConcern(WriteConcern.ACKNOWLEDGED)//
+            .applyConnectionString(connectionString)//
+            .build();
+        }
+
         return MongoClients.create(mongoClientSettings);
     }
 
-    @Primary
-    @Bean(name = "mongoTemplate")
-    public MongoTemplate mongoTemplate()
-    {
-        return new MongoTemplate(mongoClient(), this.database);
-    }
+     @Primary
+     @Bean(name = "mongoTemplate")
+     public MongoTemplate mongoTemplate(@Autowired final MongoClient mongoClient)
+     {
+     return new MongoTemplate(mongoClient, this.database);
+     }
 
     /**
      * Déclaration du validateur.

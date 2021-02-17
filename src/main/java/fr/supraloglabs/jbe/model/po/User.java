@@ -13,12 +13,13 @@ package fr.supraloglabs.jbe.model.po;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.validator.constraints.Email;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -40,7 +41,7 @@ import lombok.experimental.FieldDefaults;
  * 
  * @author Vincent Otchoun
  */
-@Document(collection = "USERS")
+@Document(collection = "T_USERS")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -57,30 +58,31 @@ public class User implements Serializable
     private static final long serialVersionUID = 4677921064921552486L;
 
     @Id
-    Long id; // identifiant technique auto-généré
+    String id; // identifiant technique auto-généré
 
-    @NotEmpty(message = UserAccountUtil.PRENOM_MSG)
+    @NotNull(message = UserAccountUtil.PRENOM_MSG)
     @Size(min = 1, max = UserAccountUtil.QUATRE_VINGT, message = UserAccountUtil.PRENOM_SIZE_MSG)
     @Field("firstName")
     String firstName; // le prénom de l'utilisateur
 
-    @NotEmpty(message = UserAccountUtil.NOM_MSG)
+    @NotNull(message = UserAccountUtil.NOM_MSG)
     @Size(min = 1, max = UserAccountUtil.CINQUANTE, message = UserAccountUtil.NOM_SIZE_MSG)
     @Field("lastName")
     String lastName; // le nom de lisateur
 
-    @NotEmpty(message = UserAccountUtil.EMAIL_MSG)
+    @NotNull(message = UserAccountUtil.EMAIL_MSG)
     @Size(min = 1, max = UserAccountUtil.CINQUANTE, message = UserAccountUtil.EMAIL_SIZE_MSG)
     @Email
     @Field("email")
-    @Indexed(unique=true)
+    @Indexed(unique = true)
     String email; // adresse mail de l'utilisateur
 
-    @NotEmpty(message = UserAccountUtil.AGE_MSG)
+    @NotNull(message = UserAccountUtil.AGE_MSG)
     @Field("age")
+    @Min(value = 18, message = UserAccountUtil.AGE_MIN_MSG)
     Integer age; // l'âge de l'utilisateur
 
-    @NotEmpty(message = UserAccountUtil.PAYS_MSG)
+    @NotNull(message = UserAccountUtil.PAYS_MSG)
     @Size(min = 1, max = UserAccountUtil.CINQUANTE, message = UserAccountUtil.PAYS_SIZE_MSG)
     @Field("country")
     String country; // le pays de l'utilisateur

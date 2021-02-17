@@ -11,6 +11,7 @@
  */
 package fr.supraloglabs.jbe.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -19,37 +20,27 @@ import org.springframework.stereotype.Repository;
 import fr.supraloglabs.jbe.model.po.User;
 
 /**
- * Référentiel Spring Data MongoDB pour les opérations en base ende données sur la collection persistant les données de
+ * Référentiel Spring Data MongoDB pour les opérations en base de données sur la collection persistant les données de
  * l'entité {@link User}.
  * 
  * @author Vincent Otchoun
  */
 @Repository
-public interface UserRepository extends MongoRepository<User, Long>
+public interface UserRepository extends MongoRepository<User, String>
 {
     /**
-     * Obtenir les informations de l'utilisateur dans la base de données à partir de son adresse email sans tenir de la
-     * casse.
+     * Recherche les données des utlisateurs en base de données par leur adresse mail.
      * 
      * @param pEmail adresse email de l'utilisateur recherché.
-     * @return les informations de l'utilisateur recherché s'i existe, sinon vide.
+     * @return la liste des données des utilisateurs.
      */
-    Optional<User> findOneByEmailIgnoreCase(final String pEmail);
+    List<User> findByEmailIgnoreCase(final String pEmail);
 
     /**
-     * Obtenir les données de la base de données de l'utilisateur par nom et prénom à partir de son identifiant technque.
+     * Obtenir les détails en base de données de l'utilisateur à partir de son identifiant technique.
      * 
-     * @param pId identifiant technique en base de données de l'enregistrement lié à l'utilisateur recherché.
-     * @return les informations de l'utilisateur recherché s'i existe, sinon vide.
+     * @param pId identifiant technique de l'objet en base de données.
+     * @return les détails de l'utilisateur recherché s'i existe, sinon vide.
      */
-    Optional<User> findOneWithFirstNameAndLastNameById(final Long pId);
-
-    /**
-     * Rechercher la liste paginée des informations dans la base de données des utilisateurs du SI.
-     * 
-     * @param pPageable condition de pagination de la liste (index de la page, nombre d'éléments dans la page à retourner).
-     * @return
-     */
-    // Page<User> findAllPagedUsers(final Pageable pPageable);
-
+    Optional<User> findOneById(final String pId);
 }

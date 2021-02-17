@@ -37,7 +37,7 @@ public class TestsDataUtils
     public static final String NOT_FOUND_ERROR = "Erreur recherche infructueuse de données.";
     public static final String INTEGRITY_ERROR = "Erreur de violations d'intégrité des données.";
     public static final String ACCESS_DENIED = "Accès non autorisés.";
-    
+
     //
     public final UserDTO USER_DTO_TEST = UserDTO.builder()//
     // .id(generateUniqueId())//
@@ -78,8 +78,8 @@ public class TestsDataUtils
     }
 
     public final User USER_TEST = User.builder()//
-    // .id(generateUniqueId())//
-    .id(12L)//
+    .id(generateUniqueId())//
+    // .id(12L)//
     .firstName("Batcho")//
     .lastName("Karen Djayé")//
     .email("karen.test@live.fr")//
@@ -91,7 +91,6 @@ public class TestsDataUtils
     .build();
 
     public final User USER_TEST_NO_ID = User.builder()//
-    // .id(generateUniqueId())//
     .firstName("Batcho")//
     .lastName("Karen Djayé")//
     .email("karen.test@live.fr")//
@@ -102,9 +101,31 @@ public class TestsDataUtils
     .phone("0645789512")//
     .build();
 
+    public final User USER_AGE = User.builder()//
+    .firstName("Adjiba")//
+    .lastName("Naldine")//
+    .email("naldine.test@live.fr")//
+    .age(10)//
+    .country("France")//
+    .adresse("13 Rue Lakanal")//
+    .city("Toulouse")//
+    .phone("0645789512")//
+    .build();
+    
+    public final User USER_SERVICE_TEST = User.builder()//
+    .firstName("Adjiba")//
+    .lastName("Naldine")//
+    .email("naldine.test@live.fr")//
+    .age(43)//
+    .country("France")//
+    .adresse("13 Rue Lakanal")//
+    .city("Toulouse")//
+    .phone("0645789512")//
+    .build();
+
     public static void assertAllUsers(final User expected, final User actual)
     {
-        assertThat(actual.getId()).isEqualTo(expected.getId());
+        // assertThat(actual.getId()).isEqualTo(expected.getId());
         assertThat(actual.getFirstName()).isEqualTo(expected.getFirstName());
         assertThat(actual.getLastName()).isEqualTo(expected.getLastName());
         assertThat(actual.getEmail()).isEqualTo(expected.getEmail());

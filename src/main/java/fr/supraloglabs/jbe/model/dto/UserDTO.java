@@ -44,7 +44,7 @@ import lombok.experimental.FieldDefaults;
 public class UserDTO
 {
 
-    Long id; // identifiant technique auto-généré
+    String id; // identifiant technique auto-généré
 
     @NotEmpty(message = UserAccountUtil.PRENOM_MSG)
     @Size(min = 1, max = UserAccountUtil.QUATRE_VINGT, message = UserAccountUtil.PRENOM_SIZE_MSG)
