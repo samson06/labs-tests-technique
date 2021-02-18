@@ -39,7 +39,34 @@ C'est un projet `Maven` avec `Spring Boot` donc basé sur le langage `Java` :
 - `Model Mapper` pour la conversion des objets : objets persistants vers `DTO` (Data Transfert Object) et vice versa.
 
 ## Configurations
-L'ensemble des configurations pour l'exécution et exploitation de l'application est consigné dans le fichier : [application.properties](/labs-tests-technique/src/main/resources/application.properties)
+Les configurations de l'application permettent de faciliter aussi bien l'exécution que l'exploitation.
+
+### MongoDB Configuration de base
+La base de données cible de l'application est `MongoDB`. Si au démarrage vous obtenez un message du type : `Sessions are not supported by the MongoDB cluster to which this client is connected`, il s'agit d'un
+problème de configuration au niveau de la base (ceci veut dire que vous disposez d'un seule instance `MongoDB` autonome : de type `STANDALONE`), donc les tentavies de connexion échouent.
+Pour y remédier il faut configurer le `REPLICA_SET` le fichier de configuration : `mongod.cfg` selon votre environnement (`Windows,Linux ou macOS`).
+- pour Windows la localisation du fichier est la suivante :` <install directory>/bin/mongod.cfg`
+- pour Linux :  `/etc/mongod.conf`
+- pour Mac : `/usr/local/etc/mongod.conf`
+
+Dans notre cas de figure (env `Windows`), il faut ajouter les inforamtions ci-dessous et redémarré le service.
+```yml
+replication:
+   oplogSizeMB: 128
+   replSetName: "rs0"  -- le nom du replica_set à fourni dans le fichier des propriétés applicatives pour établir correctement la connexion avec la basede données.
+   enableMajorityReadConcern: true
+```
+Une fois le fichier modifié, par le biais d'une console de type PowerShell, il faut exécuter les lignes de commandes suivantes:
+```sh
+$ cd "<install directory>/bin/"
+$ mongo.exe
+$ rs.initiate() -- pour intialiser le REPLICA_SET
+$ rs.conf()     -- pour vérifier que la configuration est bien activée
+$ exit          -- pour sortir
+```
+
+### Configurations applicatives
+L'ensemble des configurations applicaqtives sont consignées dans le fichier : [application.properties](/labs-tests-technique/src/main/resources/application.properties)
 
 ```properties
 # Activer le port d'écoute du serveur
@@ -52,15 +79,16 @@ server.servlet.context-path=/user-account-api
 #########################
 ####  MONGODB PROPS  #### 
 #########################
-# Credentials : informations d'identification à la base de données àrenseigner s'il y a lieu 
+# Credentials : informations d'identification à la base de données à renseigner s'il y a lieu 
 spring.data.mongodb.authentication-database=
 spring.data.mongodb.username=
 spring.data.mongodb.password=
 
-# Informations pour la construction de la cha^ne de connexion à la base de donnnées
-spring.data.mongodb.database=admin
-spring.data.mongodb.host=localhost
-spring.data.mongodb.port=27017
+# Informations pour la construction de la chaîne de connexion à la base de donnnées.
+spring.data.mongodb.replica-set-name=rs0  # le nom du REPLICA_SET.
+spring.data.mongodb.database=admin        # le nom de la base de données.
+spring.data.mongodb.host=localhost        # l'hôte.
+spring.data.mongodb.port=27017            # le port d'écoute du serveur pour l'hôte spécifié.
 
 ```
 
