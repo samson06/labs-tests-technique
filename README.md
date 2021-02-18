@@ -42,10 +42,10 @@ C'est un projet `Maven` avec `Spring Boot` donc basé sur le langage `Java` :
 L'ensemble des configurations pour l'exécution et exploitation de l'application est consigné dans le fichier : [application.properties](/labs-tests-technique/src/main/resources/application.properties)
 
 ```properties
-# App custom config
+# Activer le port d'écoute du serveur
 server.port=8500
 
-spring.profiles.active=production
+# Autres propriétés
 spring.application.name=user-account
 server.servlet.context-path=/user-account-api
 
@@ -64,13 +64,18 @@ spring.data.mongodb.port=27017
 
 ```
 
-## Fonctionnalités
-Cette application fournit des points de terminaison HTTP et des outils pour les éléments suivants : 
+## Points de terminaison REST
+L'application fournit des points de terminaison HTTP et des outils pour exposer les fonctionnalités proposées.
 
+### Les fonctionnalités de base : points de terminaison REST
 |Verbe HTTP|URL|Description|Status Codes|
 |---|---|---|---|
 |`POST`|_http://localhost:${server.port}/${server.servlet.context-path}/api-users/user/register/_|Enregistrer/Sauvegarder dans le SI les informations d'un utilisateur|<ul><li>`200 OK` si succès</li><li>`4XX ou 5XX` si erreur survenue</li></ul>|
 |`GET`|_http://localhost:${server.port}/${server.servlet.context-path}/api-users/user/search/{id}_|Rechercher et afficher les détails d'un utilisateur enregistré dans le SI|<ul><li>`200 OK` si utilisateur existe</li><li>`4XX ou 5XX` si erreur survenue</li></ul>|
+
+### Les fonctionnalités supplémentaires : points de terminaison REST
+Au-délà des fonctionnalités de base, l'application propose également les fonctionnalités supplémentaires suivantes :
+
 
 avec comme URL de base : `http://localhost:${server.port}/${server.servlet.context-path}`
 
