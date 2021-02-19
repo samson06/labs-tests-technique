@@ -12,6 +12,8 @@
 package fr.supraloglabs.jbe.api.registeer;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -47,6 +50,7 @@ import fr.supraloglabs.jbe.model.dto.UserDTO;
 import fr.supraloglabs.jbe.model.po.User;
 import fr.supraloglabs.jbe.service.mapper.UserMapper;
 import fr.supraloglabs.jbe.service.user.UserService;
+import fr.supraloglabs.jbe.util.UserAccountUtil;
 
 /**
  * Classe des Tests Unitraires des objets de type {@link UserRegisterController}
@@ -54,15 +58,16 @@ import fr.supraloglabs.jbe.service.user.UserService;
  * @author Vincent Otchoun
  */
 @RunWith(SpringRunner.class)
-@ContextConfiguration(name = "userRegisterControllerTest", classes = { AppRootConfig.class, UserService.class, UserRegisterController.class })
+@ContextConfiguration(name = "userRegisterControllerTest", classes = { AppRootConfig.class, UserMapper.class, UserService.class,
+        UserRegisterController.class })
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 class UserRegisterControllerTest
 {
-    // private static final String URL = "http://localhost:";// url of the REST server. This url can be that of a remote
     // server.
-    private String API_URL = "/api-users/user/register";
+    private static final String API_URL = "/api-users/user/register";
+    private static final String DETAILS = "uri=/api-users/user/register";
 
     @Autowired
     MockMvc mockMvc;
@@ -75,9 +80,9 @@ class UserRegisterControllerTest
 
     @Mock
     private UserService userService;
-
     @Mock
     private UserMapper userMapper;
+    
     private UserRegisterController controller;
 
     /**
@@ -95,9 +100,9 @@ class UserRegisterControllerTest
     @AfterEach
     void tearDown() throws Exception
     {
-         this.controller = null;
-         this.userMapper = null;
-         this.userService = null;
+        this.controller = null;
+        this.userMapper = null;
+        this.userService = null;
         this.mongoOps.dropCollection(User.class);
     }
 
@@ -127,8 +132,6 @@ class UserRegisterControllerTest
         BDDMockito.given(this.userMapper.convertToUserDTO(Mockito.any(User.class))).willReturn(userMock);
         BDDMockito.given(this.userService.getByEmailIgnoreCase(Mockito.any(String.class))).willReturn(Collections.emptyList());
         //
-        // when(Mockito.any(UserDTO.class).getId()).thenReturn(null);
-        // BDDMockito.given(this.controller.createNewUSerDetails(Mockito.any(UserDTO.class))).willReturn(ResponseEntity.ok(userMock));
 
         final String strContent = this.objectMapper.writeValueAsString(userMock);
 
@@ -146,8 +149,10 @@ class UserRegisterControllerTest
         .andExpect(jsonPath("$.age").value(userMock.getAge()))//
         .andExpect(jsonPath("$.email").value(userMock.getEmail()))//
         ;
-        
+
         assertThat(this.controller).isNotNull();
+
+        verify(this.userService, times(0)).createUser(Mockito.any(User.class));
     }
 
     @Test
@@ -163,9 +168,9 @@ class UserRegisterControllerTest
         .city("Marseille")//
         .phone("0645789512")//
         .build();
-        
-        BDDMockito.given(this.userMapper.convertToUser(Mockito.any(UserDTO.class))).willReturn(TestsDataUtils.USER_TEST);
-        BDDMockito.given(this.userMapper.convertToUserDTO(Mockito.any(User.class))).willReturn(userMock);
+
+        BDDMockito.given(this.userMapper.convertToUser(userMock)).willReturn(TestsDataUtils.USER_TEST);
+        BDDMockito.given(this.userMapper.convertToUserDTO(TestsDataUtils.USER_TEST)).willReturn(userMock);
 
         final String strContent = this.objectMapper.writeValueAsString(userMock);
         this.mockMvc.perform(MockMvcRequestBuilders.post(API_URL)//
@@ -177,6 +182,8 @@ class UserRegisterControllerTest
         )//
         .andDo(MockMvcResultHandlers.print())//
         .andExpect(status().isInternalServerError())//
+        .andExpect(jsonPath("$.status").value(HttpStatus.INTERNAL_SERVER_ERROR.toString()))//
+        .andExpect(jsonPath("$.details").value(DETAILS))//
         ;
     }
 
@@ -205,6 +212,9 @@ class UserRegisterControllerTest
         )//
         .andDo(MockMvcResultHandlers.print())//
         .andExpect(status().isNotFound())//
+        .andExpect(jsonPath("$.status").value(HttpStatus.NOT_FOUND.toString()))//
+        .andExpect(jsonPath("$.details").value(DETAILS))//
+        .andExpect(jsonPath("$.message").value(UserAccountUtil.ALREADY_EXIST_USER_ID_MSG))//
         ;
     }
 
@@ -232,7 +242,8 @@ class UserRegisterControllerTest
         )//
         .andDo(MockMvcResultHandlers.print())//
         .andExpect(status().isInternalServerError())//
+        .andExpect(jsonPath("$.status").value(HttpStatus.INTERNAL_SERVER_ERROR.toString()))//
+        .andExpect(jsonPath("$.details").value(DETAILS))//
         ;
     }
-
 }

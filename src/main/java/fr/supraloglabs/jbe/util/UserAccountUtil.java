@@ -36,7 +36,12 @@ public class UserAccountUtil
     // Controller - SWAGGER
     public static final String ALREADY_EXIST_USER_ID_MSG = "Un nouvel utilisateur ne peut pas déjà avoir un identifiant.";
     public static final String ALREADY_EXIST_USER_EMAIL_MSG = "Conflit: l'email existe déjà dans la base de données.";
-    public static final String USER_DATE_SUCCES_MSG  ="Les données utilisateur ont été enregistrées avec succès.";
+    public static final String USER_DATE_SUCCES_MSG = "Les données utilisateur ont été enregistrées avec succès.";
+    public static final String USER_DATA_NOT_NULL_MSG = "Impossible d'enregistrer un utilsateur sans données dans le système d'informations.";
+    public static final String USER_ID_NOT_NULL_MSG = "Impossible de trouver les détails de l'utilisateur : ";
+    public static final String USER_ID_SEARCH_MSG = "L'utilisateur recherché : [";
+    public static final String USER_ID_SEARCH_END_MSG = "], n'existe pas dans le système d'infiormations.";
+    public static final String USER_ID_MSG_PATTERN = "%s%s%s";
 
     // "mongodb://localhost:12345/users_db_test"
     public static final String MONGODB_PREFIX_PATTERN = "mongodb://%s:%d/%s";
@@ -74,7 +79,6 @@ public class UserAccountUtil
     public static final String AGE_MIN_MSG = "L'âge minimum de création de compte dans le système est de 18 ans.";
     public static final String PAYS_REF = "FRANCE";
     public static final String MAJEUR_FR_USER_MSG = "Vous n'êtes pas autorisé à créér un compte dans le système. Il faut avoir au moins 18 ans et vivre en France";
-    
 
     public static final int CINQUANTE = 50;
     public static final int QUATRE_VINGT = 80;
@@ -172,4 +176,26 @@ public class UserAccountUtil
             throw new AppCustomException(MAJEUR_FR_USER_MSG);
         }
     }
+
+    /**
+     * Construire le message d'erreur pour recherche infructueuse sur l'identifnant de l'utilisateur.
+     * 
+     * @param userId identifiant de l'utilisateur.
+     * @return le message d'erreurs.
+     */
+    public static String buildMessage(final String userId)
+    {
+        return String.format(UserAccountUtil.USER_ID_MSG_PATTERN, UserAccountUtil.USER_ID_SEARCH_MSG, userId, UserAccountUtil.USER_ID_SEARCH_END_MSG);
+    }
+
+    /**
+     * Intercepter l'exception surnue.
+     * 
+     * @param userId identifiant de l'utilisateur.
+     */
+    public static void buildExcemption(final String userId)
+    {
+        throw new AppCustomException(buildMessage(userId));
+    }
+
 }

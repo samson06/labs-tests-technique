@@ -59,7 +59,13 @@ public class LoadDatabase
     }
 
     private static final String PAYS = "France";
+
+    /*
+     * XXX: Attention les id sont auto-générés dans le SI
+     * On force les traits au niveau Id pour pour pour pouvoir fair les recherches facilement pour les tests d'intégration
+     */
     private User user = User.builder()//
+    .id("83381733-d06a-4eb6-97c8-ee9eef873c9f")//
     .lastName("Batcho")//
     .firstName("Karen Djayé")//
     .email("karen.test@live.fr")//
@@ -71,6 +77,7 @@ public class LoadDatabase
     .build();
 
     private User user2 = User.builder()//
+    .id("83381733-d06a-4eb6-97c8-aa9cvef873c9f")//
     .lastName("Adjba")//
     .firstName("Italé Naldine")//
     .email("naldine.test@live.fr")//
@@ -82,6 +89,7 @@ public class LoadDatabase
     .build();
 
     private User user3 = User.builder()//
+    .id("83381745-d08a-4eb6-97c8-ee9eef873c9f")//
     .lastName("Dessoum")//
     .firstName("André Marcel")//
     .email("marcel.test@live.fr")//
@@ -93,6 +101,7 @@ public class LoadDatabase
     .build();
 
     private User user4 = User.builder()//
+    .id("89991733-d06a-4eb6-97c8-ee9eef873c9f")//
     .lastName("Belahy")//
     .firstName("Steeve")//
     .email("steeve.test@live.fr")//

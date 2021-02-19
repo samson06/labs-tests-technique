@@ -93,6 +93,19 @@ public class TestsDataUtils
     .city("Marseille")//
     .phone("0645789512")//
     .build();
+    
+    public final User USER_TEST_ID = User.builder()//
+    .id("83381733-d06a-4eb6-97c8-ee9eef873c9f")//
+    // .id(12L)//
+    .lastName("Batcho")//
+    .firstName("Karen Djayé")//
+    .email("karen.test@live.fr")//
+    .age(28)//
+    .country("France")//
+    .adresse("23 Rue du Commandant Mages")//
+    .city("Marseille")//
+    .phone("0645789512")//
+    .build();
 
     public final User USER_TEST_NO_ID = User.builder()//
     .lastName("Batcho")//
@@ -125,6 +138,61 @@ public class TestsDataUtils
     .adresse("13 Rue Lakanal")//
     .city("Toulouse")//
     .phone("0645789512")//
+    .build();
+    
+    
+    /*
+     * XXX: Attention les id sont auto-générés dans le SI
+     * On force les traits au niveau Id pour pour pour pouvoir fair les recherches facilement pour les tests d'intégration
+     */
+    private static final String PAYS = "France";
+    
+    public static final User USER = User.builder()//
+    .id("83381733-d06a-4eb6-97c8-ee9eef873c9f")//
+    .lastName("Batcho")//
+    .firstName("Karen Djayé")//
+    .email("karen.test@live.fr")//
+    .age(20)//
+    .country(PAYS)//
+    .adresse("23 Rue du Commandant Mages")//
+    .city("Marseille")//
+    .phone("0645789512")//
+    .build();
+
+    public static final  User USER2 = User.builder()//
+    .id("83381733-d06a-4eb6-97c8-aa9cvef873c9f")//
+    .lastName("Adjba")//
+    .firstName("Italé Naldine")//
+    .email("naldine.test@live.fr")//
+    .age(28)//
+    .country(PAYS)//
+    .adresse("13 Rue Lakanal")//
+    .city("Toulouse")//
+    .phone("0645789912")//
+    .build();
+
+    public static final  User USER3 = User.builder()//
+    .id("83381745-d08a-4eb6-97c8-ee9eef873c9f")//
+    .lastName("Dessoum")//
+    .firstName("André Marcel")//
+    .email("marcel.test@live.fr")//
+    .age(36)//
+    .country(PAYS)//
+    .adresse("1 Boulevard Wilson")//
+    .city("Antibes")//
+    .phone("0745788912")//
+    .build();
+
+    public static final  User USER4 = User.builder()//
+    .id("89991733-d06a-4eb6-97c8-ee9eef873c9f")//
+    .lastName("Belahy")//
+    .firstName("Steeve")//
+    .email("steeve.test@live.fr")//
+    .age(32)//
+    .country(PAYS)//
+    .adresse("1 Boulevard Wilson")//
+    .city("Juan Les Pins")//
+    .phone("0759733912")//
     .build();
 
     public static void assertAllUsers(final User expected, final User actual)

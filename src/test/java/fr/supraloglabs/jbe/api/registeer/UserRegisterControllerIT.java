@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------
  * Projet ou Module : labs-tests-technique
- * Nom de la classe : UserRegisterController_Test.java
+ * Nom de la classe : UserRegisterControllerIT.java
  * Date de création : 18 févr. 2021
  * Heure de création : 19:32:48
  * Package : fr.supraloglabs.jbe.api.registeer
@@ -30,6 +30,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import fr.supraloglabs.jbe.UserAccountApplicationStarter;
 import fr.supraloglabs.jbe.config.AppRootConfig;
 import fr.supraloglabs.jbe.model.dto.UserDTO;
+import fr.supraloglabs.jbe.service.mapper.UserMapper;
 import fr.supraloglabs.jbe.service.user.UserService;
 
 /**
@@ -38,10 +39,11 @@ import fr.supraloglabs.jbe.service.user.UserService;
  * @author Vincent Otchoun
  */
 @RunWith(SpringRunner.class)
-@ContextConfiguration(name = "userRegisterControllerTest", classes = { AppRootConfig.class, UserService.class, UserRegisterController.class })
+@ContextConfiguration(name = "userRegisterControllerTest", classes = { AppRootConfig.class, UserMapper.class, UserService.class,
+        UserRegisterController.class })
 @SpringBootTest(classes = UserAccountApplicationStarter.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-class UserRegisterController_Test
+class UserRegisterControllerIT
 {
     //
     private static final String URL = "http://localhost:";// url du serveur REST. Cette url peut être celle d'un serveur distant.

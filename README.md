@@ -7,8 +7,8 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/samson06/labs-tests-technique)
 
 ## A Propos de l'application
-C'est une application basée sur une architecture `REST API` (`service RESTFul`) exposant ses fonctionnalités au travers de deux `API`. Elle est écrite en `Java` 
-avec pour socle le Framework `Spring` plus précisement `Spring Boot` qui est des variante de l'écosystème`Spring`. Elle embarque aussi d'autres technos supplémentaires pour l'impémentation des besoins exprimés.
+C'est une application basée sur une architecture `REST` (`service RESTFul`) exposant ses fonctionnalités au travers de deux `API`. Elle est écrite en `Java` 
+avec pour socle le Framework `Spring` plus précisement `Spring Boot` qui est une de ces variantes de l'écosystème`Spring`. Elle embarque aussi d'autres technos supplémentaires pour l'impémentation des besoins exprimés.
 
 ## Documentation
 Cette application est livrée avec des documents situés dans le dossier : `labs-tests-technique/docs/`
@@ -29,38 +29,37 @@ Une liste non exhaustive des technos embarquées pour le développement de cette
 
 C'est un projet `Maven` avec `Spring Boot` donc basé sur le langage `Java` : 
 - `EA` (Entreprise Architect) pour la fourniture des éléments de modélisation/conception des spécifications techniques fournies.
-- `Java 8` est la version du langage utilisé pour le code source et cible pour l'environnement d'exécution ou de production.
-- `MongoDB`, configurations pour les accès aux données en base. Elle facilite également les réalisations de TI (`_Tests d'Intégration_` : composants ou système).
-- l'interface `MongoRepository ` pour les concepts ORM et DAO.
+- `Java 8` est la version du langage utilisé et cible pour l'environnement d'exécution ou de production.
+- `MongoDB`, configurations pour les accès aux données en base et pour la réalisation de TI (`_Tests d'Intégration_` : système). L'interface `MongoRepository ` pour les concepts ORM et DAO.
 - `Lombok` pour générer du code couramment utilisé et faciliter le maintien du code source propre, simplifier l'écriture des classes.
 - `JUnit 5` pour l'écriture des codes sources des classes des Tests Unitaires et/ou d'Intégration.
-- `SonarLint` intégré dans l'IDE (_STS_) pour `analyser la qualité du code` livré, poussé dans le `repository` (_bonnes pratiques de développement_).
-- `JaCoCo` pour la production et fourniture des rapports de couverture du code source par les différents tests réalisés.
+- `SonarLint` intégré dans l'IDE (_STS_) pour `analyser la qualité du code` livré (_bonnes pratiques de développement_).
+- `JaCoCo` produire/fournir les rapports de couverture du code source par les différents tests réalisés.
 - `Model Mapper` pour la conversion des objets : objets persistants vers `DTO` (Data Transfert Object) et vice versa.
 
 ## Configurations
 Les configurations de l'application permettent de faciliter aussi bien l'exécution que l'exploitation.
 
-### MongoDB Configuration de base
+### MongoDB 
 La base de données cible de l'application est `MongoDB`. Si au démarrage vous obtenez un message du type : `Sessions are not supported by the MongoDB cluster to which this client is connected`, il s'agit d'un
 problème de configuration au niveau de la base (ceci veut dire que vous disposez d'un seule instance `MongoDB` autonome : de type `STANDALONE`), donc les tentatives de connexion échouent.
 Pour y remédier il faut configurer le `REPLICA_SET` dans le fichier de configuration : `mongod.cfg` selon votre environnement (`Windows,Linux ou macOS`).
-- pour Windows le fichier se situe à :` <install directory>/bin/mongod.cfg`
-- pour Linux :  `/etc/mongod.conf`
-- pour Mac : `/usr/local/etc/mongod.conf`
+- `Windows` le fichier de configuration à modifier se trouve à :` <install directory>/bin/mongod.cfg`
+- `Linux` :  `/etc/mongod.conf`
+- `Mac` : `/usr/local/etc/mongod.conf`
 
-Dans notre cas de figure (env `Windows`), il faut ajouter les inforamtions ci-dessous et redémarré le service.
+Dans notre cas de figure (env `Windows`), il faut ajouter les informations ci-dessous et redémarré le service.
 ```yml
 replication:
    oplogSizeMB: 128
-   replSetName: "rs0"  -- le nom du replica_set à fournir dans le fichier des propriétés applicatives pour établir correctement la connexion avec la basede données.
+   replSetName: "rs0"  -- le nom du REPLICA_SET à fournir dans le fichier des propriétés applicatives pour établir correctement la connexion avec la basede données.
    enableMajorityReadConcern: true
 ```
-Une fois le fichier modifié, par le biais d'une console de type `PowerShell` par exemple, il faut exécuter les lignes de commandes suivantes:
+Une fois le fichier modifié, par le biais d'une console de type `PowerShell` (par exemple), il faut exécuter les lignes de commandes suivantes:
 ```sh
 $ cd "<install directory>/bin/"
 $ mongo.exe
-$ rs.initiate() -- pour intialiser le REPLICA_SET
+$ rs.initiate() -- pour intialiser le REPLICA_SET défini
 $ rs.conf()     -- pour vérifier que la configuration est bien activée
 $ exit          -- pour sortir
 ```
@@ -74,7 +73,7 @@ server.port=8500
 
 # Autres propriétés
 spring.application.name=user-account
-server.servlet.context-path=/user-account-api
+server.servlet.context-path=/user-account # root contexte de l'application
 
 #########################
 ####  MONGODB PROPS  #### 
