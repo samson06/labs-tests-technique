@@ -35,8 +35,8 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 /**
- * Objet de mapping de la composante de gestion des erreurs dans les retours des API. Il sera intégréà l'objet de
- * gestion des retours.
+ * Objet de mapping de la composante de gestion des erreurs dans les retours des API. Il sera intégré à l'objet de
+ * gestion des retours de l'API.
  * 
  * @author Vincent Otchoun
  */
@@ -45,7 +45,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE) 
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @JsonPropertyOrder({ "status", "timestamp", "details", "validationErrors" })
 public class ErrorDetails
@@ -57,9 +57,9 @@ public class ErrorDetails
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = UserAccountUtil.ISO_DATE_TIME, locale = UserAccountUtil.FR_LOCALE, timezone = UserAccountUtil.CET_TIMEZONE)
     private LocalDateTime timestamp; // Horodatage de constatation de l'erreur
 
-    private String details; // Le message d'erreurs à afficher
+    private String details; // Lee détails de l'erreur à afficher
 
-    private String message;
+    private String message; // Le message d'erreurs
 
     @Override
     public String toString()

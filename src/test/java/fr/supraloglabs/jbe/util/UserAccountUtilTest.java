@@ -54,7 +54,7 @@ class UserAccountUtilTest
     }
 
     @Test
-    void testMongoDBConectionStr_()
+    void testMongoDBConectionStr_WithNull()
     {
         final String response = UserAccountUtil.mongoDBConnectionStr(null, null, null);
 

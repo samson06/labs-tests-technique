@@ -37,7 +37,7 @@ import fr.supraloglabs.jbe.config.AppRootConfig;
 import fr.supraloglabs.jbe.util.UserAccountUtil;
 
 /**
- * Configuration de beans de la couche abstraite d'accès aux informations en abse de données.
+ * Configuration de beans de la couche abstraite d'accès aux données en base.
  * 
  * @author Vincent Otchoun
  */
@@ -137,9 +137,9 @@ public class MongoConfig
     }
 
     /**
-     * Obtenir le traduction d'exceptions de persistance.
+     * Obtenir le traducteur d'exceptions de persistance.
      *
-     * @return le traduction des exceptions de persistance.
+     * @return le traducteur des exceptions de persistance.
      */
     @Primary
     @Bean(name = "exceptionTranslationPostProcessor")

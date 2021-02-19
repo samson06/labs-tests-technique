@@ -26,7 +26,7 @@ import fr.supraloglabs.jbe.model.po.User;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Service de conversion/transformation d'un objet de type {@link User} en son objet de tranfert de ses données
+ * Service de conversion/transformation d'un objet de type {@link User} en son objet de tranfert de données
  * {@link UserDTO} et vice versa.
  * 
  * @author Vincent Otchoun
@@ -39,7 +39,7 @@ public class UserMapper
     private final ModelMapper modelMapper;
 
     /**
-     * Constructeur avec paramètres pour injection du beans en dépendances.
+     * Constructeur avec paramètre pour injection du beans en dépendances.
      * 
      * @param modelMapper le bean de conversion des modèles selon le type.
      */
@@ -58,35 +58,34 @@ public class UserMapper
     public User convertToUser(final UserDTO pUserDTO)
     {
         log.info("[convertToUser] - Obtenir les données en base de l'utilisateur.");
-        
+
         if (pUserDTO == null)
         {
             return null;
         }
 
         return this.modelMapper.map(UserDTO.class, User.UserBuilder.class)//
-         .id(pUserDTO.getId())//
-         .firstName(pUserDTO.getFirstName())//
-         .lastName(pUserDTO.getLastName())//
-         .email(pUserDTO.getEmail())//
-         .age(pUserDTO.getAge())//
-         .country(pUserDTO.getCountry())//
-         .adresse(pUserDTO.getAdresse())//
-         .city(pUserDTO.getCity())//
-         .phone(pUserDTO.getPhone())//
+        .firstName(pUserDTO.getFirstName())//
+        .lastName(pUserDTO.getLastName())//
+        .email(pUserDTO.getEmail())//
+        .age(pUserDTO.getAge())//
+        .country(pUserDTO.getCountry())//
+        .adresse(pUserDTO.getAdresse())//
+        .city(pUserDTO.getCity())//
+        .phone(pUserDTO.getPhone())//
         .build();
     }
 
     /**
      * Convertir l'objet {@link User} en {@link UserDTO}.
      * 
-     * @param pUser les données en base de l'utilisateur
+     * @param pUser les données en base de l'utilisateur.
      * @return l'objet de transfert des informations de l'utilisateur.
      */
     public UserDTO convertToUserDTO(final User pUser)
     {
-        log.info("[convertToDTO] - Obtenir les données de l'objet de transfert des données de l'utilisateur.");
-        
+        log.info("[convertToUserDTO] - Obtenir les données de l'objet de transfert des données de l'utilisateur.");
+
         if (pUser == null)
         {
             return null;
@@ -106,15 +105,14 @@ public class UserMapper
     }
 
     /**
-     * Construire la liste de {@link User} à partir de la liste des objets de transfert des données de l'utilisateur
-     * {@link UserDTO}.
+     * Construire la liste de {@link User} à partir de la liste de {@link UserDTO}.
      * 
      * @param userDTOs la liste des données des objets de transfert des informations de l'utilisateur.
      * @return la liste des données en base de données de l'utilisateur.
      */
-    public Collection<User> totoUsers(final Collection<UserDTO> userDTOs)
+    public Collection<User> toUsers(final Collection<UserDTO> userDTOs)
     {
-        log.info("[totoUsers] - Obtenir la liste des données en base des utilisateurs.");
+        log.info("[toUsers] - Obtenir la liste des données en base des utilisateurs.");
 
         //
         return Optional.ofNullable(userDTOs)//
@@ -134,7 +132,7 @@ public class UserMapper
      */
     public Collection<UserDTO> toUserDtos(final Collection<User> users)
     {
-        log.info("[convertToDTO] - Obtenir la liste des données des objets de transfert des données de l'utilisateur.");
+        log.info("[toUserDtos] - Obtenir la liste des données des objets de transfert des données de l'utilisateur.");
 
         //
         return Optional.ofNullable(users)//

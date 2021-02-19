@@ -22,6 +22,7 @@ import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -79,11 +80,13 @@ class UserServiceTest
     @AfterEach
     void tearDown() throws Exception
     {
+        //
     }
 
     /**
      * Test method for {@link fr.supraloglabs.jbe.service.user.UserService#createUser(fr.supraloglabs.jbe.model.po.User)}.
      */
+    @DisplayName("given object to save when save object using UserRepository then object is saved")
     @Test
     void testCreateUser()
     {

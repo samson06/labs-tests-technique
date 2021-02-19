@@ -42,7 +42,9 @@ public class UserService
     private final UserRepository userRepository;
 
     /**
-     * @param pUserRepository
+     * Constructeur avec paramètre pour injection du bean dépendancess.
+     * 
+     * @param pUserRepository le DAO des opérations d'accès aux données utilisateur en base.
      */
     @Autowired
     public UserService(final UserRepository pUserRepository)
@@ -53,7 +55,7 @@ public class UserService
     /**
      * Enrregistrer les données d'un nouvel utilisateur dans le SI.
      * 
-     * @param pUser les données de l'utilisateur à persister.
+     * @param pUser les données de l'utilisateur à enregistrer.
      * @return les détails de l'utilisateur créé.
      */
     public User createUser(final User pUser)
@@ -76,8 +78,8 @@ public class UserService
     /**
      * Recherche les données des utlisateurs en base de données par leur adresse mail.
      * 
-     * @param pEmail adresse email de l'utilisateur recherché.
-     * @return la liste des données des utilisateurs.
+     * @param pEmail adresse email des utilisateurs recherchés.
+     * @return la liste des données des utilisateurs correspaondant au critère de recherche.
      */
     @Transactional(readOnly = true)
     public Collection<User> getByEmailIgnoreCase(String pEmail)
@@ -134,7 +136,7 @@ public class UserService
     /**
      * Supprimer les détails d'un utilisateur du SI à partir de son identifiant.
      * 
-     * @param pUserId idnetifiant de l'utilisateur dans la base de données.
+     * @param pUserId identifiant de l'utilisateur dans la base de données.
      */
     public void deleteUser(final String pUserId)
     {
@@ -153,7 +155,7 @@ public class UserService
     }
 
     /**
-     * MEttre à jour les détails d'un utilisateur dans la base de données à partir de son identifiant.
+     * Mettre à jour les détails d'un utilisateur dans la base de données à partir de son identifiant.
      * 
      * @param pUserId identifiant de l'utilisateur recherché pour mise à jour des détails.
      * @param pUser   détails de l'utilisateur à mettre à jour.

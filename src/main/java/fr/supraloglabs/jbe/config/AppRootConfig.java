@@ -43,9 +43,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 public class AppRootConfig
 {
     /**
-     * Construire le bean de générateur de mappeur Jackson vers objet.
+     * Construire le bean de générateur de mapper Jackson d'objet  <--> au format JSON.
      * 
-     * @return le générateur de mappeur.
+     * @return le générateur de mapper.
      */
     @Bean(name = "jackson2ObjectMapperBuilder")
     @Primary
@@ -82,7 +82,7 @@ public class AppRootConfig
     }
 
     /**
-     * Construire le bean de mappeurd'objets de construction au format JSON.
+     * Construire le bean de mapper d'objets <--> au format JSON.
      * 
      * @return le mappeur d'objets au format JSON.
      */
@@ -94,10 +94,10 @@ public class AppRootConfig
     }
 
     /**
-     * mappes de propriétés personnalisées et convertisseurs pour gérer le transfert de l'objet de transfert de données
+     * Mapper de propriétés personnalisées et convertisseurs pour gérer le transfert de l'objet de transfert de données
      * à l'entité et vice versa.
      * 
-     * @return
+     * @returnle model mapper.
      */
     @Bean(name = "modelMapper")
     @Primary
@@ -105,4 +105,6 @@ public class AppRootConfig
     {
         return new ModelMapper();
     }
+    
+
 }

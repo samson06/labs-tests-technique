@@ -43,9 +43,9 @@ Les configurations de l'application permettent de faciliter aussi bien l'exécut
 
 ### MongoDB Configuration de base
 La base de données cible de l'application est `MongoDB`. Si au démarrage vous obtenez un message du type : `Sessions are not supported by the MongoDB cluster to which this client is connected`, il s'agit d'un
-problème de configuration au niveau de la base (ceci veut dire que vous disposez d'un seule instance `MongoDB` autonome : de type `STANDALONE`), donc les tentavies de connexion échouent.
-Pour y remédier il faut configurer le `REPLICA_SET` le fichier de configuration : `mongod.cfg` selon votre environnement (`Windows,Linux ou macOS`).
-- pour Windows la localisation du fichier est la suivante :` <install directory>/bin/mongod.cfg`
+problème de configuration au niveau de la base (ceci veut dire que vous disposez d'un seule instance `MongoDB` autonome : de type `STANDALONE`), donc les tentatives de connexion échouent.
+Pour y remédier il faut configurer le `REPLICA_SET` dans le fichier de configuration : `mongod.cfg` selon votre environnement (`Windows,Linux ou macOS`).
+- pour Windows le fichier se situe à :` <install directory>/bin/mongod.cfg`
 - pour Linux :  `/etc/mongod.conf`
 - pour Mac : `/usr/local/etc/mongod.conf`
 
@@ -53,10 +53,10 @@ Dans notre cas de figure (env `Windows`), il faut ajouter les inforamtions ci-de
 ```yml
 replication:
    oplogSizeMB: 128
-   replSetName: "rs0"  -- le nom du replica_set à fourni dans le fichier des propriétés applicatives pour établir correctement la connexion avec la basede données.
+   replSetName: "rs0"  -- le nom du replica_set à fournir dans le fichier des propriétés applicatives pour établir correctement la connexion avec la basede données.
    enableMajorityReadConcern: true
 ```
-Une fois le fichier modifié, par le biais d'une console de type PowerShell, il faut exécuter les lignes de commandes suivantes:
+Une fois le fichier modifié, par le biais d'une console de type `PowerShell` par exemple, il faut exécuter les lignes de commandes suivantes:
 ```sh
 $ cd "<install directory>/bin/"
 $ mongo.exe
@@ -66,7 +66,7 @@ $ exit          -- pour sortir
 ```
 
 ### Configurations applicatives
-L'ensemble des configurations applicaqtives sont consignées dans le fichier : [application.properties](/labs-tests-technique/src/main/resources/application.properties)
+L'ensemble des configurations applicatives sont consignées dans le fichier : [application.properties](/labs-tests-technique/src/main/resources/application.properties)
 
 ```properties
 # Activer le port d'écoute du serveur
@@ -95,15 +95,15 @@ spring.data.mongodb.port=27017            # le port d'écoute du serveur pour l'
 ## Points de terminaison REST
 L'application fournit des points de terminaison HTTP et des outils pour exposer les fonctionnalités proposées.
 
-### Les fonctionnalités de base : points de terminaison REST
+### Les points de terminaison REST des fonctionnalités de base 
 |Verbe HTTP|URL|Description|Status Codes|
 |---|---|---|---|
 |`POST`|_http://localhost:${server.port}/${server.servlet.context-path}/api-users/user/register/_|Enregistrer/Sauvegarder dans le SI les informations d'un utilisateur|<ul><li>`200 OK` si succès</li><li>`4XX ou 5XX` si erreur survenue</li></ul>|
-|`GET`|_http://localhost:${server.port}/${server.servlet.context-path}/api-users/user/search/{id}_|Rechercher et afficher les détails d'un utilisateur enregistré dans le SI|<ul><li>`200 OK` si utilisateur existe</li><li>`4XX ou 5XX` si erreur survenue</li></ul>|
+|`GET`|_http://localhost:${server.port}/${server.servlet.context-path}/api-users/user/search/{id}_|Afficher les détails d'un utilisateur enregistré dans le SI|<ul><li>`200 OK` si utilisateur existe</li><li>`4XX ou 5XX` si erreur survenue</li></ul>|
 
-### Les fonctionnalités supplémentaires : points de terminaison REST
+### Les points de terminaison REST des fonctionnalités supplémentaires ajoutées
 Au-délà des fonctionnalités de base, l'application propose également les fonctionnalités supplémentaires suivantes :
-
+`TODO`
 
 avec comme URL de base : `http://localhost:${server.port}/${server.servlet.context-path}`
 

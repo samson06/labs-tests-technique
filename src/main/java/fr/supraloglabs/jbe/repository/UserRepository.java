@@ -32,15 +32,15 @@ public interface UserRepository extends MongoRepository<User, String>
      * Recherche les données des utlisateurs en base de données par leur adresse mail.
      * 
      * @param pEmail adresse email de l'utilisateur recherché.
-     * @return la liste des données des utilisateurs.
+     * @return la liste des données des utilisateurs correspondants.
      */
     List<User> findByEmailIgnoreCase(final String pEmail);
 
     /**
-     * Obtenir les détails en base de données de l'utilisateur à partir de son identifiant technique.
+     * Obtenir les détails en base de données de l'utilisateur à partir de son identifiant.
      * 
      * @param pId identifiant technique de l'objet en base de données.
-     * @return les détails de l'utilisateur recherché s'i existe, sinon vide.
+     * @return les détails de l'utilisateur recherché s'il existe, sinon vide.
      */
     Optional<User> findOneById(final String pId);
 }

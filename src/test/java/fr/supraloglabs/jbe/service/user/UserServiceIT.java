@@ -36,7 +36,6 @@ import fr.supraloglabs.jbe.TestsDataUtils;
 import fr.supraloglabs.jbe.config.AppRootConfig;
 import fr.supraloglabs.jbe.error.AppCustomException;
 import fr.supraloglabs.jbe.model.po.User;
-import fr.supraloglabs.jbe.repository.UserRepository;
 import fr.supraloglabs.jbe.util.UserAccountUtil;
 
 /**
@@ -53,11 +52,9 @@ class UserServiceIT
     private static final String OBJECT_NOT_NULL = "must not be null!";
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private MongoOperations mongoOps;
 
+    @Autowired
     private UserService userService;
     private User user;
     private User user2;
@@ -68,8 +65,6 @@ class UserServiceIT
     @BeforeEach
     void setUp() throws Exception
     {
-        this.userService = new UserService(this.userRepository);
-
         this.user = TestsDataUtils.USER_SERVICE_TEST;
         this.user2 = TestsDataUtils.USER_TEST_NO_ID;
 
@@ -337,12 +332,12 @@ class UserServiceIT
         final User savedUser = this.userService.createUser(this.user2);
         assertThat(savedUser).isNotNull();
         final String id = savedUser.getId();
-        
+
         //
         savedUser.setFirstName("Adjiba");
         savedUser.setLastName("Milande");
         savedUser.setEmail("milande.test@live.fr");
-        savedUser.setAge(21); 
+        savedUser.setAge(21);
 
         this.userService.updateUser(id, savedUser);
 

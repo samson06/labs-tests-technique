@@ -13,7 +13,11 @@ package fr.supraloglabs.jbe;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Arrays;
 import java.util.UUID;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 import fr.supraloglabs.jbe.model.dto.UserDTO;
 import fr.supraloglabs.jbe.model.po.User;
@@ -41,8 +45,8 @@ public class TestsDataUtils
     //
     public final UserDTO USER_DTO_TEST = UserDTO.builder()//
     // .id(generateUniqueId())//
-    .firstName("Batcho")//
-    .lastName("Karen Djayé")//
+    .lastName("Batcho")//
+    .firstName("Karen Djayé")//
     .email("karen.test@live.fr")//
     .age(28)//
     .country("France")//
@@ -80,8 +84,8 @@ public class TestsDataUtils
     public final User USER_TEST = User.builder()//
     .id(generateUniqueId())//
     // .id(12L)//
-    .firstName("Batcho")//
-    .lastName("Karen Djayé")//
+    .lastName("Batcho")//
+    .firstName("Karen Djayé")//
     .email("karen.test@live.fr")//
     .age(28)//
     .country("France")//
@@ -91,8 +95,8 @@ public class TestsDataUtils
     .build();
 
     public final User USER_TEST_NO_ID = User.builder()//
-    .firstName("Batcho")//
-    .lastName("Karen Djayé")//
+    .lastName("Batcho")//
+    .firstName("Karen Djayé")//
     .email("karen.test@live.fr")//
     .age(28)//
     .country("France")//
@@ -102,8 +106,8 @@ public class TestsDataUtils
     .build();
 
     public final User USER_AGE = User.builder()//
-    .firstName("Adjiba")//
-    .lastName("Naldine")//
+    .lastName("Adjiba")//
+    .firstName("Naldine")//
     .email("naldine.test@live.fr")//
     .age(10)//
     .country("France")//
@@ -113,8 +117,8 @@ public class TestsDataUtils
     .build();
     
     public final User USER_SERVICE_TEST = User.builder()//
-    .firstName("Adjiba")//
-    .lastName("Naldine")//
+    .lastName("Adjiba")//
+    .firstName("Naldine")//
     .email("naldine.test@live.fr")//
     .age(43)//
     .country("France")//
@@ -144,6 +148,17 @@ public class TestsDataUtils
     public static String generateUniqueId()
     {
         return UUID.randomUUID().toString();
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public static  HttpHeaders httpHeaders() {
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON); // media type of the request body
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));// media type to response with
+        return headers;
     }
 
 }

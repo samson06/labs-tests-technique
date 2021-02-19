@@ -114,7 +114,7 @@ class UserMapperTest
     }
 
     /**
-     * Test method for {@link fr.supraloglabs.jbe.service.mapper.UserMapper#totoUsers(java.util.Collection)}.
+     * Test method for {@link fr.supraloglabs.jbe.service.mapper.UserMapper#toUsers(java.util.Collection)}.
      */
     @Test
     void testTotoUsers()
@@ -124,7 +124,7 @@ class UserMapperTest
         dtos.add(this.dto);
         dtos.add(this.dto);
 
-        final List<User> users = (List<User>) this.userMapper.totoUsers(dtos);
+        final List<User> users = (List<User>) this.userMapper.toUsers(dtos);
         assertThat(users).isNotEmpty();
         assertThat(users.size()).isPositive();
         assertThat(users.size()).isEqualTo(3);
@@ -139,7 +139,7 @@ class UserMapperTest
         dtos.add(this.dto);
         dtos.add(null);
 
-        final List<User> users = (List<User>) this.userMapper.totoUsers(dtos);
+        final List<User> users = (List<User>) this.userMapper.toUsers(dtos);
         assertThat(users).isNotEmpty();
         assertThat(users.size()).isPositive();
         assertThat(users.size()).isEqualTo(2);
@@ -150,7 +150,7 @@ class UserMapperTest
     @Test
     void testTotoUsers_WithNullList()
     {
-        final List<User> users = (List<User>) this.userMapper.totoUsers(null);
+        final List<User> users = (List<User>) this.userMapper.toUsers(null);
         assertThat(users).isEmpty();
         assertThat(users.size()).isNotPositive();
     }

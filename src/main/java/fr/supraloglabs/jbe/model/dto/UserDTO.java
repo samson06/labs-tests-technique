@@ -11,7 +11,6 @@
  */
 package fr.supraloglabs.jbe.model.dto;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -21,6 +20,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import fr.supraloglabs.jbe.model.po.User;
 import fr.supraloglabs.jbe.util.UserAccountUtil;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -32,6 +32,8 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 /**
+ * Objet de transfert des données (DTO) des objets de type {@link User}.
+ * 
  * @author Vincent Otchoun
  */
 @Getter
@@ -39,7 +41,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE) 
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @JsonPropertyOrder({ "id", "firstName", "lastName", "email", "age", "accountLocked", "adresse", "city", "phone" })
 public class UserDTO
@@ -57,7 +59,6 @@ public class UserDTO
 
     @NotNull(message = UserAccountUtil.EMAIL_MSG)
     @Size(min = 1, max = UserAccountUtil.CINQUANTE, message = UserAccountUtil.EMAIL_SIZE_MSG)
-    @Email
     String email; // adresse mail de l'utilisateur
 
     @NotNull(message = UserAccountUtil.AGE_MSG)

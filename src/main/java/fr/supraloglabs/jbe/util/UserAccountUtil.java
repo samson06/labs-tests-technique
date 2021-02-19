@@ -33,6 +33,11 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class UserAccountUtil
 {
+    // Controller - SWAGGER
+    public static final String ALREADY_EXIST_USER_ID_MSG = "Un nouvel utilisateur ne peut pas déjà avoir un identifiant.";
+    public static final String ALREADY_EXIST_USER_EMAIL_MSG = "Conflit: l'email existe déjà dans la base de données.";
+    public static final String USER_DATE_SUCCES_MSG  ="Les données utilisateur ont été enregistrées avec succès.";
+
     // "mongodb://localhost:12345/users_db_test"
     public static final String MONGODB_PREFIX_PATTERN = "mongodb://%s:%d/%s";
 
@@ -67,12 +72,14 @@ public class UserAccountUtil
     public static final String PAYS_MSG = "Le pays de résidence est obligatoire. Le pays autorisé pour la création de compte dans le système est la France.";
     public static final String PAYS_SIZE_MSG = "Le pays doit contenir au plus 50 caractères.";
     public static final String AGE_MIN_MSG = "L'âge minimum de création de compte dans le système est de 18 ans.";
-    private static final String PAYS_REF = "FRANCE";
-    private static final String MAJEUR_FR_USER_MSG = "Vous n'êtes pas autorisé à créér un compte dans le système. Il faut avoir au moins 18 ans et vivre en France";;
+    public static final String PAYS_REF = "FRANCE";
+    public static final String MAJEUR_FR_USER_MSG = "Vous n'êtes pas autorisé à créér un compte dans le système. Il faut avoir au moins 18 ans et vivre en France";
+    
 
     public static final int CINQUANTE = 50;
     public static final int QUATRE_VINGT = 80;
 
+    // Fonction
     public static final BiFunction<String, String, Boolean> IGNORE_CASE = String::equalsIgnoreCase;
 
     /**
@@ -165,5 +172,4 @@ public class UserAccountUtil
             throw new AppCustomException(MAJEUR_FR_USER_MSG);
         }
     }
-
 }

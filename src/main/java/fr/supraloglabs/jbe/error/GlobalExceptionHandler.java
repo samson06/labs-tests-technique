@@ -26,7 +26,7 @@ import fr.supraloglabs.jbe.util.UserAccountUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Composant de gestion des erreurs à remonter par les API en cas de dysfonctionnement.
+ * Composant de gestion des erreurs à remonter par les API en cas de dysfonctionnement de l'application.
  * 
  * @author Vincent Otchoun
  */
@@ -35,10 +35,10 @@ import lombok.extern.slf4j.Slf4j;
 public class GlobalExceptionHandler<T>
 {
     /**
-     * Interception des exceptions levées lorsqu'une erreur avec le status (code HTTP) 4xx survient.
+     * Intercepter les exceptions levées lorsqu'une erreur HTTP Client avec le status (code HTTP) 4xx survient.
      * 
      * @param pException erreur survenue lors de l'appel client.
-     * @param pRequest   les information de la requête adressée.
+     * @param pRequest   les informations de la requête adressée.
      * @return entité de réponse HTTP avec les données sur les erreurs.
      */
     @ExceptionHandler(value = { HttpClientErrorException.class })
@@ -60,7 +60,7 @@ public class GlobalExceptionHandler<T>
      * Interception des exceptions personnalisées de l'application.
      * 
      * @param pException erreur applicative survenue.
-     * @param pRequest   les information de la requête adressée.
+     * @param pRequest   les informations de la requête adressée.
      * @return entité de réponse HTTP avec les données sur les erreurs.
      */
     @ExceptionHandler(value = { AppCustomException.class })
@@ -77,7 +77,7 @@ public class GlobalExceptionHandler<T>
      * Interception des autres type d'erreurs survenues lors de l'exécution de l'application.
      * 
      * @param ex       erreur interne survenue.
-     * @param pRequest les information de la requête adressée.
+     * @param pRequest les informations de la requête adressée.
      * @return entité de réponse HTTP avec les données sur les erreurs.
      */
     @ExceptionHandler(Exception.class)

@@ -97,6 +97,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		
 		<!-- AOP avec AspectJ + aspectjweaver -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -133,6 +134,19 @@
 			<artifactId>modelmapper</artifactId>
 			<version>${modelmapper.version}</version>
 		</dependency>
+		
+		<!-- Swagger UI spring boot starter -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-boot-starter</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		
 		<!-- LOGGER : SLF4J && LOGBACK : Implementation choisie pour SLF4J -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -142,6 +156,7 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 		</dependency>
+		
 		<!-- Lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>

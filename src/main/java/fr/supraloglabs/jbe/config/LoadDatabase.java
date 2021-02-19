@@ -13,9 +13,6 @@ package fr.supraloglabs.jbe.config;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +20,6 @@ import org.springframework.context.annotation.Configuration;
 import com.google.common.collect.Lists;
 
 import fr.supraloglabs.jbe.model.po.User;
-import fr.supraloglabs.jbe.repository.UserRepository;
 import fr.supraloglabs.jbe.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,23 +32,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LoadDatabase
 {
-    @Autowired
-    private UserRepository userRepository;
 
-    private UserService userService;
-    
-    @PostConstruct
-    private void init() {
-        this.userService = new UserService(this.userRepository);
-    }
-
+    /**
+     * Commande d'intialisation de la base de données avec une jeu de tests.
+     * 
+     * @param userService le service des opérations 'accès aux donnéesutilisateur en base.
+     * @return
+     */
     @Bean
-    // CommandLineRunner initUsers(final UserService userService)
-    CommandLineRunner initUsers()
+    CommandLineRunner initUsers(final UserService userService)
     {
         return args -> {
             log.info("[initUsers] - Initialisation de la base de données avec le jeu de tests. ");
-            this.creerJeuDeDonnees().forEach(this.userService::createUser);
+            this.creerJeuDeDonnees().forEach(userService::createUser);
         };
     }
 
@@ -68,8 +60,8 @@ public class LoadDatabase
 
     private static final String PAYS = "France";
     private User user = User.builder()//
-    .firstName("Batcho")//
-    .lastName("Karen Djayé")//
+    .lastName("Batcho")//
+    .firstName("Karen Djayé")//
     .email("karen.test@live.fr")//
     .age(20)//
     .country(PAYS)//
@@ -79,8 +71,8 @@ public class LoadDatabase
     .build();
 
     private User user2 = User.builder()//
-    .firstName("Adjba")//
-    .lastName("Italé Naldine")//
+    .lastName("Adjba")//
+    .firstName("Italé Naldine")//
     .email("naldine.test@live.fr")//
     .age(28)//
     .country(PAYS)//
@@ -90,8 +82,8 @@ public class LoadDatabase
     .build();
 
     private User user3 = User.builder()//
-    .firstName("Dessoum")//
-    .lastName("André Marcel")//
+    .lastName("Dessoum")//
+    .firstName("André Marcel")//
     .email("marcel.test@live.fr")//
     .age(36)//
     .country(PAYS)//
@@ -101,8 +93,8 @@ public class LoadDatabase
     .build();
 
     private User user4 = User.builder()//
-    .firstName("Belahy")//
-    .lastName("Steeve")//
+    .lastName("Belahy")//
+    .firstName("Steeve")//
     .email("steeve.test@live.fr")//
     .age(32)//
     .country(PAYS)//

@@ -37,11 +37,11 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 /**
- * Mapping objet des informations des utilisateurs en base de données.
+ * Mapping objet des données des utilisateurs dans le système d'informations.
  * 
  * @author Vincent Otchoun
  */
-@Document(collection = "T_USERS")
+@Document(collection = "C_USERS")  // Le nom de la collection dans la base de données
 @Getter
 @Setter
 @NoArgsConstructor
