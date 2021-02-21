@@ -6,8 +6,8 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/samson06/labs-tests-technique)
 ![GitHub last commit](https://img.shields.io/github/last-commit/samson06/labs-tests-technique)
 
-## A Propos de l'application
-C'est une application basée sur une architecture `REST` (`service RESTFul`) exposant ses fonctionnalités au travers de deux `API`. Elle est écrite en `Java` 
+## A Propos
+C'est une application basée sur une architecture `REST` (`service RESTFul`) exposant ses fonctionnalités au travers d'`API`. Elle est écrite en `Java` 
 avec pour socle le Framework `Spring` plus précisement `Spring Boot` qui est une de ces variantes de l'écosystème`Spring`. Elle embarque aussi d'autres technos supplémentaires pour l'impémentation des besoins exprimés.
 
 ## Documentation
@@ -16,7 +16,7 @@ Cette application est livrée avec des documents situés dans le dossier : `labs
 - Le document des `Spécifications Techniques Détaillées` : STD_Test_Technique.pdf 
 
 ## Stack Technique
-Une liste non exhaustive des technos embarquées pour le développement de cette application est présentée ci-dessous :
+Une liste non exhaustive des technos utilisées pour le développement de cette application est présentée ci-dessous :
 
 ![](https://img.shields.io/badge/Java_8-✓-blue.svg)
 ![](https://img.shields.io/badge/Maven_3-✓-blue.svg)
@@ -26,7 +26,7 @@ Une liste non exhaustive des technos embarquées pour le développement de cette
 ![](https://img.shields.io/badge/Model_Mapper-✓-blue.svg)
 ![](https://img.shields.io/badge/Lombok-✓-blue.svg)
 ![](https://img.shields.io/badge/JaCoCo-✓-blue.svg)
-![](https://img.shields.io/badge/Swagger_3.0-✓-blue.svg)
+![](https://img.shields.io/badge/Swagger_3.0_/OpenAPI-✓-blue.svg)
 
 C'est un projet `Maven` avec `Spring Boot` donc basé sur le langage `Java` : 
 - `EA` (Entreprise Architect) pour la fourniture des éléments de modélisation/conception des spécifications techniques fournies.
@@ -139,7 +139,7 @@ Il peut y arriver qu'on veuille écraser les configuration de base par des fichi
 ```bash
 java -Dlogging.config=file:${SRVC_HOME}/logback-spring.xml -jar labs-tests-technique-0.0.1-SNAPSHOT.jar -Dspring.config.location=file:${SRVC_HOME}/application.properties
 ```
-Où SRVC_HOME = <chemin d'accès aux fichiers concernés>
+Où `SRVC_HOME = <chemin d'accès aux fichiers concernés>`
 
 ### Documentation Swagger
 En dehors du document des spécifications techniques fournies, l'application embarque en son sein  `Swagger ` pour produire la documentation des API proposées par l'application.
@@ -181,9 +181,10 @@ Le tableau ci-dessous dresse une liste des outils disponibles pour la réalisati
 |`Assert-J`|_pour les assertions_|
 |`Postman`|_pour tester les fonctionnalités exposées par les API_|
 |`JaCoCo`|_Plugin maven (avec les plugin surefire et failsafe) pour produire/fournir les rapports de couverture de codes_|
+|`Swagger`|_Pour générer la documentation et Tester les REST API_|
 
 ### Rapports de couverture de codes
 Comme mentionné ci-dessus la couverture de codes par les tests mis en place et exécutés, est mesurée et fournie par `JaCoCo`. L'image ci-dessous fournit la couverture du code de l'application à l'exception des objets de couche de modèle de modèles de données.
 
 La copie d'écran ci-dessous fournit l'image de la couverture de codes de l'application.
-TODO
+![JACOCO](./docs/images/jacocco_rapports_couverture_tests.png "Rapports JaCoCo de couverture de codes par les tests")

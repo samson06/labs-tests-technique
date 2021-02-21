@@ -135,7 +135,7 @@
 			<version>${modelmapper.version}</version>
 		</dependency>
 		
-		<!-- Swagger UI spring boot starter -->
+		<!-- OpenAPI/Swagger UI Spring Boot Starter  -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-boot-starter</artifactId>
