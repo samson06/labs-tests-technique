@@ -25,8 +25,10 @@ Une liste non exhaustive des technos utilisées pour le développement de cette 
 ![](https://img.shields.io/badge/Junit_5-✓-blue.svg)
 ![](https://img.shields.io/badge/Model_Mapper-✓-blue.svg)
 ![](https://img.shields.io/badge/Lombok-✓-blue.svg)
-![](https://img.shields.io/badge/JaCoCo-✓-blue.svg)
 ![](https://img.shields.io/badge/Swagger_3.0_/OpenAPI-✓-blue.svg)
+![](https://img.shields.io/badge/JaCoCo-✓-blue.svg)
+![](https://img.shields.io/badge/SonarLint-✓-blue.svg)
+![](https://img.shields.io/badge/MoreUnit-✓-blue.svg)
 
 C'est un projet `Maven` avec `Spring Boot` donc basé sur le langage `Java` : 
 - `EA` (Entreprise Architect) pour la fourniture des éléments de modélisation/conception des spécifications techniques fournies.
@@ -35,6 +37,7 @@ C'est un projet `Maven` avec `Spring Boot` donc basé sur le langage `Java` :
 - `Lombok` pour générer du code couramment utilisé et faciliter le maintien du code source propre, simplifier l'écriture des classes.
 - `JUnit 5` pour l'écriture des codes sources des classes des Tests Unitaires et/ou d'Intégration.
 - `SonarLint` intégré dans l'IDE (_STS_) pour `analyser la qualité du code` livré (_bonnes pratiques de développement_).
+- `MoreUnit` intégré dans l'IDE (_STS_) pour `taguer` les classes du code source couvertes par des TU (_Tests Unitaires_).
 - `JaCoCo` produire/fournir les rapports de couverture du code source par les différents tests réalisés.
 - `Model Mapper` pour la conversion des objets : objets persistants vers `DTO` (Data Transfert Object) et vice versa.
 - `Swagger` dans sa version `3.0` pour la documentation et Tests des API proposées par le système d'informations.
@@ -150,14 +153,13 @@ http://localhost:${server.port}/user-account/swagger-ui/index.html
 La configuration fournie dans l'application est la suivante :
 ![SWAGGER](./docs/images/app_swagger.png "Configuration Swagger dans l'application")
 
-Il fournit un ensemble de définition décrit dans le tableau ci-dessous
+LA configuration définie dans l'application fournit un ensemble de définitions décrites dans le tableau ci-dessous
 |Défintion|Description|
 |---|---|
 |`Créer Utilisateur`|_API de création des données d'un nouvel utilisateur dans le SI_|
 |`Détails Utilisateur`|_API permettant de remonter les détails d'un utilisateur existant dans le SI_|
 |`Nouvelles Fonctionnalités`|_API fournissant les opérations suivantes : <ul><li>Mise à jour des données d'un utilisateur existant dans le SI</li><li>Suppression du SI des données d''un utulisateur existant</li><li>Afficher la liste paginée des utilisateurs du système</li></ul>_|
 |`Page de Garde`|_Ensemble des API's proposées par le système d'informations_|
-
 
 
 ## Tests
