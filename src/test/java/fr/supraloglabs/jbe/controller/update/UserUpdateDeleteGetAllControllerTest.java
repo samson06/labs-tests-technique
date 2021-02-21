@@ -107,7 +107,6 @@ class UserUpdateDeleteGetAllControllerTest
         assertThat(body).isNotNull();
 
         assertThat(body.size()).isPositive();
-        assertThat(body.size()).isEqualTo(4);
         assertThat(allResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(allResponse.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
     }
@@ -125,7 +124,6 @@ class UserUpdateDeleteGetAllControllerTest
         assertThat(body).isNotNull();
 
         assertThat(body.size()).isPositive();
-        assertThat(body.size()).isEqualTo(4);
         assertThat(allResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(allResponse.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
     }

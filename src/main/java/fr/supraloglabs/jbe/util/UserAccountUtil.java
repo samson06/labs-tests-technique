@@ -13,12 +13,16 @@ package fr.supraloglabs.jbe.util;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Set;
 import java.util.function.BiFunction;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.WebRequest;
+
+import com.google.common.collect.Sets;
 
 import fr.supraloglabs.jbe.error.AppCustomException;
 import fr.supraloglabs.jbe.model.error.ErrorDetails;
@@ -85,6 +89,43 @@ public class UserAccountUtil
 
     public static final int CINQUANTE = 50;
     public static final int QUATRE_VINGT = 80;
+    
+    // SWAGGER
+    public static final String AUTH_BAERER_TOKEN = "Bearer %token";
+    public static final String AUTHORISATION = "Authorization";
+    public static final String HEADER = "Header";
+    
+    public static final String DEFAULT_GROUPENAME = "Page de Garde";
+    public static final String USER_DETAILS_GROUPENAME = "Détails Utilisateur";
+    public static final String REGISTER_USER_GROUPENAME = "Créer Utilisateur";
+    public static final String AUTRES_USER_OPERATIONS_GROUPENAME = "Nouvelles Fonctionnalités";
+    
+    public static final String DEFAULT_CONTROLLER_BASE_PACKAGE = "fr.supraloglabs.jbe.controller";
+    public static final String USER_DETAILS_CONTROLLER_BASE_PACKAGE = "fr.supraloglabs.jbe.controller.details";
+    public static final String REGISTER_USER_CONTROLLER_BASE_PACKAGE = "fr.supraloglabs.jbe.controller.register";
+    public static final String AUTRES_USER_OPERATIONS_CONTROLLER_BASE_PACKAGE = "fr.supraloglabs.jbe.controller.update";
+    
+    public static final Set<String> MEDIA_SET = Sets.newHashSet();
+    static
+    {
+        MEDIA_SET.add(MediaType.APPLICATION_JSON_VALUE);
+    }
+    
+    public static final String TITLE = "API's Gestion des Comptes Utilisateurs";
+    public static final String DESCRITPION = "<b><font color='#e63f1b'>Gestion des données utilisateurs dans le système d'informations.</font></b>";
+    public static final String VERSION = "3.0";
+    public static final String TERME_OF_SERVICE_URL = "1.0.0";
+    public static final String CONTACT_NAME = "Vincent OTCHOUN";
+    public static final String CONTACT_URL = "www.tuto.vincent.fr";
+    public static final String CONTACT_MAIL = "vincokri@live.fr";
+    public static final String LICENCE = "Apache 2.0";
+    public static final String LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.html";
+
+    public static final String DEFAULT_INCLUDE_PATTERN = "1.0.0";
+    public static final String HOST = "host1";
+    public static final String DEFAULT_RESPONSE_MESSAGE = "false";
+    public static final String CODE_GENERATION = "false";
+    public static final String BASE_PACKAGE = "fr.supraloglabs.jbe.controller";
 
     // Fonction
     public static final BiFunction<String, String, Boolean> IGNORE_CASE = String::equalsIgnoreCase;

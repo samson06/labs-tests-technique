@@ -26,6 +26,7 @@ Une liste non exhaustive des technos embarquées pour le développement de cette
 ![](https://img.shields.io/badge/Model_Mapper-✓-blue.svg)
 ![](https://img.shields.io/badge/Lombok-✓-blue.svg)
 ![](https://img.shields.io/badge/JaCoCo-✓-blue.svg)
+![](https://img.shields.io/badge/Swagger-✓-blue.svg)
 
 C'est un projet `Maven` avec `Spring Boot` donc basé sur le langage `Java` : 
 - `EA` (Entreprise Architect) pour la fourniture des éléments de modélisation/conception des spécifications techniques fournies.
@@ -36,6 +37,7 @@ C'est un projet `Maven` avec `Spring Boot` donc basé sur le langage `Java` :
 - `SonarLint` intégré dans l'IDE (_STS_) pour `analyser la qualité du code` livré (_bonnes pratiques de développement_).
 - `JaCoCo` produire/fournir les rapports de couverture du code source par les différents tests réalisés.
 - `Model Mapper` pour la conversion des objets : objets persistants vers `DTO` (Data Transfert Object) et vice versa.
+- `Swagger` dans sa version `3.0` pour la documentation et Tests des API proposées par le su=ystème d'informations.
 
 ## Configurations
 Les configurations de l'application permettent de faciliter aussi bien l'exécution que l'exploitation.
@@ -97,16 +99,21 @@ L'application fournit des points de terminaison HTTP et des outils pour exposer 
 ### Les points de terminaison REST des fonctionnalités de base 
 |Verbe HTTP|URL|Description|Status Codes|
 |---|---|---|---|
-|`POST`|_http://localhost:${server.port}/${server.servlet.context-path}/api-users/user/register/_|Enregistrer/Sauvegarder dans le SI les informations d'un utilisateur|<ul><li>`200 OK` si succès</li><li>`4XX ou 5XX` si erreur survenue</li></ul>|
-|`GET`|_http://localhost:${server.port}/${server.servlet.context-path}/api-users/user/search/{id}_|Afficher les détails d'un utilisateur enregistré dans le SI|<ul><li>`200 OK` si utilisateur existe</li><li>`4XX ou 5XX` si erreur survenue</li></ul>|
+|`POST`|_http://localhost:${server.port}/${server.servlet.context-path}/api-users/user/register/_|Enregistrer/Sauvegarder dans le SI les informations d'un utilisateur|<ul><li>`200 OK` si succès et retourne les données utilisateur enregistrées</li><li>`4XX ou 5XX` si erreur survenue</li></ul>|
+|`GET`|_http://localhost:${server.port}/${server.servlet.context-path}/api-users/user/search/{id}_|Afficher les détails d'un utilisateur enregistré dans le SI|<ul><li>`200 OK` si utilisateur existe et retourne les données utilisateur modifiées</li><li>`4XX ou 5XX` si erreur survenue</li></ul>|
 
-### Les points de terminaison REST des fonctionnalités supplémentaires ajoutées
+### Les points de terminaison REST des fonctionnalités supplémentaires proposées
 Au-délà des fonctionnalités de base, l'application propose également les fonctionnalités supplémentaires suivantes :
-`TODO`
+|Verbe HTTP|URL|Description|Status Codes|
+|---|---|---|---|
+|`GET`|_http://localhost:${server.port}/${server.servlet.context-path}/api-users/user/usersr/_|Afficher la liste paginée de l'ensemble des utilisateurs du SI|<ul><li>`200 OK` si succès et retourne la liste paginée</li><li>`4XX ou 5XX` si erreur survenue</li></ul>|
+|`DELETE`|_http://localhost:${server.port}/${server.servlet.context-path}/api-users/user/destroy/{id}_|Supprimer les détails d'un utilisateur enregistré dans le SI|<ul><li>`200 OK` si utilisateur existe et retourne un message</li><li>`4XX ou 5XX` si erreur survenue</li></ul>|
+|`PUT`|_http://localhost:${server.port}/${server.servlet.context-path}/api-users/user/update/{id}_|Mettre à jour les détails d'un utilisateur enregistré dans le SI|<ul><li>`200 OK` si utilisateur existe et renvoie les données utilisateur mise à jour</li><li>`4XX ou 5XX` si erreur survenue</li></ul>|
 
-avec comme URL de base : `http://localhost:${server.port}/${server.servlet.context-path}`
+URL de base : `http://localhost:${server.port}/${server.servlet.context-path}`
 
-## Compilation et Packaging
+## Compilation, Packaging, Exécution et Documentation
+### Compilation et Packaging
 L'application a été conçue et développée pour être exécutée à partir d'une archive Java `jar`. L'arxhive exécutable peut être générée de deux façons :
 - un build `Maven` : ceci suppose que l'outil `Maven` soit prélablement installé sur le post de travail
 - un build à partir de l'environnement intégré de développment utilsé
@@ -116,8 +123,37 @@ mvn clean package
 ```
 Il nettoiera, compilera et générera l'archive exécutable le `.jar` dans le répertoire cible, par exemple `labs-tests-technique-0.0.1-SNAPSHOT.jar`
 
-## Exécution
-TODO
+### Exécution
+Les points ci-dessous présentent les différentes façons d'exécuter l'application.
+- Cycle de vie Maven
+```bash
+mvn spring-boot:run
+```
+- Ligne de commande
+```bash
+java -jar labs-tests-technique-0.0.1-SNAPSHOT.jar
+```
+- Ligne de commande avec surcharge des fichiers de base
+Il peut y arriver qu'on veuille écraser les configuration de base par des fichiers externes (fichier de propriétés, logger, ....). Dans ce cas la commande est la suivante :
+```bash
+java -Dlogging.config=file:${SRVC_HOME}/logback-spring.xml -jar labs-tests-technique-0.0.1-SNAPSHOT.jar -Dspring.config.location=file:${SRVC_HOME}/application.properties
+```
+Où SRVC_HOME = <chemin d'accès aux fichiers concernés>
+
+### Documentation Swagger
+En dehors du document des spécifications techniques fournies, l'application embarque en son sein  `Swagger ` pour produire la documentation des API proposées par l'application.
+Il permet également de tester les API's. Au démarrage de l'application, il est accessible par l'URL fournie ci-dessous :
+```bash
+http://localhost:${server.port}/user-account/swagger-ui/index.html
+```
+La configuration fournie dans l'application se présente ainsi :
+![SWAGGER](./docs/images/app_swagger.png "Configuration Swagger dans l'application")
+
+Il fournit un ensemble de définition décrit dans le tableau ci-dessous
+|Défintion|Description|
+|---|---|
+|`Créer Utilisateur`|_API de création des données d'un nouvel utilisateur dans le SI_|
+|`Détails Utilisateur`|_API de création des données d'un nouvel utilisateur dans le SI_|
 
 ## Tests
 
