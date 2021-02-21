@@ -43,7 +43,6 @@ import fr.supraloglabs.jbe.model.po.User;
 @ActiveProfiles("test")
 class UserMapperTest
 {
-
     @Autowired
     private UserMapper userMapper;
 

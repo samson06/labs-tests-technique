@@ -25,7 +25,6 @@ import org.springframework.web.context.request.WebRequest;
 
 import fr.supraloglabs.jbe.model.error.ErrorDetails;
 import fr.supraloglabs.jbe.util.UserAccountUtil;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Composant de gestion des erreurs à remonter par les API en cas de dysfonctionnement de l'application.
@@ -33,7 +32,6 @@ import lombok.extern.slf4j.Slf4j;
  * @author Vincent Otchoun
  */
 @ControllerAdvice
-@Slf4j
 public class GlobalExceptionHandler<T>
 {
     /**
@@ -46,8 +44,6 @@ public class GlobalExceptionHandler<T>
     @ExceptionHandler(value = { HttpClientErrorException.class })
     public ResponseEntity<T> handleHttpClientErrorException(final HttpClientErrorException pException, final WebRequest pRequest)
     {
-        log.info("[handleHttpClientErrorException] - Interception des erreurs de type 4XX.");
-
         // Construire l'objet portant les données des erreurs survenues
         final ErrorDetails responseError = ErrorDetails.builder()//
         .status(pException.getStatusCode()) //
@@ -68,8 +64,6 @@ public class GlobalExceptionHandler<T>
     @ExceptionHandler(value = { AppCustomException.class, ConstraintViolationException.class })
     public ResponseEntity<T> handleAppCustomException(final AppCustomException pException, final WebRequest pRequest)
     {
-        log.info("[handleAppCustomException] - Interception des erreurs applicatives.");
-
         // Construire l'objet portant les données des erreurs survenues
         final ErrorDetails error = UserAccountUtil.construireErreur(pException, pRequest, HttpStatus.NOT_FOUND);
         return UserAccountUtil.buildResponseErrorEntity(error);
@@ -85,8 +79,6 @@ public class GlobalExceptionHandler<T>
     @ExceptionHandler(Exception.class)
     public ResponseEntity<T> globleExcpetionHandler(final Exception pException, WebRequest pRequest)
     {
-        log.info("[globleExcpetionHandler] - Interception des autres erreurs applicatives.");
-
         // Construire l'objet portant les données des erreurs survenues
         final ErrorDetails error = UserAccountUtil.construireErreur(pException, pRequest, HttpStatus.INTERNAL_SERVER_ERROR);
         return UserAccountUtil.buildResponseErrorEntity(error);

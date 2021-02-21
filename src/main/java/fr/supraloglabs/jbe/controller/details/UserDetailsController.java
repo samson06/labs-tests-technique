@@ -32,7 +32,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Contrôleur REST pour afficher les détails d'un utilisateur existant dans le SI.
@@ -42,7 +41,6 @@ import lombok.extern.slf4j.Slf4j;
 @Api(value = "User Details Rest Controller: opération pour afficher les détails de l'utilisateur existant dans le SI")
 @RestController
 @RequestMapping("/api-users")
-@Slf4j
 @Validated
 public class UserDetailsController
 {
@@ -76,8 +74,6 @@ public class UserDetailsController
     public ResponseEntity<UserDTO> getUserDetails(@PathVariable(value = "id", required = true) final String userId,
     @RequestParam(value = "country", required = false, defaultValue = "France") final String userCountry)
     {
-        log.info("[getUSerDetails] - Afficher les détails de l'utilisateur. Identifiant recherché : [{}].", userId);
-
         // Chech valeur en entrée identifiant fourni
         Assert.notNull(userId, UserAccountUtil.USER_ID_NOT_NULL_MSG + userId);
 

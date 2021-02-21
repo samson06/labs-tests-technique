@@ -27,7 +27,6 @@ import fr.supraloglabs.jbe.error.AppCustomException;
 import fr.supraloglabs.jbe.model.po.User;
 import fr.supraloglabs.jbe.repository.UserRepository;
 import fr.supraloglabs.jbe.util.UserAccountUtil;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service fournissant les fonctionnalités de gestion des données utilisateur dans le SI.
@@ -36,7 +35,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Service(value = "userService")
 @Transactional
-@Slf4j
 public class UserService
 {
     private final UserRepository userRepository;
@@ -60,8 +58,6 @@ public class UserService
      */
     public User createUser(final User pUser)
     {
-        log.info("[createUser] - Engeristrer les détails d'un nouvel utilisateur dans le SI.");
-
         // Tentative d'enregistrement des données d'un nouvel utilisateur.
         try
         {
@@ -84,8 +80,6 @@ public class UserService
     @Transactional(readOnly = true)
     public Collection<User> getByEmailIgnoreCase(String pEmail)
     {
-        log.info("[getByEmailIgnoreCase] - Obtenir les détails utilisateur par son email. Email=[{}].", pEmail);
-
         return this.userRepository.findByEmailIgnoreCase(pEmail)//
         .stream()//
         .filter(Objects::nonNull)//
@@ -101,8 +95,6 @@ public class UserService
     @Transactional(readOnly = true)
     public Optional<User> getUserById(final String pId)
     {
-        log.info("[getUserById] - Obtenir les détails d'un utilisateur par son identifiant. Id=[{}].", pId);
-
         return Optional.ofNullable(this.userRepository.findOneById(pId)).filter(Optional::isPresent)//
         .orElseThrow(() -> new AppCustomException(UserAccountUtil.FIND_BY_ID_MSG));
     }
@@ -116,8 +108,6 @@ public class UserService
     @Transactional(readOnly = true)
     public Page<User> getAllUsersPageable(final Pageable pPageable)
     {
-        log.info("[getAllUsersPageable] - Obtenir la liste paginée des détails de l'ensemble des utilisateurs du SI.");
-        
         return this.userRepository.findAll(pPageable);
     }
 
@@ -129,8 +119,6 @@ public class UserService
     @Transactional(readOnly = true)
     public Collection<User> getUsers()
     {
-        log.info("[getUsers] - Obtenir la liste des détails de l'ensemble des utilisateurs du SI.");
-
         return this.userRepository.findAll();
     }
 
@@ -141,8 +129,6 @@ public class UserService
      */
     public void deleteUser(final String pUserId)
     {
-        log.info("[deleteUser] - Supprimer les informations d'un utilisateur du SI. Identifiant [{}]", pUserId);
-
         // Tentative de suppression des informations d'un utilisateur du SI.
         try
         {
@@ -164,8 +150,6 @@ public class UserService
      */
     public User updateUser(final String pUserId, final User pUser)
     {
-        log.info("[updateUser] - Mise à jour des informations d'untilisateur existant. Identifiant : [{}].", pUserId);
-
         // Tentative des mise à jour des informations d'un utilisateur existant dans le SI.
         try
         {

@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import fr.supraloglabs.jbe.model.dto.UserDTO;
 import fr.supraloglabs.jbe.model.po.User;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service de conversion/transformation d'un objet de type {@link User} en son objet de tranfert de données
@@ -32,7 +31,6 @@ import lombok.extern.slf4j.Slf4j;
  * @author Vincent Otchoun
  */
 @Service
-@Slf4j
 public class UserMapper
 {
 
@@ -57,8 +55,6 @@ public class UserMapper
      */
     public User convertToUser(final UserDTO pUserDTO)
     {
-        log.info("[convertToUser] - Obtenir les données en base de l'utilisateur.");
-
         if (pUserDTO == null)
         {
             return null;
@@ -84,8 +80,6 @@ public class UserMapper
      */
     public UserDTO convertToUserDTO(final User pUser)
     {
-        log.info("[convertToUserDTO] - Obtenir les données de l'objet de transfert des données de l'utilisateur.");
-
         if (pUser == null)
         {
             return null;
@@ -112,8 +106,6 @@ public class UserMapper
      */
     public Collection<User> toUsers(final Collection<UserDTO> userDTOs)
     {
-        log.info("[toUsers] - Obtenir la liste des données en base des utilisateurs.");
-
         //
         return Optional.ofNullable(userDTOs)//
         .orElseGet(Collections::emptyList)//
@@ -132,8 +124,6 @@ public class UserMapper
      */
     public Collection<UserDTO> toUserDtos(final Collection<User> users)
     {
-        log.info("[toUserDtos] - Obtenir la liste des données des objets de transfert des données de l'utilisateur.");
-
         //
         return Optional.ofNullable(users)//
         .orElseGet(Collections::emptyList)//

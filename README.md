@@ -73,12 +73,11 @@ $ exit          -- pour sortir
 L'ensemble des configurations applicatives sont consignées dans le fichier : [application.properties](/labs-tests-technique/src/main/resources/application.properties)
 
 ```properties
-# Activer le port d'écoute du serveur
-server.port=8500
+server.port=8500                           # Activer le port d'écoute du serveur
 
 # Autres propriétés
 spring.application.name=user-account
-server.servlet.context-path=/user-account # root contexte de l'application
+server.servlet.context-path=/user-account  # root contexte de l'application
 
 #########################
 ####  MONGODB PROPS  #### 

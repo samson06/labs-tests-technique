@@ -34,7 +34,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Contrôleur REST pour la gestion de l'enregistrement des données de nouveaux utilisateurs dans le SI.
@@ -44,7 +43,6 @@ import lombok.extern.slf4j.Slf4j;
 @Api(value = "User Read Rest Controller: opération pour enregistrer les données des utilisateurs dans le SI")
 @RestController
 @RequestMapping("/api-users")
-@Slf4j
 @Validated
 public class UserRegisterController
 {
@@ -77,7 +75,6 @@ public class UserRegisterController
             @ApiResponse(responseCode = "404", description = "<font color='#e63f1b'>Opération en échec</font>  - <font color='#26c4ec'>Renvoie le message d'erreur correspondant</font>.") })
     public ResponseEntity<UserDTO> createNewUSerDetails(@RequestBody final UserDTO pUserDTO)
     {
-        log.info("[createNewUSerDetails] - Demande REST pour enregistrer l'utilisateur : {}", pUserDTO);
         
         Assert.notNull(pUserDTO, UserAccountUtil.USER_DATA_NOT_NULL_MSG); 
 

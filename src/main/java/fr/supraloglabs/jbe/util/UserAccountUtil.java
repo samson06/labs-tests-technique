@@ -37,6 +37,9 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class UserAccountUtil
 {
+
+    public static final String ENV = "prod";
+    
     // Controller - SWAGGER
     public static final String ALREADY_EXIST_USER_ID_MSG = "Un nouvel utilisateur ne peut pas déjà avoir un identifiant.";
     public static final String ALREADY_EXIST_USER_EMAIL_MSG = "Conflit: l'email existe déjà dans la base de données.";
@@ -47,7 +50,7 @@ public class UserAccountUtil
     public static final String USER_ID_SEARCH_END_MSG = "], n'existe pas dans le système d'informations.";
     public static final String ALL_USERS_EMPTY = "Il n'y a pas d'utilisateurs enregistrés";
     public static final String DELETE_OK_MSG = "Suppression des données de l'utilisateur effectué avec succès";
-    
+
     public static final String USER_ID_MSG_PATTERN = "%s%s%s";
 
     // "mongodb://localhost:12345/users_db_test"
@@ -89,28 +92,28 @@ public class UserAccountUtil
 
     public static final int CINQUANTE = 50;
     public static final int QUATRE_VINGT = 80;
-    
+
     // SWAGGER
     public static final String AUTH_BAERER_TOKEN = "Bearer %token";
     public static final String AUTHORISATION = "Authorization";
     public static final String HEADER = "Header";
-    
+
     public static final String DEFAULT_GROUPENAME = "Page de Garde";
     public static final String USER_DETAILS_GROUPENAME = "Détails Utilisateur";
     public static final String REGISTER_USER_GROUPENAME = "Créer Utilisateur";
     public static final String AUTRES_USER_OPERATIONS_GROUPENAME = "Nouvelles Fonctionnalités";
-    
+
     public static final String DEFAULT_CONTROLLER_BASE_PACKAGE = "fr.supraloglabs.jbe.controller";
     public static final String USER_DETAILS_CONTROLLER_BASE_PACKAGE = "fr.supraloglabs.jbe.controller.details";
     public static final String REGISTER_USER_CONTROLLER_BASE_PACKAGE = "fr.supraloglabs.jbe.controller.register";
     public static final String AUTRES_USER_OPERATIONS_CONTROLLER_BASE_PACKAGE = "fr.supraloglabs.jbe.controller.update";
-    
+
     public static final Set<String> MEDIA_SET = Sets.newHashSet();
     static
     {
         MEDIA_SET.add(MediaType.APPLICATION_JSON_VALUE);
     }
-    
+
     public static final String TITLE = "API's Gestion des Comptes Utilisateurs";
     public static final String DESCRITPION = "<b><font color='#e63f1b'>Gestion des données utilisateurs dans le système d'informations.</font></b>";
     public static final String VERSION = "3.0";
