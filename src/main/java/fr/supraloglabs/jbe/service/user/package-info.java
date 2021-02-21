@@ -10,7 +10,7 @@
  * ----------------------------------------------
  */
 /**
- * Composants de la logique méteir pour les credentials.
+ * Services de gestion des opérations d'accès aux données des utilisateurs dans le SI.
  * 
  * @author Vincent Otchoun
  */

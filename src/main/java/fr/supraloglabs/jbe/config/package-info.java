@@ -10,7 +10,7 @@
  * ----------------------------------------------
  */
 /**
- * Les configurations applicatives.
+ * Couche des composants de configuration de l'application.
  * 
  * @author Vincent Otchoun
  */

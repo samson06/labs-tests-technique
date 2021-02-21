@@ -339,12 +339,12 @@ class UserServiceIT
         savedUser.setEmail("milande.test@live.fr");
         savedUser.setAge(21);
 
-        this.userService.updateUser(id, savedUser);
+        final User response = this.userService.updateUser(id, savedUser);
 
-        assertThat(savedUser.getId()).isEqualTo(id);
-        assertThat(savedUser.getFirstName()).isEqualTo("Adjiba");
-        assertThat(savedUser.getLastName()).isEqualTo("Milande");
-        assertThat(savedUser.getEmail()).isEqualTo("milande.test@live.fr");
+        assertThat(response.getId()).isEqualTo(id);
+        assertThat(response.getFirstName()).isEqualTo("Adjiba");
+        assertThat(response.getLastName()).isEqualTo("Milande");
+        assertThat(response.getEmail()).isEqualTo("milande.test@live.fr");
     }
 
     @Test

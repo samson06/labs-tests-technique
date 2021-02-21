@@ -10,7 +10,7 @@
  * ----------------------------------------------
  */
 /**
- * Couche des composants d'absraction des éléments d'accès à la base de données.
+ * Couche DAO des composants d'abstraction des accès à la base de données.
  * 
  * @author Vincent Otchoun
  */

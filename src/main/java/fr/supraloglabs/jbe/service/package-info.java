@@ -10,7 +10,7 @@
  * ----------------------------------------------
  */
 /**
- * Composants implémentatn la couche métier de l'application.
+ * Couche des composants de gestion de la logique métier de l'application.
  * 
  * @author Vincent Otchoun
  */

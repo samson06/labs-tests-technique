@@ -194,6 +194,18 @@ public class TestsDataUtils
     .city("Juan Les Pins")//
     .phone("0759733912")//
     .build();
+    
+    public static final  User USER5 = User.builder()//
+    .id("89995698-d06a-4eb6-97c8-ee9eef873c9f")//
+    .lastName("Belahy update")//
+    .firstName("Steeve update")//
+    .email("steeve.test@live.fr")//
+    .age(32)//
+    .country(PAYS)//
+    .adresse("1 Boulevard Wilson")//
+    .city("Juan Les Pins")//
+    .phone("0759733912")//
+    .build();
 
     public static void assertAllUsers(final User expected, final User actual)
     {

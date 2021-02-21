@@ -4,20 +4,18 @@
  * Nom de la classe : UserDetailsControllerIT.java
  * Date de création : 19 févr. 2021
  * Heure de création : 11:30:33
- * Package : fr.supraloglabs.jbe.api.details
+ * Package : fr.supraloglabs.jbe.controller.details
  * Auteur : Vincent Otchoun
  * Copyright © 2021 - All rights reserved.
  * ----------------------------------------------
  */
-package fr.supraloglabs.jbe.api.details;
+package fr.supraloglabs.jbe.controller.details;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +31,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import fr.supraloglabs.jbe.TestsDataUtils;
 import fr.supraloglabs.jbe.UserAccountApplicationStarter;
-import fr.supraloglabs.jbe.api.registeer.UserRegisterController;
 import fr.supraloglabs.jbe.config.AppRootConfig;
+import fr.supraloglabs.jbe.controller.register.UserRegisterController;
 import fr.supraloglabs.jbe.model.dto.UserDTO;
 import fr.supraloglabs.jbe.model.po.User;
 import fr.supraloglabs.jbe.service.mapper.UserMapper;
@@ -70,24 +68,8 @@ class UserDetailsControllerIT
     }
 
     /**
-     * @throws java.lang.Exception
-     */
-    @BeforeEach
-    void setUp() throws Exception
-    {
-    }
-
-    /**
-     * @throws java.lang.Exception
-     */
-    @AfterEach
-    void tearDown() throws Exception
-    {
-    }
-
-    /**
      * Test method for
-     * {@link fr.supraloglabs.jbe.api.details.UserDetailsController#getUSerDetails(java.lang.String, java.lang.String)}.
+     * {@link fr.supraloglabs.jbe.controller.details.UserDetailsController#getUSerDetails(java.lang.String, java.lang.String)}.
      */
     @Test
     void testGetUSerDetails()
@@ -100,9 +82,8 @@ class UserDetailsControllerIT
         final ResponseEntity<UserDTO> getResponse = this.restTemplate.getForEntity(this.getURLWithPort(API_URL), UserDTO.class, variables);
 
         assertThat(getResponse).isNotNull();
-
         final UserDTO body = getResponse.getBody();
-        
+
         assertThat(body).isNotNull();
         assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(getResponse.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
@@ -118,9 +99,8 @@ class UserDetailsControllerIT
         variables.put(ID_PARAM, searchedUser.getId() + "4587");
 
         final ResponseEntity<UserDTO> getResponse = this.restTemplate.getForEntity(this.getURLWithPort(API_URL), UserDTO.class, variables);
-
         assertThat(getResponse).isNotNull();
-        
+
         final UserDTO body = getResponse.getBody();
         assertThat(body).isNotNull();
         assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);

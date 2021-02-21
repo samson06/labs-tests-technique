@@ -14,6 +14,8 @@ package fr.supraloglabs.jbe.error;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -63,7 +65,7 @@ public class GlobalExceptionHandler<T>
      * @param pRequest   les informations de la requête adressée.
      * @return entité de réponse HTTP avec les données sur les erreurs.
      */
-    @ExceptionHandler(value = { AppCustomException.class })
+    @ExceptionHandler(value = { AppCustomException.class, ConstraintViolationException.class })
     public ResponseEntity<T> handleAppCustomException(final AppCustomException pException, final WebRequest pRequest)
     {
         log.info("[handleAppCustomException] - Interception des erreurs applicatives.");
@@ -76,7 +78,7 @@ public class GlobalExceptionHandler<T>
     /**
      * Interception des autres type d'erreurs survenues lors de l'exécution de l'application.
      * 
-     * @param ex       erreur interne survenue.
+     * @param pException       erreur interne survenue.
      * @param pRequest les informations de la requête adressée.
      * @return entité de réponse HTTP avec les données sur les erreurs.
      */
@@ -89,5 +91,4 @@ public class GlobalExceptionHandler<T>
         final ErrorDetails error = UserAccountUtil.construireErreur(pException, pRequest, HttpStatus.INTERNAL_SERVER_ERROR);
         return UserAccountUtil.buildResponseErrorEntity(error);
     }
-
 }

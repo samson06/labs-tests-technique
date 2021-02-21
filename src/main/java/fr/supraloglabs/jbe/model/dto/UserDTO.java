@@ -43,9 +43,13 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-@JsonPropertyOrder({ "id", "firstName", "lastName", "email", "age", "accountLocked", "adresse", "city", "phone" })
-public class UserDTO
+@JsonPropertyOrder({ "id", "firstName", "lastName", "email", "age", "country", "adresse", "city", "phone" })
+public class UserDTO 
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 7890823153215059569L;
 
     String id; // identifiant technique auto-généré
 

@@ -10,7 +10,7 @@
  * ----------------------------------------------
  */
 /**
- * Configurations des beans de gestion des accès à la base de données MongoDB.
+ * Configurations des beans de gestion des accès à MongoDB.
  * 
  * @author Vincent Otchoun
  */

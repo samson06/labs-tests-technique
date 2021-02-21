@@ -10,7 +10,7 @@
  * ----------------------------------------------
  */
 /**
- * Les modèles de données des objets persistants ou non de l'application.
+ * Couche des modèles de données des objets persistants ou non de l'application.
  * 
  * @author Vincent Otchoun
  */

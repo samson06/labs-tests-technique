@@ -4,12 +4,12 @@
  * Nom de la classe : UserRegisterControllerTest.java
  * Date de création : 18 févr. 2021
  * Heure de création : 13:53:15
- * Package : fr.supraloglabs.jbe.api.registeer
+ * Package : fr.supraloglabs.jbe.controller.register
  * Auteur : Vincent Otchoun
  * Copyright © 2021 - All rights reserved.
  * ----------------------------------------------
  */
-package fr.supraloglabs.jbe.api.registeer;
+package fr.supraloglabs.jbe.controller.register;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
@@ -108,7 +108,7 @@ class UserRegisterControllerTest
 
     /**
      * Test method for
-     * {@link fr.supraloglabs.jbe.api.registeer.UserRegisterController#createNewUSerDetails(fr.supraloglabs.jbe.model.dto.UserDTO)}.
+     * {@link fr.supraloglabs.jbe.controller.register.UserRegisterController#createNewUSerDetails(fr.supraloglabs.jbe.model.dto.UserDTO)}.
      * 
      * @throws Exception
      */
@@ -181,8 +181,8 @@ class UserRegisterControllerTest
         .content(strContent)//
         )//
         .andDo(MockMvcResultHandlers.print())//
-        .andExpect(status().isInternalServerError())//
-        .andExpect(jsonPath("$.status").value(HttpStatus.INTERNAL_SERVER_ERROR.toString()))//
+        .andExpect(status().isNotFound())//
+        .andExpect(jsonPath("$.status").value(HttpStatus.NOT_FOUND.toString()))//
         .andExpect(jsonPath("$.details").value(DETAILS))//
         ;
     }
@@ -241,8 +241,8 @@ class UserRegisterControllerTest
         .content(strContent)//
         )//
         .andDo(MockMvcResultHandlers.print())//
-        .andExpect(status().isInternalServerError())//
-        .andExpect(jsonPath("$.status").value(HttpStatus.INTERNAL_SERVER_ERROR.toString()))//
+        .andExpect(status().isNotFound())//
+        .andExpect(jsonPath("$.status").value(HttpStatus.NOT_FOUND.toString()))//
         .andExpect(jsonPath("$.details").value(DETAILS))//
         ;
     }

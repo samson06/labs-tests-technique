@@ -117,6 +117,7 @@ public class UserService
     public Page<User> getAllUsersPageable(final Pageable pPageable)
     {
         log.info("[getAllUsersPageable] - Obtenir la liste paginée des détails de l'ensemble des utilisateurs du SI.");
+        
         return this.userRepository.findAll(pPageable);
     }
 
@@ -159,20 +160,22 @@ public class UserService
      * 
      * @param pUserId identifiant de l'utilisateur recherché pour mise à jour des détails.
      * @param pUser   détails de l'utilisateur à mettre à jour.
+     * @return 
      */
-    public void updateUser(final String pUserId, final User pUser)
+    public User updateUser(final String pUserId, final User pUser)
     {
         log.info("[updateUser] - Mise à jour des informations d'untilisateur existant. Identifiant : [{}].", pUserId);
 
         // Tentative des mise à jour des informations d'un utilisateur existant dans le SI.
         try
         {
-            this.getUserById(pUserId)//
+           this.getUserById(pUserId)//
             .ifPresent(user -> {
                 final String id = user.getId();
                 pUser.setId(id);
                 this.createUser(pUser);
             });
+           return pUser;
         }
         catch (Exception e)
         {

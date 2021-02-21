@@ -40,7 +40,10 @@ public class UserAccountUtil
     public static final String USER_DATA_NOT_NULL_MSG = "Impossible d'enregistrer un utilsateur sans données dans le système d'informations.";
     public static final String USER_ID_NOT_NULL_MSG = "Impossible de trouver les détails de l'utilisateur : ";
     public static final String USER_ID_SEARCH_MSG = "L'utilisateur recherché : [";
-    public static final String USER_ID_SEARCH_END_MSG = "], n'existe pas dans le système d'infiormations.";
+    public static final String USER_ID_SEARCH_END_MSG = "], n'existe pas dans le système d'informations.";
+    public static final String ALL_USERS_EMPTY = "Il n'y a pas d'utilisateurs enregistrés";
+    public static final String DELETE_OK_MSG = "Suppression des données de l'utilisateur effectué avec succès";
+    
     public static final String USER_ID_MSG_PATTERN = "%s%s%s";
 
     // "mongodb://localhost:12345/users_db_test"

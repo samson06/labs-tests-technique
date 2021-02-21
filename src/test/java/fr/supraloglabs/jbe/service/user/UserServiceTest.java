@@ -383,10 +383,10 @@ class UserServiceTest
         final Optional<User> userFromDB = this.userService.getUserById(id);
         assertThat(userFromDB).isPresent();
 
-        this.userService.updateUser(userFromDB.get().getId(), userToUpdated);
+        final User result = this.userService.updateUser(userFromDB.get().getId(), userToUpdated);
 
-        assertThat(userToUpdated.getId()).isEqualTo("1L");
-        assertThat(userToUpdated.getEmail()).isEqualTo("update.test@test.com");
+        assertThat(result.getId()).isEqualTo("1L");
+        assertThat(result.getEmail()).isEqualTo("update.test@test.com");
 
         verify(this.userRepository, times(2)).findOneById(Mockito.any(String.class));
     }

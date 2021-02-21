@@ -4,12 +4,12 @@
  * Nom de la classe : UserRegisterControllerIT.java
  * Date de création : 18 févr. 2021
  * Heure de création : 19:32:48
- * Package : fr.supraloglabs.jbe.api.registeer
+ * Package : fr.supraloglabs.jbe.controller.register
  * Auteur : Vincent Otchoun
  * Copyright © 2021 - All rights reserved.
  * ----------------------------------------------
  */
-package fr.supraloglabs.jbe.api.registeer;
+package fr.supraloglabs.jbe.controller.register;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,6 +29,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import fr.supraloglabs.jbe.UserAccountApplicationStarter;
 import fr.supraloglabs.jbe.config.AppRootConfig;
+import fr.supraloglabs.jbe.controller.register.UserRegisterController;
 import fr.supraloglabs.jbe.model.dto.UserDTO;
 import fr.supraloglabs.jbe.service.mapper.UserMapper;
 import fr.supraloglabs.jbe.service.user.UserService;
@@ -63,7 +64,7 @@ class UserRegisterControllerIT
 
     /**
      * Test method for
-     * {@link fr.supraloglabs.jbe.api.registeer.UserRegisterController#createNewUSerDetails(fr.supraloglabs.jbe.model.dto.UserDTO)}.
+     * {@link fr.supraloglabs.jbe.controller.register.UserRegisterController#createNewUSerDetails(fr.supraloglabs.jbe.model.dto.UserDTO)}.
      */
     @Test
     void testCreateNewUSerDetails()

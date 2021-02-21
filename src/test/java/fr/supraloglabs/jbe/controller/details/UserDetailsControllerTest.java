@@ -4,12 +4,12 @@
  * Nom de la classe : UserDetailsControllerTest.java
  * Date de création : 19 févr. 2021
  * Heure de création : 09:03:39
- * Package : fr.supraloglabs.jbe.api.details
+ * Package : fr.supraloglabs.jbe.controller.details
  * Auteur : Vincent Otchoun
  * Copyright © 2021 - All rights reserved.
  * ----------------------------------------------
  */
-package fr.supraloglabs.jbe.api.details;
+package fr.supraloglabs.jbe.controller.details;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -41,6 +41,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fr.supraloglabs.jbe.TestsDataUtils;
 import fr.supraloglabs.jbe.config.AppRootConfig;
+import fr.supraloglabs.jbe.controller.details.UserDetailsController;
 import fr.supraloglabs.jbe.model.po.User;
 import fr.supraloglabs.jbe.service.mapper.UserMapper;
 import fr.supraloglabs.jbe.service.user.UserService;
@@ -97,7 +98,7 @@ class UserDetailsControllerTest
 
     /**
      * Test method for
-     * {@link fr.supraloglabs.jbe.api.details.UserDetailsController#getUSerDetails(java.lang.String, java.lang.String)}.
+     * {@link fr.supraloglabs.jbe.controller.details.UserDetailsController#getUSerDetails(java.lang.String, java.lang.String)}.
      * 
      * @throws Exception
      */

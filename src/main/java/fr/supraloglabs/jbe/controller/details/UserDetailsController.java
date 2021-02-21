@@ -4,18 +4,19 @@
  * Nom de la classe : UserDetailsController.java
  * Date de création : 19 févr. 2021
  * Heure de création : 06:45:05
- * Package : fr.supraloglabs.jbe.api.details
+ * Package : fr.supraloglabs.jbe.controller.details
  * Auteur : Vincent Otchoun
  * Copyright © 2021 - All rights reserved.
  * ----------------------------------------------
  */
-package fr.supraloglabs.jbe.api.details;
+package fr.supraloglabs.jbe.controller.details;
 
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/api-users")
 @Slf4j
+@Validated
 public class UserDetailsController
 {
     private final UserService userService;
@@ -60,7 +62,7 @@ public class UserDetailsController
     }
 
     /**
-     * Rechercher et Afficher lesdétails 'un utilisateur existant dans le système d'informations.
+     * Rechercher et Afficher les détails 'un utilisateur existant dans le système d'informations.
      * 
      * @param userId
      * @param userCountry le pays de résidence de l'utilisateur.
@@ -69,9 +71,9 @@ public class UserDetailsController
     @GetMapping("/user/search/{id}")
     @ApiOperation(value = "Afficher les détails d'un utilisateur existant dans le SI", response = UserDTO.class)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "<font color='#4fe61b'>Opération réussie - renvoie un </font> <font color='#e63f1b'>Détails utilisateur existant</font>."),
-            @ApiResponse(responseCode = "404", description = "<font color='#e63f1b'>Opération en échec - Renvoie le message d'erreur correspondant</font>.") })
-    public ResponseEntity<UserDTO> getUSerDetails(@PathVariable(value = "id", required = true) final String userId,
+            @ApiResponse(responseCode = "200", description = "<font color='#096a09'>Opération réussie</font>  - <font color='#730800'>Renvoie les données de l'utilisateur existant recherché</font>."),
+            @ApiResponse(responseCode = "404", description = "<font color='#e63f1b'>Opération en échec - <font color='#26c4ec'>Renvoie le message d'erreur correspondant</font>.") })
+    public ResponseEntity<UserDTO> getUserDetails(@PathVariable(value = "id", required = true) final String userId,
     @RequestParam(value = "country", required = false, defaultValue = "France") final String userCountry)
     {
         log.info("[getUSerDetails] - Afficher les détails de l'utilisateur. Identifiant recherché : [{}].", userId);
@@ -89,10 +91,10 @@ public class UserDetailsController
             UserAccountUtil.buildExcemption(userId);
         }
 
-        // L'utilisateur exite.
+        // L'utilisateur existe.
         final User user = existUserDetails ? userFromDb.get() : null;
 
-        // L'utilisateur exite, verifier qu'il réside bien en France, sinon remonter le message d'erreurs associé.
+        // L'utilisateur existe, verifier qu'il réside bien en France, sinon remonter le message d'erreurs associé.
         final String pays = user != null ? user.getCountry() : null;
         final boolean isFranceCountry = StringUtils.isNotBlank(pays) && UserAccountUtil.IGNORE_CASE.apply(pays, userCountry);
         if (!isFranceCountry)
@@ -100,7 +102,7 @@ public class UserDetailsController
             UserAccountUtil.buildExcemption(userId);
         }
 
-        // Convertir en objet de ttransfert de données et retourner le résultat
+        // Convertir en objet de transfert de données et retourner le résultat
         final UserDTO result = this.userMapper.convertToUserDTO(user);
         return ResponseEntity.ok(result);
     }
