@@ -121,7 +121,7 @@ L'application a été conçue et développée pour être exécutée à partir d'
 - un build à partir de l'environnement intégré de développment utilsé
 Pour `Maven`, exécuter la commande ci-dessous :
 ```bash
-mvn clean package
+$ mvn clean package
 ```
 Il nettoiera, compilera et générera l'archive exécutable le `.jar` dans le répertoire cible, par exemple `labs-tests-technique-0.0.1-SNAPSHOT.jar`
 
@@ -129,17 +129,19 @@ Il nettoiera, compilera et générera l'archive exécutable le `.jar` dans le r�
 Les points ci-dessous présentent les différentes façons d'exécuter l'application.
 - Cycle de vie Maven
 ```bash
-mvn spring-boot:run
+$ mvn spring-boot:run
 ```
 - Ligne de commande
 ```bash
-java -jar labs-tests-technique-0.0.1-SNAPSHOT.jar
+$ java -jar labs-tests-technique-0.0.1-SNAPSHOT.jar
 ```
 - Ligne de commande avec surcharge des fichiers de base
 
 Il peut y arriver qu'on veuille écraser les configuration de base par des fichiers externes (fichier de propriétés, logger, ....). Dans ce cas la commande est la suivante :
 ```bash
-java -Dlogging.config=file:${SRVC_HOME}/logback-spring.xml -jar labs-tests-technique-0.0.1-SNAPSHOT.jar -Dspring.config.location=file:${SRVC_HOME}/application.properties
+$ java -Dlogging.config=file:${SRVC_HOME}/logback-spring.xml -jar labs-tests-technique-0.0.1-SNAPSHOT.jar -Dspring.config.location=file:${SRVC_HOME}/application.properties
+ou
+$ java -Dlogging.config=file:${SRVC_HOME}/logback-spring.xml -jar labs-tests-technique-0.0.1-SNAPSHOT.jar --spring.config.location=file:${SRVC_HOME}/application.properties
 ```
 Où `SRVC_HOME = <chemin d'accès aux fichiers concernés>`
 
