@@ -1,0 +1,8 @@
+${AnsiColor.BLUE}888   |                               ${AnsiColor.WHITE}     e                                                   d8         ${AnsiColor.RED}     e                          
+${AnsiColor.BLUE}888   |  d88~\  e88~~8e  888-~\       ${AnsiColor.WHITE}    d8b      e88~~\  e88~~\  e88~-_  888  888 888-~88e _d88__       ${AnsiColor.RED}    d8b     888-~88e  888-~88e  
+${AnsiColor.BLUE}888   | C888   d888  88b 888          ${AnsiColor.WHITE}   /Y88b    d888    d888    d888   i 888  888 888  888  888         ${AnsiColor.RED}   /Y88b    888  888b 888  888b 
+${AnsiColor.BLUE}888   |  Y88b  8888__888 888          ${AnsiColor.WHITE}  /  Y88b   8888    8888    8888   | 888  888 888  888  888         ${AnsiColor.RED}  /  Y88b   888  8888 888  8888 
+${AnsiColor.BLUE}Y88   |   888D Y888    , 888          ${AnsiColor.WHITE} /____Y88b  Y888    Y888    Y888   ' 888  888 888  888  888         ${AnsiColor.RED} /____Y88b  888  888P 888  888P 
+${AnsiColor.BLUE} "8__/  \_88P   "88___/  888          ${AnsiColor.WHITE}/      Y88b  "88__/  "88__/  "88_-~  "88_-888 888  888  "88_/       ${AnsiColor.RED}/      Y88b 888-_88"  888-_88"  
+       									                                                                                                     ${AnsiColor.RED}            888       888       
+${AnsiColor.BRIGHT_BLUE}:: OVIOK 🤓  :: Running Spring Boot ${spring-boot.version} :: :: https://fr.vincent.tuto ::${AnsiColor.DEFAULT}                                                                                                         				   					        

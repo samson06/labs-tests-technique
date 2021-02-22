@@ -246,6 +246,7 @@
 				<includes>
 					<include>**/*.properties</include>
 					<include>**/*.xml</include>
+					<include>**/**</include> <!-- Inclure les dossiers par exemple : db/migration -->
 				</includes>
 				<excludes>
 					<exclude>**/*.java</exclude>

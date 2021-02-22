@@ -74,10 +74,10 @@ L'ensemble des configurations applicatives sont consignées dans le fichier : [a
 
 ```properties
 server.port=8500                           # Activer le port d'écoute du serveur
+server.servlet.context-path=/user-account  # root contexte de l'application
 
 # Autres propriétés
-spring.application.name=user-account
-server.servlet.context-path=/user-account  # root contexte de l'application
+spring.application.name=user-account       # Le nom de l'application 
 
 #########################
 ####  MONGODB PROPS  #### 
