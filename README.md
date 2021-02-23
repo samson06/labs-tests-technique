@@ -150,11 +150,13 @@ En dehors du document des spécifications techniques fournies, l'application emb
 Il permet également de tester les API's. Au démarrage de l'application, il est accessible par l'URL fournie ci-dessous :
 ```bash
 http://localhost:${server.port}/user-account/swagger-ui/index.html
+ou da façon générique :
+http://localhost:${server.port}/${server.servlet.context-path}/swagger-ui/index.html
 ```
 La configuration fournie dans l'application est la suivante :
 ![SWAGGER](./docs/images/app_swagger.png "Configuration Swagger dans l'application")
 
-LA configuration définie dans l'application fournit un ensemble de définitions décrites dans le tableau ci-dessous
+La configuration définie dans l'application fournit un ensemble de définitions décrites dans le tableau ci-dessous
 |Défintion|Description|
 |---|---|
 |`Créer Utilisateur`|_API de création des données d'un nouvel utilisateur dans le SI_|
