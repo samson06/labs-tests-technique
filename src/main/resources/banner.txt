@@ -4,6 +4,6 @@ ${AnsiColor.BLUE}888   | C888   d888  88b 888          ${AnsiColor.WHITE}   /Y88
 ${AnsiColor.BLUE}888   |  Y88b  8888__888 888          ${AnsiColor.WHITE}  /  Y88b   8888    8888    8888   | 888  888 888  888  888         ${AnsiColor.RED}  /  Y88b   888  8888 888  8888 
 ${AnsiColor.BLUE}Y88   |   888D Y888    , 888          ${AnsiColor.WHITE} /____Y88b  Y888    Y888    Y888   ' 888  888 888  888  888         ${AnsiColor.RED} /____Y88b  888  888P 888  888P 
 ${AnsiColor.BLUE} "8__/  \_88P   "88___/  888          ${AnsiColor.WHITE}/      Y88b  "88__/  "88__/  "88_-~  "88_-888 888  888  "88_/       ${AnsiColor.RED}/      Y88b 888-_88"  888-_88"  
-${AnsiColor.BLUE}						                                                                                                     ${AnsiColor.RED}            888       888       
+										                                                                                                     ${AnsiColor.RED}            888       888       
 ${AnsiColor.BRIGHT_BLUE}:: OVIOK 🤓  :: Running Spring Boot ${spring-boot.version} :: :: https://fr.vincent.tuto ::${AnsiColor.DEFAULT}
                                                                                                          				   					        
