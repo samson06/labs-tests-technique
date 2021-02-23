@@ -148,7 +148,7 @@ Où `SRVC_HOME = <chemin d'accès aux fichiers concernés>`
 ### Documentation Swagger
 En dehors du document des spécifications techniques fournies, l'application embarque en son sein  `Swagger ` pour produire la documentation des API proposées par l'application.
 Il permet également de tester les API's. Au démarrage de l'application, il est accessible par l'URL fournie ci-dessous :
-```bash
+```html
 http://localhost:${server.port}/user-account/swagger-ui/index.html
 ou da façon générique :
 http://localhost:${server.port}/${server.servlet.context-path}/swagger-ui/index.html
