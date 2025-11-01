@@ -41,7 +41,7 @@ import lombok.experimental.FieldDefaults;
  * 
  * @author Vincent Otchoun
  */
-@Document(collection = "C_USERS")  // Le nom de la collection dans la base de données
+@Document(collection = "C_USERS") // Le nom de la collection dans la base de données
 @Getter
 @Setter
 @NoArgsConstructor
@@ -49,56 +49,54 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-public class User implements Serializable
-{
-    /**
-     * 
-     */
-    @Transient
-    private static final long serialVersionUID = 4677921064921552486L;
+public class User implements Serializable {
+	/**
+	 * 
+	 */
+	@Transient
+	private static final long serialVersionUID = 4677921064921552486L;
 
-    @Id
-    String id; // identifiant technique auto-généré
+	@Id
+	String id; // identifiant technique auto-généré
 
-    @NotNull(message = UserAccountUtil.PRENOM_MSG)
-    @Size(min = 1, max = UserAccountUtil.QUATRE_VINGT, message = UserAccountUtil.PRENOM_SIZE_MSG)
-    @Field("firstName")
-    String firstName; // le prénom de l'utilisateur
+	@NotNull(message = UserAccountUtil.PRENOM_MSG)
+	@Size(min = 1, max = UserAccountUtil.QUATRE_VINGT, message = UserAccountUtil.PRENOM_SIZE_MSG)
+	@Field("firstName")
+	String firstName; // le prénom de l'utilisateur
 
-    @NotNull(message = UserAccountUtil.NOM_MSG)
-    @Size(min = 1, max = UserAccountUtil.CINQUANTE, message = UserAccountUtil.NOM_SIZE_MSG)
-    @Field("lastName")
-    String lastName; // le nom de lisateur
+	@NotNull(message = UserAccountUtil.NOM_MSG)
+	@Size(min = 1, max = UserAccountUtil.CINQUANTE, message = UserAccountUtil.NOM_SIZE_MSG)
+	@Field("lastName")
+	String lastName; // le nom de lisateur
 
-    @NotNull(message = UserAccountUtil.EMAIL_MSG)
-    @Size(min = 1, max = UserAccountUtil.CINQUANTE, message = UserAccountUtil.EMAIL_SIZE_MSG)
-    @Email
-    @Field("email")
-    @Indexed(unique = true)
-    String email; // adresse mail de l'utilisateur
+	@NotNull(message = UserAccountUtil.EMAIL_MSG)
+	@Size(min = 1, max = UserAccountUtil.CINQUANTE, message = UserAccountUtil.EMAIL_SIZE_MSG)
+	@Email
+	@Field("email")
+	@Indexed(unique = true)
+	String email; // adresse mail de l'utilisateur
 
-    @NotNull(message = UserAccountUtil.AGE_MSG)
-    @Field("age")
-    @Min(value = 18, message = UserAccountUtil.AGE_MIN_MSG)
-    Integer age; // l'âge de l'utilisateur
+	@NotNull(message = UserAccountUtil.AGE_MSG)
+	@Field("age")
+	@Min(value = 18, message = UserAccountUtil.AGE_MIN_MSG)
+	Integer age; // l'âge de l'utilisateur
 
-    @NotNull(message = UserAccountUtil.PAYS_MSG)
-    @Size(min = 1, max = UserAccountUtil.CINQUANTE, message = UserAccountUtil.PAYS_SIZE_MSG)
-    @Field("country")
-    String country; // le pays de l'utilisateur
+	@NotNull(message = UserAccountUtil.PAYS_MSG)
+	@Size(min = 1, max = UserAccountUtil.CINQUANTE, message = UserAccountUtil.PAYS_SIZE_MSG)
+	@Field("country")
+	String country; // le pays de l'utilisateur
 
-    @Field("adresse")
-    String adresse; // adresse lieu de résidence de l'utilisateur
+	@Field("adresse")
+	String adresse; // adresse lieu de résidence de l'utilisateur
 
-    @Field("city")
-    String city; // la ville de résidence de l'utilisateur
+	@Field("city")
+	String city; // la ville de résidence de l'utilisateur
 
-    @Field("phone")
-    String phone; // le numéro de téléphone de l'utilisateur
+	@Field("phone")
+	String phone; // le numéro de téléphone de l'utilisateur
 
-    @Override
-    public String toString()
-    {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+	}
 }
